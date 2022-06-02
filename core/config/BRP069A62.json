@@ -247,7 +247,7 @@
     "maxValue": null
   },
   "2-heatupMode": {
-    "name": "Mode Heatup",
+    "name": "2 - Mode Heatup",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
