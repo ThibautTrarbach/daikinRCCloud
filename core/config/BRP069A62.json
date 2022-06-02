@@ -1,6 +1,6 @@
 {
   "1-isHolidayModeActive": {
-    "name": "Mode Vacance",
+    "name": "1 - Mode Vacance",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -12,7 +12,7 @@
     "maxValue": null
   },
   "1-isInErrorState": {
-    "name": "Erreur",
+    "name": "1 - Erreur",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -24,7 +24,7 @@
     "maxValue": null
   },
   "1-isInWarningState": {
-    "name": "Warning",
+    "name": "1 - Warning",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -36,7 +36,7 @@
     "maxValue": null
   },
   "1-isInInstallerState": {
-    "name": "Mode Installation",
+    "name": "1 - Mode Installation",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -48,7 +48,7 @@
     "maxValue": null
   },
   "1-isInEmergencyState": {
-    "name": "Urgence",
+    "name": "1 - Urgence",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -60,7 +60,7 @@
     "maxValue": null
   },
   "1-operationMode": {
-    "name": "Mode",
+    "name": "1 - Mode",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -70,7 +70,7 @@
     "value": null
   },
   "1-onOffMode": {
-    "name": "Etat",
+    "name": "1 - Etat",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -82,7 +82,7 @@
     "maxValue": null
   },
   "1-setpointMode": {
-    "name": "Mode Point",
+    "name": "1 - Mode Point",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -92,7 +92,7 @@
     "value": null
   },
   "1-controlMode": {
-    "name": "Mode Control",
+    "name": "1 - Mode Control",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -104,7 +104,7 @@
     "maxValue": null
   },
   "1-roomTemperature": {
-    "name": "Piece",
+    "name": "1 - Piece",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -116,7 +116,7 @@
     "maxValue": 30
   },
   "1-outdoorTemperature": {
-    "name": "Extérieur",
+    "name": "1 - Extérieur",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -128,7 +128,7 @@
     "maxValue": 40
   },
   "1-leavingWaterTemperature": {
-    "name": "Sortie Eau",
+    "name": "1 - Sortie Eau",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -140,7 +140,7 @@
     "maxValue": 30
   },
   "1-targetTemperature": {
-    "name": "Target Temperature",
+    "name": "1 - Target Temperature",
     "generic_type": null,
     "isHistorized": true,
     "type": "info",
@@ -150,5 +150,146 @@
     "value": null,
     "minValue": 12,
     "maxValue": 30
+  },
+
+  "2-isHolidayModeActive": {
+    "name": "2 - Mode Vacance",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-isInErrorState": {
+    "name": "2 - Erreur",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-isInWarningState": {
+    "name": "2 - Warning",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-isInInstallerState": {
+    "name": "2 - Mode Installation",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-isInEmergencyState": {
+    "name": "2 - Urgence",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-onOffMode": {
+    "name": "2 - Etat",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-operationMode": {
+    "name": "2 - Mode",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "string",
+    "unite": null,
+    "isVisible": true,
+    "value": null
+  },
+  "2-powerfulMode": {
+    "name": "2 - Mode Puissant",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-heatupMode": {
+    "name": "Mode Heatup",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null,
+    "minValue": null,
+    "maxValue": null
+  },
+  "2-tankTemperature": {
+    "name": "2 - Tank",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "numeric",
+    "unite": "°C",
+    "isVisible": true,
+    "value": null,
+    "minValue": 10,
+    "maxValue": 30
+  },
+  "2-temperatureControl": {
+    "name": "2 - Temperature",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "numeric",
+    "unite": "°C",
+    "isVisible": true,
+    "value": null,
+    "minValue": 30,
+    "maxValue": 55
+  },
+  "2-setpointMode": {
+    "name": "2 - Mode Point",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "binary",
+    "unite": null,
+    "isVisible": true,
+    "value": null
   }
 }
