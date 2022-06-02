@@ -268,7 +268,7 @@
     "isVisible": true,
     "value": null,
     "minValue": 10,
-    "maxValue": 30
+    "maxValue": 70
   },
   "2-temperatureControl": {
     "name": "2 - Temperature",
