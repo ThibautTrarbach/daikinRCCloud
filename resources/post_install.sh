@@ -11,4 +11,3 @@ sudo yarn install
 chown -R www-data:www-data *
 
 echo "Everything is successfully installed!"
-

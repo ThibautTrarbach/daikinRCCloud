@@ -115,9 +115,7 @@
 
 			$daikin_path = realpath(dirname(__FILE__) . '/../../resources/daikintomqtt');
 			$data_path = dirname(__FILE__) . '/../../data/deamon';
-			if (!is_dir($data_path)) {
-				mkdir($data_path, 0777, true);
-			}
+			if (!is_dir($data_path)) mkdir($data_path, 0777, true);
 			$data_path = realpath(dirname(__FILE__) . '/../../data/deamon');
 			self::configureSettings($data_path);
 			chdir($daikin_path);
@@ -277,9 +275,9 @@
 
 		/*     * **********************Getteur Setteur*************************** */
 
-		public static function publishMqttValue($_node,$_path,$_args=array()) {
-			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Publication Mqtt Value' . $_node . ' ' . $_path . ' ' . json_encode($_args));
-			mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT').'/'.$_node.'/'.$_path.'/set',$_args);
+		public function publishMqttValue($_node,$_args=array()) {
+			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Publication Mqtt Value' . $_node . ' ' . json_encode($_args));
+			mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT').'/'.$_node.'/set',$_args);
 		}
 
 		public static function handleMqttMessage($_message) {
@@ -288,6 +286,7 @@
 			$events = $_message[config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT')];
 
 			foreach ($events as $key => $event) {
+				if ($key == 'system') continue;
 				log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."ID : ".$key." | Value : ".json_encode($event));
 				$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
 				if (!is_object($eqLogic)) {
@@ -343,9 +342,12 @@
 				$cmd->setType($cmdData['type']);
 				$cmd->setSubType($cmdData['subType']);
 				if (isset($cmdData['unite'])) $cmd->setUnite($cmdData['unite']);
-				if (isset($cmdData['value'])) $cmd->setValue($cmdData['value']);
+				if (isset($cmdData['value'])) $cmd->setValue( $this->getCmd('info', $cmdData['value'])->getId());
 				if (isset($cmdData['minValue'])) $cmd->setConfiguration("minValue",$cmdData['minValue']);
 				if (isset($cmdData['maxValue'])) $cmd->setConfiguration("maxValue", $cmdData['maxValue']);
+				if (isset($cmdData['action'])) $cmd->setConfiguration("actionValue", $cmdData['action']);
+				if (isset($cmdData['value'])) $cmd->setConfiguration("action", $cmdData['value']);
+				if (isset($cmdData['template'])) $cmd->setTemplate("dashboard", $cmdData['template']);
 				$cmd->save();
 			}
 
@@ -384,6 +386,25 @@
 		// Exécution d'une commande
 		public function execute($_options = array())
 		{
+			if ($this->getLogicalId() == 'refresh') $this->getEqLogic()->refresh();
+			else {
+				$deamon = daikinRCCloud::deamon_info();
+				if ($deamon['state'] == 'ok') {
+					$action = $this->getConfiguration('action', null);
+					$actionValue = $this->getConfiguration('actionValue', null);
+					$logicalID = $this->getEqLogic()->getLogicalId();
+
+					$data = array(
+						$action=>$actionValue
+					);
+
+					$this->getEqLogic()->publishMqttValue($logicalID, $data);
+					return true;
+				}
+				return false;
+			}
+
+
 		}
 
 		/*     * **********************Getteur Setteur*************************** */
