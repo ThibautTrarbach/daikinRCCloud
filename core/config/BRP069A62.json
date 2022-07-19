@@ -168,6 +168,32 @@
     "minValue": 0,
     "maxValue": 30
   },
+  "temperatureControl1": {
+    "name": "1 - Thermostat",
+    "generic_type": null,
+    "isHistorized": true,
+    "type": "info",
+    "subType": "numeric",
+    "unite": "°C",
+    "isVisible": true,
+    "value": null,
+    "minValue": -10,
+    "maxValue": 30
+  },
+  "temperatureControl1-slider": {
+    "name": "1 - Thermostat Slider",
+    "generic_type": null,
+    "isHistorized": null,
+    "type": "action",
+    "subType": "slider",
+    "unite": null,
+    "isVisible": true,
+    "value": "temperatureControl1",
+    "minValue": null,
+    "maxValue": null,
+    "template": null,
+    "action": null
+  },
   "targetTemperature1": {
     "name": "1 - Target Temperature",
     "generic_type": null,
