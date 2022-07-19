@@ -397,9 +397,7 @@
 							$actionValue = $this->getConfiguration('actionValue', null);
 							break;
 						case 'slider':
-							log::add('daikinRCCloudCmd', 'error', json_encode($_options));
-							//$actionValue = $this->getConfiguration('actionValue', null);
-						return ;
+							$actionValue = $_options['slider'];
 					}
 
 
