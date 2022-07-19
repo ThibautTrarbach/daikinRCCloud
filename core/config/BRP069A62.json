@@ -1,5 +1,5 @@
 {
-  "1-isHolidayModeActive": {
+  "isHolidayModeActive1": {
     "name": "1 - Mode Vacance",
     "generic_type": null,
     "isHistorized": true,
@@ -11,7 +11,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-isInErrorState": {
+  "isInErrorState1": {
     "name": "1 - Erreur",
     "generic_type": null,
     "isHistorized": true,
@@ -23,7 +23,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-isInWarningState": {
+  "isInWarningState1": {
     "name": "1 - Warning",
     "generic_type": null,
     "isHistorized": true,
@@ -35,7 +35,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-isInInstallerState": {
+  "isInInstallerState1": {
     "name": "1 - Mode Installation",
     "generic_type": null,
     "isHistorized": true,
@@ -47,7 +47,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-isInEmergencyState": {
+  "isInEmergencyState1": {
     "name": "1 - Urgence",
     "generic_type": null,
     "isHistorized": true,
@@ -59,7 +59,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-operationMode": {
+  "operationMode1": {
     "name": "1 - Mode",
     "generic_type": null,
     "isHistorized": true,
@@ -69,19 +69,48 @@
     "isVisible": true,
     "value": null
   },
-  "1-onOffMode": {
+  "onOffMode1": {
     "name": "1 - Etat",
-    "generic_type": null,
+    "generic_type": "ENERGY_STATE",
     "isHistorized": true,
     "type": "info",
     "subType": "binary",
     "unite": null,
-    "isVisible": true,
+    "isVisible": false,
     "value": null,
     "minValue": null,
+    "template": "core::prise",
     "maxValue": null
   },
-  "1-setpointMode": {
+  "onOffMode1-on": {
+    "name": "1 - ON",
+    "generic_type": "ENERGY_ON",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "onOffMode1",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "on"
+  },
+  "onOffMode1-off": {
+    "name": "1 - OFF",
+    "generic_type": "ENERGY_OFF",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "onOffMode1",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "off"
+  },
+  "setpointMode1": {
     "name": "1 - Mode Point",
     "generic_type": null,
     "isHistorized": true,
@@ -91,7 +120,7 @@
     "isVisible": true,
     "value": null
   },
-  "1-controlMode": {
+  "controlMode1": {
     "name": "1 - Mode Control",
     "generic_type": null,
     "isHistorized": true,
@@ -103,7 +132,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "1-roomTemperature": {
+  "roomTemperature1": {
     "name": "1 - Piece",
     "generic_type": null,
     "isHistorized": true,
@@ -115,7 +144,7 @@
     "minValue": 10,
     "maxValue": 30
   },
-  "1-outdoorTemperature": {
+  "outdoorTemperature1": {
     "name": "1 - Extérieur",
     "generic_type": null,
     "isHistorized": true,
@@ -127,7 +156,7 @@
     "minValue": -30,
     "maxValue": 40
   },
-  "1-leavingWaterTemperature": {
+  "leavingWaterTemperature1": {
     "name": "1 - Sortie Eau",
     "generic_type": null,
     "isHistorized": true,
@@ -139,7 +168,7 @@
     "minValue": 0,
     "maxValue": 30
   },
-  "1-targetTemperature": {
+  "targetTemperature1": {
     "name": "1 - Target Temperature",
     "generic_type": null,
     "isHistorized": true,
@@ -152,7 +181,7 @@
     "maxValue": 30
   },
 
-  "2-isHolidayModeActive": {
+  "isHolidayModeActive2": {
     "name": "2 - Mode Vacance",
     "generic_type": null,
     "isHistorized": true,
@@ -164,7 +193,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-isInErrorState": {
+  "isInErrorState2": {
     "name": "2 - Erreur",
     "generic_type": null,
     "isHistorized": true,
@@ -176,7 +205,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-isInWarningState": {
+  "isInWarningState2": {
     "name": "2 - Warning",
     "generic_type": null,
     "isHistorized": true,
@@ -188,7 +217,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-isInInstallerState": {
+  "isInInstallerState2": {
     "name": "2 - Mode Installation",
     "generic_type": null,
     "isHistorized": true,
@@ -200,7 +229,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-isInEmergencyState": {
+  "isInEmergencyState2": {
     "name": "2 - Urgence",
     "generic_type": null,
     "isHistorized": true,
@@ -212,7 +241,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-onOffMode": {
+  "onOffMode2": {
     "name": "2 - Etat",
     "generic_type": null,
     "isHistorized": true,
@@ -224,7 +253,35 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-operationMode": {
+  "onOffMode2-on": {
+    "name": "2 - ON",
+    "generic_type": "ENERGY_ON",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "onOffMode2",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "on"
+  },
+  "onOffMode2-off": {
+    "name": "2 - OFF",
+    "generic_type": "ENERGY_OFF",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "onOffMode2",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "off"
+  },
+  "operationMode2": {
     "name": "2 - Mode",
     "generic_type": null,
     "isHistorized": true,
@@ -234,7 +291,7 @@
     "isVisible": true,
     "value": null
   },
-  "2-powerfulMode": {
+  "powerfulMode2": {
     "name": "2 - Mode Puissant",
     "generic_type": null,
     "isHistorized": true,
@@ -246,7 +303,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-heatupMode": {
+  "heatupMode2": {
     "name": "2 - Mode Heatup",
     "generic_type": null,
     "isHistorized": true,
@@ -258,7 +315,7 @@
     "minValue": null,
     "maxValue": null
   },
-  "2-tankTemperature": {
+  "tankTemperature2": {
     "name": "2 - Tank",
     "generic_type": null,
     "isHistorized": true,
@@ -270,7 +327,7 @@
     "minValue": 10,
     "maxValue": 70
   },
-  "2-temperatureControl": {
+  "temperatureControl2": {
     "name": "2 - Temperature",
     "generic_type": null,
     "isHistorized": true,
@@ -282,7 +339,7 @@
     "minValue": 30,
     "maxValue": 55
   },
-  "2-setpointMode": {
+  "setpointMode2": {
     "name": "2 - Mode Point",
     "generic_type": null,
     "isHistorized": true,
