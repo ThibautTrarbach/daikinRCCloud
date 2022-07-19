@@ -189,8 +189,8 @@
     "unite": null,
     "isVisible": true,
     "value": "temperatureControl1",
-    "minValue": null,
-    "maxValue": null,
+    "minValue": -10,
+    "maxValue": 30,
     "template": null,
     "action": null
   },
@@ -205,6 +205,20 @@
     "value": null,
     "minValue": 12,
     "maxValue": 30
+  },
+  "targetTemperature1-slider": {
+    "name": "1 - Target Temperature Slider",
+    "generic_type": null,
+    "isHistorized": null,
+    "type": "action",
+    "subType": "slider",
+    "unite": null,
+    "isVisible": true,
+    "value": "targetTemperature1",
+    "minValue": 12,
+    "maxValue": 30,
+    "template": null,
+    "action": null
   },
 
   "isHolidayModeActive2": {
@@ -328,6 +342,34 @@
     "value": null,
     "minValue": null,
     "maxValue": null
+  },
+  "powerfulMode2-on": {
+    "name": "2 - Mode Puissant ON",
+    "generic_type": "ENERGY_ON",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "powerfulMode2",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "on"
+  },
+  "powerfulMode2-off": {
+    "name": "2 - Mode Puissant OFF",
+    "generic_type": "ENERGY_OFF",
+    "isHistorized": null,
+    "type": "action",
+    "subType": "other",
+    "unite": null,
+    "isVisible": true,
+    "value": "powerfulMode2",
+    "minValue": null,
+    "maxValue": null,
+    "template": "core::prise",
+    "action": "off"
   },
   "heatupMode2": {
     "name": "2 - Mode Heatup",
