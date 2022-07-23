@@ -219,7 +219,7 @@
 
 			$settings['daikin']['modeproxy'] = config::byKey('daikin_modeproxy', 'daikinRCCloud',0) == 1;
 			$settings['daikin']['username'] = config::byKey('daikin_username', 'daikinRCCloud',null);
-			$settings['daikin']['password'] = config::byKey('daikin_password', 'daikinRCCloud',null);
+			$settings['daikin']['password'] = utils::decrypt(config::byKey('daikin_password', 'daikinRCCloud',null));
 			$settings['daikin']['proxyPort'] = config::byKey('daikin_proxyPort', 'daikinRCCloud',8888);
 			$settings['daikin']['proxyWebPort'] = config::byKey('daikin_proxyWebPort', 'daikinRCCloud',8889);
 			$settings['daikin']['communicationTimeout'] = config::byKey('daikin_communicationTimeout', 'daikinRCCloud',10000);
@@ -244,12 +244,13 @@
 		* Permet de crypter/décrypter automatiquement des champs de configuration des équipements
 		* Exemple avec le champ "Mot de passe" (password)
 		public function decrypt() {
-		  $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+		  $this->setConfiguration('daikin_password', utils::decrypt($this->getConfiguration('daikin_password')));
 		}
+
 		public function encrypt() {
-		  $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-		}
-		*/
+		  $this->setConfiguration('daikin_password', utils::encrypt($this->getConfiguration('daikin_password')));
+		} */
+
 
 		/*
 		* Permet de modifier l'affichage du widget (également utilisable par les commandes)
@@ -258,17 +259,15 @@
 
 		/*
 		* Permet de déclencher une action avant modification d'une variable de configuration du plugin
-		* Exemple avec la variable "param3"
-		public static function preConfig_param3( $value ) {
-		  // do some checks or modify on $value
-		  return $value;
-		}
 		*/
+		public static function preConfig_daikin_password( $value ) {
+		  return  utils::encrypt($value);
+		}
 
 		/*
 		* Permet de déclencher une action après modification d'une variable de configuration du plugin
 		* Exemple avec la variable "param3"
-		public static function postConfig_param3($value) {
+		public static function postConfig_daikin_password($value) {
 		  // no return value
 		}
 		*/
@@ -398,9 +397,10 @@
 							break;
 						case 'slider':
 							$actionValue = $_options['slider'];
+							break;
+						default:
+							return FALSE;
 					}
-
-
 
 					$logicalID = $this->getEqLogic()->getLogicalId();
 
@@ -413,8 +413,7 @@
 				}
 				return false;
 			}
-
-
+			return false;
 		}
 
 		/*     * **********************Getteur Setteur*************************** */
