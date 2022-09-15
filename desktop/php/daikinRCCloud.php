@@ -20,10 +20,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<span>{{Configuration}}</span>
 			</div>
 		</div>
-		<legend><i class="fas fa-table"></i> {{Mes templates}}</legend>
+		<legend><i class="fas fa-table"></i> {{Mes Equipments}}</legend>
 		<?php
 		if (count($eqLogics) == 0) {
-			echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Template trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
+			echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement trouvé, relancer le daemon ou contacter le developer }}</div>';
 		} else {
 			// Champ de recherche
 			echo '<div class="input-group" style="margin:5px;">';
@@ -146,19 +146,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-sm-6 control-label">{{Firmware Version : }}</label>
                                         <div class="col-sm-6">
                                             <span class="eqLogicAttr" data-l1key="configuration" data-l2key="firmwareVersion"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">{{Wifi : }}</label>
-                                        <div class="col-sm-6">
-                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="wifiConnectionSSID"></span>
-                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="wifiConnectionStrength"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-6 control-label">{{TimeZone : }}</label>
-                                        <div class="col-sm-6">
-                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="timeZone"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
