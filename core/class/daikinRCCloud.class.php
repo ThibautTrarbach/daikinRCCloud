@@ -166,7 +166,7 @@
 		}
 
 		public static function configureSettings($_path) {
-			$file = $_path .'/config/settings.yml';
+			$file = $_path .'/settings.yml';
 			$settings = array();
 			if (file_exists($file)) {
 				unlink($file);
