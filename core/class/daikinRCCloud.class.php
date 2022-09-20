@@ -324,6 +324,7 @@
 					if (isset($cmdData['isHistorized'])) $cmd->setIsHistorized($cmdData['isHistorized']? 1:0);
 					if (isset($cmdData['isVisible'])) $cmd->setIsVisible($cmdData['isVisible']? 1:0);
 					if (isset($cmdData['generic_type'])) $cmd->setGeneric_type($cmdData['generic_type']);
+					if (isset($cmdData['template'])) $cmd->setTemplate("dashboard", $cmdData['template']);
 				}
 				$cmd->setType($cmdData['type']);
 				$cmd->setSubType($cmdData['subType']);
@@ -331,9 +332,8 @@
 				if (isset($cmdData['value'])) $cmd->setValue($eqLogics->getCmd('info', $cmdData['value'])->getId());
 				if (isset($cmdData['minValue'])) $cmd->setConfiguration("minValue",$cmdData['minValue']);
 				if (isset($cmdData['maxValue'])) $cmd->setConfiguration("maxValue", $cmdData['maxValue']);
-				if (isset($cmdData['value'])) $cmd->setConfiguration("action", $cmdData['value']);
 				if (isset($cmdData['listValue'])) $cmd->setConfiguration("listValue", $cmdData['listValue']);
-				if (isset($cmdData['template'])) $cmd->setTemplate("dashboard", $cmdData['template']);
+
 				$cmd->save();
 			}
 		}
