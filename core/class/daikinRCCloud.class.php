@@ -61,7 +61,7 @@
 		public static function deamon_start($_debug = false) {
 			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Inscription au plugin mqtt2');
 			self::deamon_stop();
-			mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
+			mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud','daikinToMQTT'));
 			$deamon_info = self::deamon_info();
 			if ($deamon_info['launchable'] != 'ok') {
 				throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
@@ -73,7 +73,7 @@
 			$data_path = realpath(dirname(__FILE__) . '/../../data/deamon');
 			self::configureSettings($data_path);
 			chdir($daikin_path);
-			$cmd = 'sudo STORE_DIR=' . $data_path;
+			$cmd = 'STORE_DIR=' . $data_path;
 			$cmd .= ' node --preserve-symlinks daikinToMQTT.js';
 			log::add('daikinRCCloud', 'info','[' . __FUNCTION__ . '] '. 'Lancement démon Daikin : ' . $cmd);
 			exec($cmd . ' >> ' . log::getPathToLog('daikinRCCloudd') . ' 2>&1 &');
@@ -193,7 +193,7 @@
 			$settings['mqtt']['password'] = $mqttInfos['password'];
 			$settings['mqtt']['connectTimeout'] = 4000;
 			$settings['mqtt']['reconnectPeriod'] = 1000;
-			$settings['mqtt']['topic'] = config::byKey('topic', 'daikinRCCloud','daikinToMQTT');
+			$settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud','daikinToMQTT');
 
 			$settings['system']['logLevel'] = 'info';
 			$settings['system']['jeedom'] = TRUE;
