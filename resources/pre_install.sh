@@ -16,5 +16,6 @@ BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 cd $BASEDIR
 rm -R daikintomqtt
-git clone https://github.com/ThibautTrarbach/daikintomqtt
+git clone --branch release https://github.com/ThibautTrarbach/daikintomqtt
+
 echo "Pre install finished"
