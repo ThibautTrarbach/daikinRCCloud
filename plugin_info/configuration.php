@@ -1,19 +1,4 @@
 <?php
-	/* This file is part of Plugin openzwave for jeedom.
-	*
-	* Plugin openzwave for jeedom is free software: you can redistribute it and/or modify
-	* it under the terms of the GNU General Public License as published by
-	* the Free Software Foundation, either version 3 of the License, or
-	* (at your option) any later version.
-	*
-	* Plugin openzwave for jeedom is distributed in the hope that it will be useful,
-	* but WITHOUT ANY WARRANTY; without even the implied warranty of
-	* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	* GNU General Public License for more details.
-	*
-	* You should have received a copy of the GNU General Public License
-	* along with Plugin openzwave for jeedom. If not, see <http://www.gnu.org/licenses/>.
-	*/
 
 	require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 	include_file('core', 'authentification', 'php');
@@ -25,7 +10,7 @@
     <fieldset>
         <legend><i class="fas fa-wifi"></i> {{Daikin}}</legend>
         <div class="form-group">
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label class="col-sm-3 control-label">{{Utilisé le mode proxy}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Cocher la case pour utiliser le mode Proxy}}"></i></sup>
                 </label>
@@ -42,16 +27,16 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">{{Mots de passe}}</label>
                 <div class="input-group col-sm-7">
-                    <input class="configKey roundedLeft form-control" data-l1key="daikin_password" placeholder="{{Mots de passe d'accès a votre compte ONECTA}}" />
+                    <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_password" placeholder="{{Mots de passe d'accès a votre compte ONECTA}}" />
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label class="col-sm-3 control-label">{{Port du proxy}}</label>
                 <div class="input-group col-sm-7">
                     <input class="configKey roundedLeft form-control" data-l1key="daikin_proxyPort" placeholder="{{Default : 8888}}" />
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label class="col-sm-3 control-label">{{Port web du proxy}}</label>
                 <div class="input-group col-sm-7">
                     <input class="configKey roundedLeft form-control" data-l1key="daikin_proxyWebPort" placeholder="{{Default : 8889}}" />

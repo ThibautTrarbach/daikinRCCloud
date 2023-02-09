@@ -22,54 +22,8 @@
 	{
 		/*     * *************************Attributs****************************** */
 
-		/*
-		* Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-		* Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-		public static $_widgetPossibility = array();
-		*/
-
-		/*
-		* Permet de crypter/décrypter automatiquement des champs de configuration du plugin
-		* Exemple : "param1" & "param2" seront cryptés mais pas "param3"
-		public static $_encryptConfigKey = array('param1', 'param2');
-		*/
-
 		/*     * ***********************Methode static*************************** */
 
-		/*
-		* Fonction exécutée automatiquement toutes les minutes par Jeedom
-		public static function cron() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-		public static function cron5() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-		public static function cron10() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-		public static function cron15() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-		public static function cron30() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement toutes les heures par Jeedom
-		public static function cronHourly() {}
-		*/
-
-		/*
-		* Fonction exécutée automatiquement tous les jours par Jeedom
-		public static function cronDaily() {}
-		*/
 
 		/*     * *********************Méthodes d'instance************************* */
 
@@ -115,9 +69,7 @@
 
 			$daikin_path = realpath(dirname(__FILE__) . '/../../resources/daikintomqtt');
 			$data_path = dirname(__FILE__) . '/../../data/deamon';
-			if (!is_dir($data_path)) {
-				mkdir($data_path, 0777, true);
-			}
+			if (!is_dir($data_path)) mkdir($data_path, 0777, true);
 			$data_path = realpath(dirname(__FILE__) . '/../../data/deamon');
 			self::configureSettings($data_path);
 			chdir($daikin_path);
@@ -175,35 +127,42 @@
 
 		public function preInsert()
 		{
+
 		}
 
 		public function postInsert()
 		{
+
 		}
 
 		public function preUpdate()
 		{
+
 		}
 
 		public function postUpdate()
 		{
+
 		}
 
 		public function preSave()
 		{
+
 		}
 
 		public function postSave()
 		{
-			self::generateCMD();
+
 		}
 
 		public function preRemove()
 		{
+
 		}
 
 		public function postRemove()
 		{
+
 		}
 
 		public static function configureSettings($_path) {
@@ -221,12 +180,11 @@
 
 			$settings['daikin']['modeproxy'] = config::byKey('daikin_modeproxy', 'daikinRCCloud',0) == 1;
 			$settings['daikin']['username'] = config::byKey('daikin_username', 'daikinRCCloud',null);
-			$settings['daikin']['password'] = config::byKey('daikin_password', 'daikinRCCloud',null);
+			$settings['daikin']['password'] = utils::decrypt(config::byKey('daikin_password', 'daikinRCCloud',null));
 			$settings['daikin']['proxyPort'] = config::byKey('daikin_proxyPort', 'daikinRCCloud',8888);
 			$settings['daikin']['proxyWebPort'] = config::byKey('daikin_proxyWebPort', 'daikinRCCloud',8889);
 			$settings['daikin']['communicationTimeout'] = config::byKey('daikin_communicationTimeout', 'daikinRCCloud',10000);
 			$settings['daikin']['communicationRetries'] = config::byKey('daikin_communicationRetries', 'daikinRCCloud',3);
-
 
 			$settings['mqtt']['host'] = $mqttInfos['ip'];
 			$settings['mqtt']['port'] = $mqttInfos['port'];
@@ -237,7 +195,8 @@
 			$settings['mqtt']['reconnectPeriod'] = 1000;
 			$settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud','daikinToMQTT');
 
-			$settings['system']['logLevel'] = 'error';
+			$settings['system']['logLevel'] = 'info';
+			$settings['system']['jeedom'] = TRUE;
 
 			 @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
 		}
@@ -246,12 +205,13 @@
 		* Permet de crypter/décrypter automatiquement des champs de configuration des équipements
 		* Exemple avec le champ "Mot de passe" (password)
 		public function decrypt() {
-		  $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+		  $this->setConfiguration('daikin_password', utils::decrypt($this->getConfiguration('daikin_password')));
 		}
+
 		public function encrypt() {
-		  $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-		}
-		*/
+		  $this->setConfiguration('daikin_password', utils::encrypt($this->getConfiguration('daikin_password')));
+		} */
+
 
 		/*
 		* Permet de modifier l'affichage du widget (également utilisable par les commandes)
@@ -260,26 +220,24 @@
 
 		/*
 		* Permet de déclencher une action avant modification d'une variable de configuration du plugin
-		* Exemple avec la variable "param3"
-		public static function preConfig_param3( $value ) {
-		  // do some checks or modify on $value
-		  return $value;
-		}
 		*/
+		public static function preConfig_daikin_password( $value ) {
+		  return  utils::encrypt($value);
+		}
 
 		/*
 		* Permet de déclencher une action après modification d'une variable de configuration du plugin
 		* Exemple avec la variable "param3"
-		public static function postConfig_param3($value) {
+		public static function postConfig_daikin_password($value) {
 		  // no return value
 		}
 		*/
 
 		/*     * **********************Getteur Setteur*************************** */
 
-		public static function publishMqttValue($_node,$_path,$_args=array()) {
-			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Publication Mqtt Value' . $_node . ' ' . $_path . ' ' . json_encode($_args));
-			mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT').'/'.$_node.'/'.$_path.'/set',$_args);
+		public function publishMqttValue($_node,$_args=array()) {
+			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Publication Mqtt Value' . $_node . ' ' . json_encode($_args));
+			mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT').'/'.$_node.'/set',$_args);
 		}
 
 		public static function handleMqttMessage($_message) {
@@ -288,68 +246,96 @@
 			$events = $_message[config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT')];
 
 			foreach ($events as $key => $event) {
-				log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."ID : ".$key." | Value : ".json_encode($event));
-				$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
-				if (!is_object($eqLogic)) {
-					$eqLogic = new eqLogic();
-					$eqLogic->setEqType_name('daikinRCCloud');
-					$eqLogic->setName($event['device']['name'] ?: $key);
-					$eqLogic->setLogicalId($key);
-					$eqLogic->setIsEnable(1);
+				if ($key == 'system') {
+					self::handleSystemEvent($event);
+					continue;
 				}
-				if (isset($event['device']['timeZone'])) $eqLogic->setConfiguration("timeZone", $event['device']['timeZone']);
-				if (isset($event['device']['errorCode'])) $eqLogic->setConfiguration("errorCode", $event['device']['errorCode']);
-				if (isset($event['device']['modelInfo'])) $eqLogic->setConfiguration("modelInfo", $event['device']['modelInfo']);
-				if (isset($event['device']['serialNumber'])) $eqLogic->setConfiguration("serialNumber", $event['device']['serialNumber']);
-				if (isset($event['device']['firmwareVersion'])) $eqLogic->setConfiguration("firmwareVersion", $event['device']['firmwareVersion']);
-				if (isset($event['device']['wifiConnectionSSID'])) $eqLogic->setConfiguration("wifiConnectionSSID", $event['device']['wifiConnectionSSID']);
-				if (isset($event['device']['wifiConnectionStrength'])) $eqLogic->setConfiguration("wifiConnectionStrength", $event['device']['wifiConnectionStrength']);
-				$eqLogic->save();
+				log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."ID : ".$key." | Value : ".json_encode($event));
+
+				$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
+				if (!is_object($eqLogic) || $eqLogic->getName() == $key) $eqLogic = self::createEqlogic($key, $event);
 
 				$cmds = $eqLogic->getCmd('info');
 				foreach ($cmds as $cmd) {
 					$logicalID = $cmd->getLogicalId();
 					if (!isset($event[$logicalID])) continue;
-					$value = $event[$logicalID];
-
-					if (is_bool($value)) $cmd->event($value ? 1:0);
-					else $cmd->event(jeedom::evaluateExpression($value));
+					$cmd->event(jeedom::evaluateExpression($event[$logicalID]));
 				}
 			}
 		}
 
-		public function generateCMD() {
-			$model = $this->getConfiguration('modelInfo', FALSE);
-			if ($model === FALSE) return;
+		private static function handleSystemEvent($event) {
+			$modules = $event['jeedom'];
 
-			$path = __DIR__ . "/../config/".$model.".json";
-			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.$path);
-			if (!file_exists($path)) return;
-			$data = file_get_contents($path);
-			if (!$data) return;
-			$cmdDatas = json_decode($data, TRUE);
+			foreach ($modules as $uid => $module) {
+				$eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
+				if (!is_object($eqLogic))  {
+					$eqLogic = new eqLogic();
+					$eqLogic->setEqType_name('daikinRCCloud');
+					$eqLogic->setName($uid);
+					$eqLogic->setLogicalId($uid);
+					$eqLogic->setIsEnable(0);
+					$eqLogic->save();
+				}
+				if (is_object($eqLogic)) {
+					log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . "uid : " . $uid . " | Value : " . json_encode($module));
+					self::generateCMD($eqLogic, $module);
+				}
+			}
 
-			foreach ($cmdDatas as $key => $cmdData) {
-				$cmd = $this->getCmd($cmdData['type'], $key);
+		}
+
+		private static function createEqlogic($key, $event) {
+			$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
+			if (!is_object($eqLogic)) {
+				$eqLogic = new eqLogic();
+				$eqLogic->setEqType_name('daikinRCCloud');
+				$eqLogic->setName($event['_device']['name'] ?: $key);
+				$eqLogic->setLogicalId($key);
+				$eqLogic->setIsEnable(1);
+			}
+
+			if ($eqLogic->getName() == $key) {
+				$eqLogic->setName($event['_device']['name'] ?: $key);
+				$eqLogic->setIsEnable(1);
+			}
+
+			if (isset($event['_device']['timeZone'])) $eqLogic->setConfiguration("timeZone", $event['_device']['timeZone']);
+			if (isset($event['_device']['errorCode'])) $eqLogic->setConfiguration("errorCode", $event['_device']['errorCode']);
+			if (isset($event['_device']['modelInfo'])) $eqLogic->setConfiguration("modelInfo", $event['_device']['modelInfo']);
+			if (isset($event['_device']['serialNumber'])) $eqLogic->setConfiguration("serialNumber", $event['_device']['serialNumber']);
+			if (isset($event['_device']['firmwareVersion'])) $eqLogic->setConfiguration("firmwareVersion", $event['_device']['firmwareVersion']);
+			if (isset($event['_device']['wifiConnectionSSID'])) $eqLogic->setConfiguration("wifiConnectionSSID", $event['_device']['wifiConnectionSSID']);
+			if (isset($event['_device']['wifiConnectionStrength'])) $eqLogic->setConfiguration("wifiConnectionStrength", $event['_device']['wifiConnectionStrength']);
+			$eqLogic->save();
+			return $eqLogic;
+		}
+
+		public static function generateCMD($eqLogics, $data) {
+			//$cmdDatas = json_decode($data, TRUE);
+
+			foreach ($data as $cmdData) {
+				$cmd = $eqLogics->getCmd($cmdData['type'], $cmdData['logicalID']);
 				if (!is_object($cmd)) {
 					$cmd = new cmd();
-					$cmd->setEqLogic_id($this->getId());
-					$cmd->setLogicalId($key);
+					$cmd->setEqLogic_id($eqLogics->getId());
+					$cmd->setLogicalId($cmdData['logicalID']);
 					$cmd->setName($cmdData['name']);
-					$cmd->setIsHistorized($cmdData['isHistorized']? 1:0);
-					$cmd->setIsVisible($cmdData['isVisible']? 1:0);
+					if (isset($cmdData['isHistorized'])) $cmd->setIsHistorized($cmdData['isHistorized']? 1:0);
+					if (isset($cmdData['isVisible'])) $cmd->setIsVisible($cmdData['isVisible']? 1:0);
 					if (isset($cmdData['generic_type'])) $cmd->setGeneric_type($cmdData['generic_type']);
+					if (isset($cmdData['template'])) $cmd->setTemplate("dashboard", $cmdData['template']);
 				}
 				$cmd->setType($cmdData['type']);
 				$cmd->setSubType($cmdData['subType']);
 				if (isset($cmdData['unite'])) $cmd->setUnite($cmdData['unite']);
-				if (isset($cmdData['value'])) $cmd->setValue($cmdData['value']);
+				if (isset($cmdData['value'])) $cmd->setValue($eqLogics->getCmd('info', $cmdData['value'])->getId());
 				if (isset($cmdData['minValue'])) $cmd->setConfiguration("minValue",$cmdData['minValue']);
 				if (isset($cmdData['maxValue'])) $cmd->setConfiguration("maxValue", $cmdData['maxValue']);
+				if (isset($cmdData['listValue'])) $cmd->setConfiguration("listValue", $cmdData['listValue']);
+
 				$cmd->save();
 			}
-
-
 		}
 
 		public static function isRunning(): bool
@@ -384,6 +370,42 @@
 		// Exécution d'une commande
 		public function execute($_options = array())
 		{
+			if ($this->getLogicalId() == 'refresh') $this->getEqLogic()->refresh();
+			else {
+
+				log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . "] | Options : " . json_encode($_options));
+
+				$deamon = daikinRCCloud::deamon_info();
+				if ($deamon['state'] == 'ok') {
+					$action = cmd::byId($this->getValue())->getLogicalId();
+
+					switch ($this->getSubType()) {
+						case 'other':
+							if ($action."_ON" == $this->getLogicalId()) $actionValue = TRUE;
+							else if ($action."_OFF" == $this->getLogicalId()) $actionValue = FALSE;
+							break;
+						case 'slider':
+							$actionValue = $_options['slider'];
+							break;
+						case 'select':
+							$actionValue = $_options['select'];
+							break;
+						default:
+							return FALSE;
+					}
+
+					$logicalID = $this->getEqLogic()->getLogicalId();
+
+					$data = array(
+						$action=>$actionValue
+					);
+
+					$this->getEqLogic()->publishMqttValue($logicalID, $data);
+					return true;
+				}
+				return false;
+			}
+			return false;
 		}
 
 		/*     * **********************Getteur Setteur*************************** */
