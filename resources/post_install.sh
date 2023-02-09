@@ -9,6 +9,6 @@ cd $BASEDIR
 cd daikintomqtt
 sudo yarn install
 mv main.js daikinToMQTT.js
-chown -R www-data:www-data *
+chown -R www-data:www-data ../*
 
 echo "Everything is successfully installed!"
