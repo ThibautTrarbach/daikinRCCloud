@@ -11,7 +11,7 @@ sudo yarn install
 
 cp main.js daikinToMQTT.js
 
-chown -R www-data:www-data *
+sudo chown -R www-data:www-data ../*
 
 echo "Everything is successfully installed!"
 
