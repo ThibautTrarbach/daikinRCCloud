@@ -295,7 +295,7 @@
 				$eqLogic->setIsEnable(1);
 			}
 
-			if ($eqLogic->getName() == ("Daikin - ". $key)) {
+			if ($eqLogic->getName() == $key) {
 				$eqLogic->setName("Daikin - ". $event['_device']['name'] ?: $key);
 				$eqLogic->setIsEnable(1);
 			}
