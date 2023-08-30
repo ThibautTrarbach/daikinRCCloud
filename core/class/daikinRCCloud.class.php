@@ -272,7 +272,7 @@
 				if (!is_object($eqLogic))  {
 					$eqLogic = new eqLogic();
 					$eqLogic->setEqType_name('daikinRCCloud');
-					$eqLogic->setName($uid);
+					$eqLogic->setName("Daikin - ".$uid);
 					$eqLogic->setLogicalId($uid);
 					$eqLogic->setIsEnable(0);
 					$eqLogic->save();
