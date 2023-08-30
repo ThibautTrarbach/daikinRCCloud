@@ -5,16 +5,16 @@
 		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA"
 	},
 	"licence" : "AGPL",
-	"author" : "Thibayt Trarbach",
-	"require" : "4.2",
+	"author" : "Thibaut Trarbach",
+	"require" : "4.3",
 	"category" : "wellness",
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 600,
 	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
+	"documentation" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
 	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
+	"documentation_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
 	"link" : {
 		"forum":"https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi"
 	},
@@ -22,7 +22,6 @@
 		"fr_FR"
 	],
 	"compatibility": [
-		"miniplus",
 		"smart",
 		"rpi",
 		"docker",

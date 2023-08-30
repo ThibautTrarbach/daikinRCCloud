@@ -20,10 +20,28 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				<span>{{Configuration}}</span>
 			</div>
 		</div>
+		<?php
+            $jeedomVersion  = jeedom::version() ?? '0';
+            $displayInfoValue = version_compare($jeedomVersion, '4.4.0', '>=');
+            if ($displayInfoValue) {
+        ?>
+        <div class="col-sm-2">
+            <legend><i class=" fas fa-comments"></i> {{Community}}</legend>
+            <div class="eqLogicThumbnailContainer">
+                <div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
+                    <i class="fas fa-ambulance"></i>
+                    <br>
+                    <span style="color:var(--txt-color)">{{Créer un post Community}}</span>
+                </div>
+            </div>
+        </div>
+        <?php
+			}
+			?>
 		<legend><i class="fas fa-table"></i> {{Mes templates}}</legend>
 		<?php
 		if (count($eqLogics) == 0) {
-			echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Template trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
+			echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement Daikin trouvé}}</div>';
 		} else {
 			// Champ de recherche
 			echo '<div class="input-group" style="margin:5px;">';
@@ -58,7 +76,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			<span class="input-group-btn">
 				<!-- Les balises <a></a> sont volontairement fermées à la ligne suivante pour éviter les espaces entre les boutons. Ne pas modifier -->
 				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
-				</a><a class="btn btn-sm btn-default eqLogicAction" data-action="copy"><i class="fas fa-copy"></i><span class="hidden-xs">  {{Dupliquer}}</span>
 				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
 				</a><a class="btn btn-sm btn-danger eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}
 				</a>
@@ -220,6 +237,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 								<th style="min-width:200px;width:350px;">{{Nom}}</th>
 								<th>{{Type}}</th>
 								<th style="min-width:260px;">{{Options}}</th>
+                                <th>{{Etat}}</th>
 								<th style="min-width:80px;width:200px;">{{Actions}}</th>
 							</tr>
 						</thead>
