@@ -272,7 +272,7 @@
 				if (!is_object($eqLogic))  {
 					$eqLogic = new eqLogic();
 					$eqLogic->setEqType_name('daikinRCCloud');
-					$eqLogic->setName("Daikin - ".$uid);
+					$eqLogic->setName($uid);
 					$eqLogic->setLogicalId($uid);
 					$eqLogic->setIsEnable(0);
 					$eqLogic->save();
@@ -290,13 +290,13 @@
 			if (!is_object($eqLogic)) {
 				$eqLogic = new eqLogic();
 				$eqLogic->setEqType_name('daikinRCCloud');
-				$eqLogic->setName($event['_device']['name'] ?: $key);
+				$eqLogic->setName("Daikin - ". $event['_device']['name'] ?: $key);
 				$eqLogic->setLogicalId($key);
 				$eqLogic->setIsEnable(1);
 			}
 
 			if ($eqLogic->getName() == $key) {
-				$eqLogic->setName($event['_device']['name'] ?: $key);
+				$eqLogic->setName("Daikin - ". $event['_device']['name'] ?: $key);
 				$eqLogic->setIsEnable(1);
 			}
 
