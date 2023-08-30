@@ -11,9 +11,9 @@
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 600,
-	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
+	"changelog" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog",
 	"documentation" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
-	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
+	"changelog_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog-beta",
 	"documentation_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
 	"link" : {
 		"forum":"https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi"
