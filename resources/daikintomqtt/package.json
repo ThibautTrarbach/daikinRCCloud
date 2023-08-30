@@ -4,10 +4,10 @@
   "description": "",
   "main": "daikinToMQTT.js",
   "scripts": {
-    "run": "../../../../WebstormProjects/daikin-deamon/node_modules/.bin/ts-node ./src/main.ts",
-    "clean": "../../../../WebstormProjects/daikin-deamon/node_modules/.bin/tsc --build --clean",
+    "run": "ts-node ./src/main.ts",
+    "clean": "tsc --build --clean",
     "start": "node --preserve-symlinks build/main.js",
-    "buildStart": "../../../../WebstormProjects/daikin-deamon/node_modules/.bin/tsc --build && node --preserve-symlinks build/main.js"
+    "buildStart": "tsc --build && node --preserve-symlinks build/main.js"
   },
   "keywords": [],
   "author": "",
