@@ -174,6 +174,8 @@ function convert(converter, value, to) {
         case converterEnum.numeric:
             return parseFloat(value);
         case converterEnum.consumption:
+            if (to != 0)
+                return 0;
             return convertConsumption(value);
     }
 }
