@@ -76,6 +76,7 @@ async function loadDaikinAPI() {
             }
             global.daikinToken = JSON.parse(fs_1.default.readFileSync(tokenFile).toString());
             logger.debug('Use Token with the following claims: ' + JSON.stringify(daikinClient.getTokenSet().claims()));
+            await (0, mqtt_1.publishStatus)(true, true);
         }
         catch (e) {
             let error = e.toString();

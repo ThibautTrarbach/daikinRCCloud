@@ -251,11 +251,6 @@
 					continue;
 				}
 
-				if ($key == 'bridge') {
-					self::handleBridgeEvent($event);
-					continue;
-				}
-
 				log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."ID : ".$key." | Value : ".json_encode($event));
 
 				$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
@@ -271,6 +266,11 @@
 		}
 
 		private static function handleSystemEvent($event) {
+			if (isset($event['jeedom'])) self::handleSystemJeedomEvent($event);
+			if (isset($event['bridge'])) self::handleSystemBridgeEvent($event);
+		}
+
+		private static function handleSystemJeedomEvent($event) {
 			$modules = $event['jeedom'];
 
 			foreach ($modules as $uid => $module) {
@@ -291,8 +291,7 @@
 
 		}
 
-
-		private static function handleBridgeEvent($event) {
+		private static function handleSystemBridgeEvent($event) {
 			$daikinStatus = $event['daikin'];
 			$mqttStatus = $event['mqtt'];
 			$status = $event['status'];

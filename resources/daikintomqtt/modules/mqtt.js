@@ -34,9 +34,6 @@ async function publishToMQTT(topic, data) {
 }
 exports.publishToMQTT = publishToMQTT;
 async function publishStatus(daikinStatus, mqttStatus, error) {
-    console.log("daikinStatus: " + daikinStatus);
-    console.log("mqttStatus: " + mqttStatus);
-    console.log("error: " + error);
     await publishToMQTT('system/bridge/status', daikinStatus && mqttStatus ? 'online' : 'offline');
     await publishToMQTT('system/bridge/daikin', daikinStatus ? 'online' : 'offline');
     await publishToMQTT('system/bridge/mqtt', mqttStatus ? 'online' : 'offline');
