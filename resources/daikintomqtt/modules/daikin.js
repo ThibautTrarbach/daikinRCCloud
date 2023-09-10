@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -11,6 +34,7 @@ const fs_1 = __importDefault(require("fs"));
 const gateway_1 = require("./gateway");
 const converter_1 = require("./converter");
 const mqtt_1 = require("./mqtt");
+const Process = __importStar(require("process"));
 async function getOptions() {
     return {
         logger: null,
@@ -43,14 +67,24 @@ async function loadDaikinAPI() {
         startError = true;
     }
     if (daikinToken == undefined || startError) {
-        if (config.daikin.modeProxy) {
-            await daikinClient.initProxyServer();
+        try {
+            if (config.daikin.modeProxy) {
+                await daikinClient.initProxyServer();
+            }
+            else {
+                await daikinClient.login(config.daikin.username, config.daikin.password);
+            }
+            global.daikinToken = JSON.parse(fs_1.default.readFileSync(tokenFile).toString());
+            logger.debug('Use Token with the following claims: ' + JSON.stringify(daikinClient.getTokenSet().claims()));
         }
-        else {
-            await daikinClient.login(config.daikin.username, config.daikin.password);
+        catch (e) {
+            let error = e.toString();
+            logger.error("Error to connect to Daikin Cloud");
+            logger.error(error);
+            await (0, mqtt_1.publishStatus)(false, true, error);
+            await timeout(10000);
+            Process.exit(2);
         }
-        global.daikinToken = JSON.parse(fs_1.default.readFileSync(tokenFile).toString());
-        logger.debug('Use Token with the following claims: ' + JSON.stringify(daikinClient.getTokenSet().claims()));
     }
     global.daikinClient = daikinClient;
 }
@@ -128,3 +162,6 @@ async function generateConfig() {
     }
 }
 exports.generateConfig = generateConfig;
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

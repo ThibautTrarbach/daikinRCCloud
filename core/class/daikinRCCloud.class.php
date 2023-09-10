@@ -250,6 +250,12 @@
 					self::handleSystemEvent($event);
 					continue;
 				}
+
+				if ($key == 'bridge') {
+					self::handleBridgeEvent($event);
+					continue;
+				}
+
 				log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."ID : ".$key." | Value : ".json_encode($event));
 
 				$eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
@@ -283,6 +289,20 @@
 				}
 			}
 
+		}
+
+
+		private static function handleBridgeEvent($event) {
+			$daikinStatus = $event['daikin'];
+			$mqttStatus = $event['mqtt'];
+			$status = $event['status'];
+			$error = $event['error'];
+
+			if ($error !== "No Error") {
+				log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
+				plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
+				self::deamon_stop();
+			}
 		}
 
 		private static function createEqlogic($key, $event) {

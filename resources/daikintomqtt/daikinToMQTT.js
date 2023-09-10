@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const modules_1 = require("./modules");
 const cron_1 = require("./modules/cron");
-async function daikinToMQTT() {
+async function main() {
     global.datadir = process.env.STORE_DIR || process.cwd() + "/config";
     global.logger = (0, modules_1.loadLogger)();
     console.info("Starting DaikinToMQTT");
@@ -22,4 +22,4 @@ async function daikinToMQTT() {
     logger.info("Send First Event Data Value");
     await (0, modules_1.sendDevice)();
 }
-daikinToMQTT().then();
+main().then();
