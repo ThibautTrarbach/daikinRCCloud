@@ -198,7 +198,7 @@
 			$settings['system']['logLevel'] = 'info';
 			$settings['system']['jeedom'] = TRUE;
 
-			 @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
+			@yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
 		}
 
 		/*
@@ -222,7 +222,7 @@
 		* Permet de déclencher une action avant modification d'une variable de configuration du plugin
 		*/
 		public static function preConfig_daikin_password( $value ) {
-		  return  utils::encrypt($value);
+			return  utils::encrypt($value);
 		}
 
 		/*
@@ -266,14 +266,12 @@
 		}
 
 		private static function handleSystemEvent($event) {
-			if (isset($event['jeedom'])) self::handleSystemJeedomEvent($event);
-			if (isset($event['bridge'])) self::handleSystemBridgeEvent($event);
+			if (isset($event['jeedom'])) self::handleSystemJeedomEvent($event['jeedom']);
+			if (isset($event['bridge'])) self::handleSystemBridgeEvent($event['bridge']);
 		}
 
 		private static function handleSystemJeedomEvent($event) {
-			$modules = $event['jeedom'];
-
-			foreach ($modules as $uid => $module) {
+			foreach ($event as $uid => $module) {
 				$eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
 				if (!is_object($eqLogic))  {
 					$eqLogic = new eqLogic();
