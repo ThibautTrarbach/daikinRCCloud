@@ -298,10 +298,9 @@
 			$status = $event['status'];
 			$error = $event['error'];
 
-			if ($error !== "No Error") {
+			if ($error !== "No Error" && $status == "offline") {
 				log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
 				plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
-				self::deamon_stop();
 			}
 		}
 
