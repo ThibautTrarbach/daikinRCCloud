@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publishStatus = exports.publishToMQTT = exports.loadMQTTClient = void 0;
-const mqtt_1 = require("resources/daikintomqtt/modules/mqtt");
+const mqtt_1 = require("mqtt");
 async function getOptions() {
     const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
     let option = {
