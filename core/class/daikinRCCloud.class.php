@@ -293,11 +293,12 @@
 			$daikinStatus = $event['daikin'];
 			$mqttStatus = $event['mqtt'];
 			$status = $event['status'];
-			$error = $event['error'];
-
-			if ($error !== "No Error" && $status == "offline") {
-				log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
-				plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
+			if (isset($event['error'])) {
+				$error = $event['error'];
+				if ($error !== "No Error") {
+					log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
+					plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
+				}
 			}
 		}
 
