@@ -260,7 +260,9 @@
 				foreach ($cmds as $cmd) {
 					$logicalID = $cmd->getLogicalId();
 					if (!isset($event[$logicalID])) continue;
-					$cmd->event(jeedom::evaluateExpression($event[$logicalID]));
+					$value = jeedom::evaluateExpression($event[$logicalID]);
+					log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '."Data Debug => logicalID : ".$logicalID." | Value : ".$value);
+					$cmd->event($value);
 				}
 			}
 		}
