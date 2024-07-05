@@ -7,7 +7,7 @@ exports.loadCron = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
 const daikin_1 = require("./daikin");
 async function loadCron() {
-    node_cron_1.default.schedule('*/5 * * * * *', async function () {
+    node_cron_1.default.schedule('0 */15 * * * *', async function () {
         logger.debug("Run Polling Daikin");
         await (0, daikin_1.sendDevice)();
     });

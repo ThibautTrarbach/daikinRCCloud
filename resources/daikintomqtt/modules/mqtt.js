@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.publishStatus = exports.publishToMQTT = exports.loadMQTTClient = void 0;
+exports.publishConfig = exports.publishToMQTT = exports.loadMQTTClient = void 0;
 const mqtt_1 = require("mqtt");
 async function getOptions() {
     const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
@@ -19,7 +19,6 @@ async function loadMQTTClient() {
     const mqttHost = `mqtt://${config.mqtt.host}:${config.mqtt.port}`;
     global.mqttClient = (0, mqtt_1.connect)(mqttHost, options);
     global.cache = {};
-    await publishStatus(false, true);
 }
 exports.loadMQTTClient = loadMQTTClient;
 async function publishToMQTT(topic, data) {
@@ -33,10 +32,7 @@ async function publishToMQTT(topic, data) {
     });
 }
 exports.publishToMQTT = publishToMQTT;
-async function publishStatus(daikinStatus, mqttStatus, error) {
-    await publishToMQTT('system/bridge/status', daikinStatus && mqttStatus ? 'online' : 'offline');
-    await publishToMQTT('system/bridge/daikin', daikinStatus ? 'online' : 'offline');
-    await publishToMQTT('system/bridge/mqtt', mqttStatus ? 'online' : 'offline');
-    await publishToMQTT('system/bridge/error', error || "No Error");
+async function publishConfig(key, value) {
+    await publishToMQTT('system/bridge/' + key, value.toString());
 }
-exports.publishStatus = publishStatus;
+exports.publishConfig = publishConfig;

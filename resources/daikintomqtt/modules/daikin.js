@@ -1,97 +1,57 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendDevice = exports.generateConfig = exports.subscribeDevices = exports.loadDaikinAPI = void 0;
-const daikin_controller_cloud_1 = __importDefault(require("daikin-controller-cloud"));
-const ip_1 = __importDefault(require("ip"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+exports.startDaikinAPI = exports.sendDevice = exports.generateConfig = exports.subscribeDevices = exports.loadDaikinAPI = void 0;
+const node_path_1 = require("node:path");
 const gateway_1 = require("./gateway");
 const converter_1 = require("./converter");
 const mqtt_1 = require("./mqtt");
-const Process = __importStar(require("process"));
-async function getOptions() {
-    return {
-        logger: null,
-        logLevel: config.system.logLevel,
-        proxyOwnIp: ip_1.default.address(),
-        proxyPort: config.daikin.proxyPort,
-        proxyWebPort: config.daikin.proxyWebPort,
-        proxyListenBind: '0.0.0.0',
-        proxyDataDir: datadir,
-        communicationTimeout: config.daikin.communicationTimeout,
-        communicationRetries: config.daikin.communicationRetries
-    };
-}
+const daikin_controller_cloud_1 = require("daikin-controller-cloud");
 async function loadDaikinAPI() {
-    let startError = false;
-    const tokenFile = path_1.default.join(datadir, '/tokenset.json');
-    let daikinOptions = await getOptions();
-    if (fs_1.default.existsSync(tokenFile))
-        global.daikinToken = JSON.parse(fs_1.default.readFileSync(tokenFile).toString());
-    else
-        global.daikinToken = undefined;
-    let daikinClient = new daikin_controller_cloud_1.default(daikinToken, daikinOptions);
-    daikinClient.on('token_update', (tokenSet) => {
-        fs_1.default.writeFileSync(tokenFile, JSON.stringify(tokenSet));
+    if (!config.daikin.clientID || !config.daikin.clientSecret) {
+        console.log('Please set the clientID and clientSecret in the settings files');
+        process.exit(0);
+    }
+    const daikinClient = new daikin_controller_cloud_1.DaikinCloudController({
+        oidcClientId: config.daikin.clientID,
+        oidcClientSecret: config.daikin.clientSecret,
+        oidcCallbackServerBindAddr: '0.0.0.0',
+        oidcCallbackServerPort: config.daikin.clientPort,
+        oidcCallbackServerExternalAddress: config.daikin.clientURL,
+        oidcTokenSetFilePath: (0, node_path_1.resolve)(datadir, 'daikin-controller-cloud-tokenset'),
+        oidcAuthorizationTimeoutS: 120
     });
-    try {
-        await daikinClient.getCloudDeviceDetails();
-    }
-    catch (e) {
-        startError = true;
-    }
-    if (daikinToken == undefined || startError) {
-        try {
-            if (config.daikin.modeProxy) {
-                await daikinClient.initProxyServer();
-            }
-            else {
-                await daikinClient.login(config.daikin.username, config.daikin.password);
-            }
-            global.daikinToken = JSON.parse(fs_1.default.readFileSync(tokenFile).toString());
-            logger.debug('Use Token with the following claims: ' + JSON.stringify(daikinClient.getTokenSet().claims()));
-            await (0, mqtt_1.publishStatus)(true, true);
-        }
-        catch (e) {
-            let error = e.toString();
-            logger.error("Error to connect to Daikin Cloud");
-            logger.error(error);
-            await (0, mqtt_1.publishStatus)(false, true, error);
-            await timeout(10000);
-            Process.exit(2);
-        }
-    }
+    daikinClient.on('authorization_request', (url) => {
+        console.log(`
+			Please make sure that ${url} is set as "Redirect URL" in your Daikin Developer Portal account for the used Client!
+			 
+			Then please open the URL ${url} in your browser and accept the security warning for the self signed certificate (if you open this for the first time).
+			 
+			Afterwards you are redirected to Daikin to approve the access and then redirected back.`);
+        (0, mqtt_1.publishConfig)('url', url).then();
+        (0, mqtt_1.publishConfig)('authorization_request', true).then();
+    });
+    daikinClient.on('rate_limit_status', (rateLimitStatus) => {
+        console.log(rateLimitStatus);
+        (0, mqtt_1.publishConfig)('authorization_request', false).then();
+        (0, mqtt_1.publishConfig)('rate/limitMinute', rateLimitStatus.limitMinute).then();
+        (0, mqtt_1.publishConfig)('rate/remainingMinute', rateLimitStatus.remainingMinute).then();
+        (0, mqtt_1.publishConfig)('rate/limitDay', rateLimitStatus.limitDay).then();
+        (0, mqtt_1.publishConfig)('rate/remainingDay', rateLimitStatus.remainingDay).then();
+    });
     global.daikinClient = daikinClient;
 }
 exports.loadDaikinAPI = loadDaikinAPI;
-async function subscribeDevices() {
+async function startDaikinAPI() {
     const devices = await daikinClient.getCloudDevices();
+    logger.info("=> Subscribe to MQTT Action");
+    await subscribeDevices(devices);
+    logger.info("Generate Config Info");
+    await generateConfig(devices);
+    logger.info("Send First Event Data Value");
+    await sendDevice(devices);
+}
+exports.startDaikinAPI = startDaikinAPI;
+async function subscribeDevices(devices) {
     for (let dev of devices) {
         let subscribeTopic = config.mqtt.topic + "/" + dev.getId() + "/set";
         mqttClient.subscribe(subscribeTopic, function (err) {
@@ -108,20 +68,22 @@ async function subscribeDevices() {
             let gateway = getModels(dev);
             if (gateway !== undefined) {
                 await (0, gateway_1.eventValue)(dev, gateway, JSON.parse(message.toString()));
+                await timeout(60000);
+                await sendDevice();
             }
         }
     });
 }
 exports.subscribeDevices = subscribeDevices;
-async function sendDevice() {
-    const devices = await daikinClient.getCloudDevices();
+async function sendDevice(devices = null) {
+    if (devices == null)
+        devices = await daikinClient.getCloudDevices();
     if (devices && devices.length) {
         for (let dev of devices) {
             let gateway = getModels(dev);
             await (0, mqtt_1.publishToMQTT)(dev.getId(), JSON.stringify(gateway));
         }
     }
-    return devices;
 }
 exports.sendDevice = sendDevice;
 function getModels(devices) {
@@ -152,13 +114,12 @@ function getModels(devices) {
             return undefined;
     }
 }
-async function generateConfig() {
-    const devices = await daikinClient.getCloudDevices();
+async function generateConfig(devices) {
     if (devices && devices.length) {
-        for (let dev of devices) {
-            let module = getModels(dev);
+        for (let device of devices) {
+            let module = getModels(device);
             if (module)
-                await (0, converter_1.makeDefineFile)(module);
+                await (0, converter_1.makeDefineFile)(module, device);
         }
     }
 }

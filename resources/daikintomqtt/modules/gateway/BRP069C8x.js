@@ -182,8 +182,11 @@ __decorate([
         name: 'Room Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: 10,
-        maxValue: 30,
+        minMaxValue: {
+            managementPoint: "climateControl",
+            dataPoint: "sensoryData",
+            dataPointPath: "/roomTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -198,8 +201,11 @@ __decorate([
         name: 'Outdoor Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: -10,
-        maxValue: 40,
+        minMaxValue: {
+            managementPoint: "climateControl",
+            dataPoint: "sensoryData",
+            dataPointPath: "/outdoorTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -221,8 +227,16 @@ __decorate([
         settable: true,
         type: BaseModules_1.typeEnum.numeric,
         unite: '°C',
-        minValue: 16,
-        maxValue: 32
+        minMaxValue: {
+            managementPoint: "climateControl",
+            dataPoint: "temperatureControl",
+            dataPointPath: "/operationModes/#value#/setpoints/roomTemperature",
+            multiple: true,
+            multipleValue: {
+                managementPoint: "climateControl",
+                dataPoint: "operationMode"
+            }
+        },
     }),
     __metadata("design:type", Number)
 ], BRP069C8x.prototype, "_temperatureControl", void 0);
@@ -264,8 +278,16 @@ __decorate([
         name: 'Fan Fixed',
         settable: true,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: 1,
-        maxValue: 3
+        minMaxValue: {
+            managementPoint: "climateControl",
+            dataPoint: "fanControl",
+            dataPointPath: "/operationModes/#value#/fanSpeed/modes/fixed",
+            multiple: true,
+            multipleValue: {
+                managementPoint: "climateControl",
+                dataPoint: "operationMode"
+            }
+        },
     }),
     __metadata("design:type", String)
 ], BRP069C8x.prototype, "_fanFixed", void 0);

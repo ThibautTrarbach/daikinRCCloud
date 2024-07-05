@@ -180,7 +180,7 @@
 
 			$settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud',null);
 			$settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud',null);
-			$settings['daikin']['clientURL'] = network::getNetworkAccess('internal');
+			$settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
 			$settings['daikin']['clientPort'] = config::byKey('daikin_clientPort', 'daikinRCCloud',8765);
 
 			$settings['mqtt']['host'] = $mqttInfos['ip'];

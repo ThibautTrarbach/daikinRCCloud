@@ -290,8 +290,11 @@ __decorate([
         name: 'Main Zone - Room Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: -127,
-        maxValue: 127,
+        minMaxValue: {
+            managementPoint: "climateControlMainZone",
+            dataPoint: "sensoryData",
+            dataPointPath: "/roomTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -306,8 +309,11 @@ __decorate([
         name: 'Main Zone - Outdoor Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: -127,
-        maxValue: 127,
+        minMaxValue: {
+            managementPoint: "climateControlMainZone",
+            dataPoint: "sensoryData",
+            dataPointPath: "/outdoorTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -322,8 +328,11 @@ __decorate([
         name: 'Main Zone - Leaving Water Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: -127,
-        maxValue: 127,
+        minMaxValue: {
+            managementPoint: "climateControlMainZone",
+            dataPoint: "sensoryData",
+            dataPointPath: "/leavingWaterTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -358,8 +367,16 @@ __decorate([
         settable: true,
         type: BaseModules_1.typeEnum.numeric,
         unite: '°C',
-        minValue: 12,
-        maxValue: 30
+        minMaxValue: {
+            managementPoint: "climateControlMainZone",
+            dataPoint: "temperatureControl",
+            dataPointPath: "/operationModes/#value#/setpoints/roomTemperature",
+            multiple: true,
+            multipleValue: {
+                managementPoint: "climateControlMainZone",
+                dataPoint: "operationMode"
+            }
+        }
     }),
     __metadata("design:type", Number)
 ], BRP069A78.prototype, "_temperatureControlMain", void 0);
@@ -380,8 +397,16 @@ __decorate([
         settable: true,
         type: BaseModules_1.typeEnum.numeric,
         unite: '°C',
-        minValue: -10,
-        maxValue: 10
+        minMaxValue: {
+            managementPoint: "climateControlMainZone",
+            dataPoint: "temperatureControl",
+            dataPointPath: "/operationModes/#value#/setpoints/roomTemperature",
+            multiple: true,
+            multipleValue: {
+                managementPoint: "climateControlMainZone",
+                dataPoint: "operationMode"
+            }
+        }
     }),
     __metadata("design:type", Number)
 ], BRP069A78.prototype, "_temperatureControlWaterMain", void 0);
@@ -522,8 +547,11 @@ __decorate([
         name: 'Water Tank - Tank Temperature',
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
-        minValue: -127,
-        maxValue: 127,
+        minMaxValue: {
+            managementPoint: "domesticHotWaterTank",
+            dataPoint: "sensoryData",
+            dataPointPath: "/tankTemperature"
+        },
         unite: '°C'
     }),
     __metadata("design:type", Number)
@@ -553,8 +581,11 @@ __decorate([
         settable: false,
         type: BaseModules_1.typeEnum.numeric,
         unite: '°C',
-        minValue: 30,
-        maxValue: 60
+        minMaxValue: {
+            managementPoint: "domesticHotWaterTank",
+            dataPoint: "temperatureControl",
+            dataPointPath: "/operationModes/heating/setpoints/domesticHotWaterTemperature",
+        },
     }),
     __metadata("design:type", Number)
 ], BRP069A78.prototype, "_domesticHotWaterTemperatureTank", void 0);
