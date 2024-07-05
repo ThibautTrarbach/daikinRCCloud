@@ -178,13 +178,10 @@
 			$mqttInfos = mqtt2::getFormatedInfos();
 			log::add('daikinRCCloud','debug','[' . __FUNCTION__ . '] '.'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
 
-			$settings['daikin']['modeproxy'] = config::byKey('daikin_modeproxy', 'daikinRCCloud',0) == 1;
-			$settings['daikin']['username'] = config::byKey('daikin_username', 'daikinRCCloud',null);
-			$settings['daikin']['password'] = utils::decrypt(config::byKey('daikin_password', 'daikinRCCloud',null));
-			$settings['daikin']['proxyPort'] = config::byKey('daikin_proxyPort', 'daikinRCCloud',8888);
-			$settings['daikin']['proxyWebPort'] = config::byKey('daikin_proxyWebPort', 'daikinRCCloud',8889);
-			$settings['daikin']['communicationTimeout'] = config::byKey('daikin_communicationTimeout', 'daikinRCCloud',10000);
-			$settings['daikin']['communicationRetries'] = config::byKey('daikin_communicationRetries', 'daikinRCCloud',3);
+			$settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud',null);
+			$settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud',null);
+			$settings['daikin']['clientURL'] = network::getNetworkAccess('internal');
+			$settings['daikin']['clientPort'] = config::byKey('daikin_clientPort', 'daikinRCCloud',8765);
 
 			$settings['mqtt']['host'] = $mqttInfos['ip'];
 			$settings['mqtt']['port'] = $mqttInfos['port'];

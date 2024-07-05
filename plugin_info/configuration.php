@@ -10,36 +10,22 @@
     <fieldset>
         <legend><i class="fas fa-wifi"></i> {{Daikin}}</legend>
         <div class="form-group">
-            <div class="form-group" hidden>
-                <label class="col-sm-3 control-label">{{Utilisé le mode proxy}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Cocher la case pour utiliser le mode Proxy}}"></i></sup>
-                </label>
-                <div class="col-md-1">
-                    <input type="checkbox" class="configKey" data-l1key="daikin_modeproxy"/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Client ID}}</label>
+                <div class="input-group col-sm-7">
+                    <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientID" placeholder="{{Client ID de votre application  Daikin Cloud}}" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">{{Email}}</label>
+                <label class="col-sm-3 control-label">{{Client Secret}}</label>
                 <div class="input-group col-sm-7">
-                    <input class="configKey roundedLeft form-control" data-l1key="daikin_username" placeholder="{{Email d'accès a votre compte ONECTA}}" />
+                    <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientSecret" placeholder="{{Client Secret de votre application Daikin Cloud}}" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">{{Mots de passe}}</label>
+                <label class="col-sm-3 control-label">{{Port du client}}</label>
                 <div class="input-group col-sm-7">
-                    <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_password" placeholder="{{Mots de passe d'accès a votre compte ONECTA}}" />
-                </div>
-            </div>
-            <div class="form-group" hidden>
-                <label class="col-sm-3 control-label">{{Port du proxy}}</label>
-                <div class="input-group col-sm-7">
-                    <input class="configKey roundedLeft form-control" data-l1key="daikin_proxyPort" placeholder="{{Default : 8888}}" />
-                </div>
-            </div>
-            <div class="form-group" hidden>
-                <label class="col-sm-3 control-label">{{Port web du proxy}}</label>
-                <div class="input-group col-sm-7">
-                    <input class="configKey roundedLeft form-control" data-l1key="daikin_proxyWebPort" placeholder="{{Default : 8889}}" />
+                    <input class="configKey roundedLeft form-control" data-l1key="daikin_clientPort" placeholder="{{Default : 8765}}" />
                 </div>
             </div>
             <div class="form-group">
