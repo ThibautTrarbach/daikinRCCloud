@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eventValue = exports.convertDaikinDevice = exports.consumptionEnum = exports.converterEnum = exports.typeEnum = void 0;
+exports.consumptionEnum = exports.converterEnum = exports.typeEnum = void 0;
+exports.convertDaikinDevice = convertDaikinDevice;
+exports.eventValue = eventValue;
 const decorator_1 = require("../decorator");
 const typeEnum = Object.freeze({
     numeric: 0,
@@ -63,7 +65,6 @@ function convertDaikinDevice(device, gatewayClass) {
         gatewayClass[key] = daikinValue;
     });
 }
-exports.convertDaikinDevice = convertDaikinDevice;
 function createDeviceInfo(device, gatewayClass) {
     let data = Reflect.getMetadata(decorator_1.PROPERTY_METADATA_DAIKIN_DEVICE, gatewayClass);
     Object.entries(data).forEach(entry1 => {
@@ -94,7 +95,6 @@ async function eventValue(device, gatewayClass, events) {
     });
     await updateDaikinDevice(device, gatewayClass);
 }
-exports.eventValue = eventValue;
 async function updateDaikinDevice(device, gatewayClass) {
     let data = Reflect.getMetadata(decorator_1.PROPERTY_METADATA_DAIKIN, gatewayClass);
     Object.entries(data).forEach(entry => {
@@ -123,7 +123,6 @@ async function updateDaikinDevice(device, gatewayClass) {
             return;
         }
     });
-    await device.updateData();
 }
 async function validateData(device, def, value) {
     let params = device.getData(def.managementPoint, def.dataPoint);
@@ -132,7 +131,12 @@ async function validateData(device, def, value) {
     let data = checkData(params, value);
     if (!data.isOK)
         return;
-    await device.setData(def.managementPoint, def.dataPoint, data.value);
+    if (params.value == data.value)
+        return;
+    const deviceD = global.cache[device.getId()];
+    logger.debug('=====================================> Send Request to cloud : Action | ' + value);
+    await deviceD.setData(def.managementPoint, def.dataPoint, data.value);
+    await cache.set('needRefresh', Math.floor(Date.now() / 1000));
 }
 async function validateDataPath(device, def, dataPointPath, value) {
     let params = device.getData(def.managementPoint, def.dataPoint, dataPointPath);
@@ -141,7 +145,12 @@ async function validateDataPath(device, def, dataPointPath, value) {
     let data = checkData(params, value);
     if (!data.isOK)
         return;
-    await device.setData(def.managementPoint, def.dataPoint, dataPointPath, data.value);
+    if (params.value == data.value)
+        return;
+    const deviceD = global.cache[device.getId()];
+    logger.debug('=====================================> Send Request to cloud : Action | ' + value);
+    await deviceD.setData(def.managementPoint, def.dataPoint, dataPointPath, data.value);
+    await cache.set('needRefresh', Math.floor(Date.now() / 1000));
 }
 function checkData(params, value) {
     let result = {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateCMD = void 0;
+exports.generateCMD = generateCMD;
 const gateway_1 = require("../gateway");
 function generateCMD(data, modules, device) {
     let cmd = [];
@@ -23,12 +23,11 @@ function generateCMD(data, modules, device) {
             }
         }
         catch (e) {
-            console.log(e);
+            logger.error(e);
         }
     });
     return cmd;
 }
-exports.generateCMD = generateCMD;
 function getMinMaxValue(value, device) {
     let min = null;
     let max = null;

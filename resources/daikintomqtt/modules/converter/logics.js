@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeDefineFile = void 0;
+exports.makeDefineFile = makeDefineFile;
 const decorator_1 = require("../decorator");
 const jeedom_1 = require("./jeedom");
 const mqtt_1 = require("../mqtt");
@@ -12,4 +12,3 @@ async function makeDefineFile(moduleClass, device) {
         await (0, mqtt_1.publishToMQTT)('system/jeedom/' + id, JSON.stringify(cmd));
     }
 }
-exports.makeDefineFile = makeDefineFile;

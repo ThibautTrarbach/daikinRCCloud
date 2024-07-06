@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.publishConfig = exports.publishToMQTT = exports.loadMQTTClient = void 0;
+exports.loadMQTTClient = loadMQTTClient;
+exports.publishToMQTT = publishToMQTT;
+exports.publishConfig = publishConfig;
 const mqtt_1 = require("mqtt");
 async function getOptions() {
     const clientId = `mqtt_${Math.random().toString(16).slice(3)}`;
@@ -18,21 +20,17 @@ async function loadMQTTClient() {
     let options = await getOptions();
     const mqttHost = `mqtt://${config.mqtt.host}:${config.mqtt.port}`;
     global.mqttClient = (0, mqtt_1.connect)(mqttHost, options);
-    global.cache = {};
 }
-exports.loadMQTTClient = loadMQTTClient;
 async function publishToMQTT(topic, data) {
-    if (cache[topic] == data)
+    if (await cache.get(topic) == data)
         return;
-    global.cache[topic] = data;
+    await cache.set(topic, data);
     mqttClient.publish(config.mqtt.topic + "/" + topic, data, { qos: 0, retain: true }, (error) => {
         logger.debug("Send Data to MQTT : " + topic);
         if (error)
             logger.error(error);
     });
 }
-exports.publishToMQTT = publishToMQTT;
 async function publishConfig(key, value) {
     await publishToMQTT('system/bridge/' + key, value.toString());
 }
-exports.publishConfig = publishConfig;

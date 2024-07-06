@@ -2,7 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const modules_1 = require("./modules");
 const cron_1 = require("./modules/cron");
+const cache_manager_1 = require("cache-manager");
 (async () => {
+    global.cache = (0, cache_manager_1.createCache)((0, cache_manager_1.memoryStore)({
+        max: 100,
+        ttl: 10 * 60 * 1000,
+    }));
     global.datadir = process.env.STORE_DIR || process.cwd() + "/config";
     global.logger = (0, modules_1.loadLogger)();
     console.info("Starting DaikinToMQTT");

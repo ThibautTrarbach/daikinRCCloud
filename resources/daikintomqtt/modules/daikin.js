@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.startDaikinAPI = exports.sendDevice = exports.generateConfig = exports.subscribeDevices = exports.loadDaikinAPI = void 0;
+exports.loadDaikinAPI = loadDaikinAPI;
+exports.subscribeDevices = subscribeDevices;
+exports.generateConfig = generateConfig;
+exports.sendDevice = sendDevice;
+exports.startDaikinAPI = startDaikinAPI;
+exports.getDevices = getDevices;
+exports.timeUpdate = timeUpdate;
 const node_path_1 = require("node:path");
 const gateway_1 = require("./gateway");
 const converter_1 = require("./converter");
@@ -8,7 +14,7 @@ const mqtt_1 = require("./mqtt");
 const daikin_controller_cloud_1 = require("daikin-controller-cloud");
 async function loadDaikinAPI() {
     if (!config.daikin.clientID || !config.daikin.clientSecret) {
-        console.log('Please set the clientID and clientSecret in the settings files');
+        logger.error('Please set the clientID and clientSecret in the settings files');
         process.exit(0);
     }
     const daikinClient = new daikin_controller_cloud_1.DaikinCloudController({
@@ -21,7 +27,7 @@ async function loadDaikinAPI() {
         oidcAuthorizationTimeoutS: 120
     });
     daikinClient.on('authorization_request', (url) => {
-        console.log(`
+        logger.info(`
 			Please make sure that ${url} is set as "Redirect URL" in your Daikin Developer Portal account for the used Client!
 			 
 			Then please open the URL ${url} in your browser and accept the security warning for the self signed certificate (if you open this for the first time).
@@ -31,7 +37,7 @@ async function loadDaikinAPI() {
         (0, mqtt_1.publishConfig)('authorization_request', true).then();
     });
     daikinClient.on('rate_limit_status', (rateLimitStatus) => {
-        console.log(rateLimitStatus);
+        logger.debug(JSON.stringify(rateLimitStatus));
         (0, mqtt_1.publishConfig)('authorization_request', false).then();
         (0, mqtt_1.publishConfig)('rate/limitMinute', rateLimitStatus.limitMinute).then();
         (0, mqtt_1.publishConfig)('rate/remainingMinute', rateLimitStatus.remainingMinute).then();
@@ -40,9 +46,8 @@ async function loadDaikinAPI() {
     });
     global.daikinClient = daikinClient;
 }
-exports.loadDaikinAPI = loadDaikinAPI;
 async function startDaikinAPI() {
-    const devices = await daikinClient.getCloudDevices();
+    const devices = await getDevices();
     logger.info("=> Subscribe to MQTT Action");
     await subscribeDevices(devices);
     logger.info("Generate Config Info");
@@ -50,7 +55,6 @@ async function startDaikinAPI() {
     logger.info("Send First Event Data Value");
     await sendDevice(devices);
 }
-exports.startDaikinAPI = startDaikinAPI;
 async function subscribeDevices(devices) {
     for (let dev of devices) {
         let subscribeTopic = config.mqtt.topic + "/" + dev.getId() + "/set";
@@ -61,31 +65,47 @@ async function subscribeDevices(devices) {
     }
     mqttClient.on('message', async function (topic, message) {
         logger.debug(`Topic : ${topic} \n- Message : ${message.toString()}`);
-        const devices = await daikinClient.getCloudDevices();
+        const devices = await getDevices();
         for (let dev of devices) {
             if (!topic.toString().includes(dev.getId()))
                 continue;
             let gateway = getModels(dev);
             if (gateway !== undefined) {
                 await (0, gateway_1.eventValue)(dev, gateway, JSON.parse(message.toString()));
-                await timeout(60000);
-                await sendDevice();
             }
         }
     });
 }
-exports.subscribeDevices = subscribeDevices;
-async function sendDevice(devices = null) {
+async function sendDevice(devices = null, cron = false) {
     if (devices == null)
-        devices = await daikinClient.getCloudDevices();
+        devices = await getDevices(cron);
     if (devices && devices.length) {
         for (let dev of devices) {
+            global.cache[dev.getId()] = dev;
             let gateway = getModels(dev);
             await (0, mqtt_1.publishToMQTT)(dev.getId(), JSON.stringify(gateway));
         }
     }
 }
-exports.sendDevice = sendDevice;
+async function timeUpdate() {
+    let time = Math.floor((Date.now() / 1000) - 60);
+    logger.debug("===> Time Update");
+    logger.debug(time);
+    let timerefresh = await cache.get('needRefresh');
+    logger.debug(timerefresh);
+    logger.debug("===> Time Update Finish");
+    if (timerefresh == undefined)
+        return;
+    if (typeof (timerefresh) != "number") {
+        await cache.del('needRefresh');
+        return;
+    }
+    if (timerefresh <= time) {
+        logger.debug("===> Cron Update Push");
+        await cache.del('needRefresh');
+        await sendDevice(null, true);
+    }
+}
 function getModels(devices) {
     let value;
     if (devices.getData('gateway', 'modelInfo') !== null)
@@ -123,7 +143,17 @@ async function generateConfig(devices) {
         }
     }
 }
-exports.generateConfig = generateConfig;
-function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+async function getDevices(force = false) {
+    const devices = await cache.get('devices');
+    if (devices == undefined || force) {
+        logger.debug("Cache invalid ou recup forcé, recuperation information sur le cloud");
+        logger.debug('=====================================> Send Request to cloud : Refresh');
+        const devices = await daikinClient.getCloudDevices();
+        await cache.set('devices', devices);
+        return devices;
+    }
+    else {
+        logger.debug("Cache valide");
+    }
+    return devices;
 }

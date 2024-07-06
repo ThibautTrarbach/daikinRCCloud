@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.anonymise = void 0;
+exports.anonymise = anonymise;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 function anonymise(dev, value) {
@@ -21,7 +21,6 @@ function anonymise(dev, value) {
         logger.debug('New Module Detected Anonymize Config already exists');
     }
 }
-exports.anonymise = anonymise;
 function recurse(resp) {
     Object.entries(resp).forEach(entry => {
         const [key, value] = entry;
