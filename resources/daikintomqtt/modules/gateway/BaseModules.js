@@ -113,7 +113,7 @@ async function updateDaikinDevice(device, gatewayClass) {
                 if (value.multipleValue.dataPointPath !== undefined)
                     multipleValue = device.getData(value.multipleValue.managementPoint, value.multipleValue.dataPoint, value.multipleValue.dataPointPath).value;
                 else
-                    multipleValue = device.getData(value.multipleValue.managementPoint, value.multipleValue.dataPoint).value;
+                    multipleValue = device.getData(value.multipleValue.managementPoint, value.multipleValue.dataPoint, null).value;
                 let dataPointPath = value.dataPointPath.replace("#value#", multipleValue);
                 validateDataPath(device, value, dataPointPath, gatewayClass[key]);
             }
@@ -125,7 +125,7 @@ async function updateDaikinDevice(device, gatewayClass) {
     });
 }
 async function validateData(device, def, value) {
-    let params = device.getData(def.managementPoint, def.dataPoint);
+    let params = device.getData(def.managementPoint, def.dataPoint, null);
     if (def.converter !== undefined)
         value = convert(def.converter, value, 1);
     let data = checkData(params, value);

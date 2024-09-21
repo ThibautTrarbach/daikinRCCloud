@@ -11,6 +11,9 @@
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
 	"maxDependancyInstallTime" : 600,
+	"os": {
+		"min":11
+	},
 	"changelog" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog",
 	"documentation" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
 	"changelog_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog-beta",

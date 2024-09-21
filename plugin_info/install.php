@@ -41,6 +41,7 @@ function daikinRCCloud_update() {
     config::save('daikin_clientID', config::byKey('daikin_clientID', 'daikinRCCloud'));
     config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'));
     config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud',8765));
+
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
