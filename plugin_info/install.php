@@ -29,7 +29,8 @@ function daikinRCCloud_install() {
 	config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'));
 	config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud',8765));
 
-    $pathDeamon = '../resources/daikintomqtt';
+    $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
+        log::add('daikinRCCloud', 'debug', $pathDeamon);
     if (deleteDirectory($pathDeamon)) {
         log::add('daikinRCCloud', 'info', __('La suppression des anciens fichiers du deamon est ok', __FILE__));
         log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));

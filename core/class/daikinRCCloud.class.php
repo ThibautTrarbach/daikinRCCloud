@@ -10,8 +10,10 @@ class daikinRCCloud extends eqLogic
         $return = array();
         $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependance';
         $return['state'] = 'ok';
+
         if (config::byKey('lastDependancyInstallTime', __CLASS__) == '') $return['state'] = 'nok';
         elseif (!file_exists(__DIR__ . '/../../resources/daikintomqtt/node_modules')) $return['state'] = 'nok';
+
         return $return;
     }
 
@@ -252,6 +254,15 @@ class daikinRCCloud extends eqLogic
             config::save('rate_remainingDay', 0, 'daikinRCCloud');
             log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : ' . $event['url'], __FILE__));
             message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="' . $event['url'] . '" target="_blank"> Authentication </a>', __FILE__), null, null);
+        }
+
+        if (isset($event['authorization_timeout']) && $event['authorization_timeout']) {
+            config::save('rate_limitMinute', 0, 'daikinRCCloud');
+            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
+            config::save('rate_limitDay', 0, 'daikinRCCloud');
+            config::save('rate_remainingDay', 0, 'daikinRCCloud');
+            log::add('daikinRCCloud', 'info', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__));
+            message::add('daikinRCCloud', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__), null, null);
         }
 
         if (isset($event['rate']) && $event['rate']) {
