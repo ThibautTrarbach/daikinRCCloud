@@ -12,20 +12,30 @@ if (!isConnect('admin')) {
         <div class="form-group" style="padding-bottom:4px">
             <table style="margin-left: auto; margin-right: auto; table-layout: auto; width: 60%">
                 <tr>
-                    <th style="text-align: left; ">{{Date dernière mise à jour : }}<span class="label configKey" data-l1key="rate_lastupdate"></span></th>
+                    <th style="text-align: left; ">{{Date dernière mise à jour : }}<span class="label configKey"
+                                                                                         data-l1key="rate_lastupdate"></span>
+                    </th>
                     <th style="text-align: center; ">{{Maximum possible}}</th>
                     <th style="text-align: center; ">{{Requete restante}}</th>
                 </tr>
                 <tr>
                     <td style="text-align: left; resize: both">{{Sur 60 secondes glissantes}}</td>
-                    <td style="text-align: center; resize: both"><span class="label configKey" style="background-color : green; color:white;" data-l1key="rate_limitMinute"></span></td>
-                    <td style="text-align: center; resize: both"><span class="label configKey" style="background-color : green; color:white;" data-l1key="rate_remainingMinute"></span></td>
+                    <td style="text-align: center; resize: both"><span class="label configKey"
+                                                                       style="background-color : green; color:white;"
+                                                                       data-l1key="rate_limitMinute"></span></td>
+                    <td style="text-align: center; resize: both"><span class="label configKey"
+                                                                       style="background-color : green; color:white;"
+                                                                       data-l1key="rate_remainingMinute"></span></td>
                 </tr>
 
                 <tr>
                     <td style="text-align: left; resize: both">{{Sur 24 heures glissantes}}</td>
-                    <td style="text-align: center; resize: both"><span class="label configKey" style="background-color : green; color:white;" data-l1key="rate_limitDay"></span></td>
-                    <td style="text-align: center; resize: both"><span class="label configKey" style="background-color : green; color:white;" data-l1key="rate_remainingDay"></span></td>
+                    <td style="text-align: center; resize: both"><span class="label configKey"
+                                                                       style="background-color : green; color:white;"
+                                                                       data-l1key="rate_limitDay"></span></td>
+                    <td style="text-align: center; resize: both"><span class="label configKey"
+                                                                       style="background-color : green; color:white;"
+                                                                       data-l1key="rate_remainingDay"></span></td>
                 </tr>
             </table>
         </div>
@@ -55,7 +65,7 @@ if (!isConnect('admin')) {
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Préfixe  MQTT}}
+            <label class="col-sm-3 control-label">{{Préfixe MQTT}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Préfixe à utiliser dans MQTT.}}"></i></sup>
             </label>
             <div class="col-sm-7">
