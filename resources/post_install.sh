@@ -10,4 +10,6 @@ cd daikintomqtt
 sudo yarn install
 chown -R www-data:www-data ../*
 
+mv main.js daikinToMQTT.js
+
 echo "Everything is successfully installed!"
