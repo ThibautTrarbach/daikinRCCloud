@@ -32,7 +32,7 @@ function daikinRCCloud_install() {
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    //exec('sudo rm -rf '.$pathDeamon);
+    exec('sudo rm -rf '.$pathDeamon);
     log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
 }
 
@@ -51,7 +51,7 @@ function daikinRCCloud_update() {
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    //exec('sudo rm -rf '.$pathDeamon);
+    exec('sudo rm -rf '.$pathDeamon);
     log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
 }
 
@@ -60,5 +60,5 @@ function daikinRCCloud_remove() {
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    //exec('sudo rm -rf '.$pathDeamon);
+    exec('sudo rm -rf '.$pathDeamon);
 }
