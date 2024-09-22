@@ -5,10 +5,9 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 class daikinRCCloud extends eqLogic
 {
-    public static function dependancy_info()
+    public static function additionnalDependancyCheck()
     {
         $return = array();
-        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependance';
         $return['state'] = 'ok';
 
         if (config::byKey('lastDependancyInstallTime', __CLASS__) == '') $return['state'] = 'nok';
