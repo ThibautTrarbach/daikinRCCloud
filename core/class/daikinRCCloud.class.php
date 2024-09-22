@@ -236,7 +236,6 @@ class daikinRCCloud extends eqLogic
     private static function handleSystemBridgeEvent($event)
     {
         log::add('daikinRCCloud', 'debug', json_encode($event));
-        log::add('daikinRCCloud', 'debug','Coucou 1');
 
         if (isset($event['error'])) {
             $error = $event['error'];
@@ -246,25 +245,22 @@ class daikinRCCloud extends eqLogic
             }
         }
 
-        log::add('daikinRCCloud', 'debug','Coucou 2');
         if (isset($event['authorization_request']) && $event['authorization_request']) {
-            log::add('daikinRCCloud', 'debug','Coucou 3.1');
             config::save('rate_limitMinute', 0, 'daikinRCCloud');
             config::save('rate_remainingMinute', 0, 'daikinRCCloud');
             config::save('rate_limitDay', 0, 'daikinRCCloud');
-            config::save('rate_remainingDay',0, 'daikinRCCloud');
-            log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : '. $event['url'], __FILE__));
-            message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="'. $event['url'].'" target="_blank"> Authentication </a>', __FILE__), null, null);
+            config::save('rate_remainingDay', 0, 'daikinRCCloud');
+            log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : ' . $event['url'], __FILE__));
+            message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="' . $event['url'] . '" target="_blank"> Authentication </a>', __FILE__), null, null);
         }
 
         if (isset($event['rate']) && $event['rate']) {
-            log::add('daikinRCCloud', 'debug','Coucou 3.2');
             config::save('rate_limitMinute', $event['rate']['limitMinute'], 'daikinRCCloud');
             config::save('rate_remainingMinute', $event['rate']['remainingMinute'], 'daikinRCCloud');
             config::save('rate_limitDay', $event['rate']['limitDay'], 'daikinRCCloud');
             config::save('rate_remainingDay', $event['rate']['remainingDay'], 'daikinRCCloud');
             config::save('rate_lastupdate', date('d-m-Y H:i:s', time()), 'daikinRCCloud');
-            log::add('daikinRCCloud', 'debug', __('Rate limite : '. json_encode($event['rate']), __FILE__));
+            log::add('daikinRCCloud', 'debug', __('Rate limite : ' . json_encode($event['rate']), __FILE__));
         }
     }
 
