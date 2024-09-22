@@ -30,15 +30,10 @@ function daikinRCCloud_install() {
 	config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud',8765));
 
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
-        log::add('daikinRCCloud', 'debug', $pathDeamon);
-    if (deleteDirectory($pathDeamon)) {
-        log::add('daikinRCCloud', 'info', __('La suppression des anciens fichiers du deamon est ok', __FILE__));
-        log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
-        message::add('daikinRCCloud', __('Une mise à jour des dépendances sera nécessaire', __FILE__), null, null);
-    } else {
-        log::add('daikinRCCloud', 'info', __('La suppression des anciens fichiers du deamon est en erreur', __FILE__));
-        message::add('daikinRCCloud', __('Une mise à jour des dépendances sera nécessaire', __FILE__), null, null);
-    }
+    log::add('daikinRCCloud', 'debug', $pathDeamon);
+
+    //exec('sudo rm -rf '.$pathDeamon);
+    log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
@@ -53,33 +48,17 @@ function daikinRCCloud_update() {
     config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'));
     config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud',8765));
 
-    $pathDeamon = '../resources/daikintomqtt';
-    if (deleteDirectory($pathDeamon)) {
-        log::add('daikinRCCloud', 'info', __('La suppression des anciens fichiers du deamon est ok', __FILE__));
-        log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
-        message::add('daikinRCCloud', __('Une mise à jour des dépendances sera nécessaire', __FILE__), null, null);
-    } else {
-        log::add('daikinRCCloud', 'info', __('La suppression des anciens fichiers du deamon est en erreur', __FILE__));
-        message::add('daikinRCCloud', __('Une mise à jour des dépendances sera nécessaire', __FILE__), null, null);
-    }
+    $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
+    log::add('daikinRCCloud', 'debug', $pathDeamon);
+
+    //exec('sudo rm -rf '.$pathDeamon);
+    log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function daikinRCCloud_remove() {
+    $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
+    log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-}
-
-
-function deleteDirectory($dir) {
-    if (!is_dir($dir)) {
-        return false;
-    }
-
-    $files = array_diff(scandir($dir), array('.', '..'));
-    foreach ($files as $file) {
-        $path = "$dir/$file";
-        is_dir($path) ? deleteDirectory($path) : unlink($path);
-    }
-
-    return rmdir($dir);
+    //exec('sudo rm -rf '.$pathDeamon);
 }
