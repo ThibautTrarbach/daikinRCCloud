@@ -120,6 +120,15 @@ class daikinRCCloud extends eqLogic
         if (file_exists($file)) {
             unlink($file);
         }
+
+        $lvlConfig = config::byKey('log::level::daikinRCCloud', 'core', '{"100":"0","200":"0","300":"0","400":"0","1000":"0","default":"1"}');
+        $logLevel= "info";
+        if ($lvlConfig['100'] == "1") $logLevel = "debug";
+        elseif ($lvlConfig['200'] == "1") $logLevel = "info";
+        elseif ($lvlConfig['300'] == "1") $logLevel = "warn";
+        elseif ($lvlConfig['400'] == "1") $logLevel = "danger";
+        elseif ($lvlConfig['1000'] == "1") $logLevel = "error";
+
         $settings['system'] = array();
         $settings['daikin'] = array();
         $settings['mqtt'] = array();
@@ -141,7 +150,11 @@ class daikinRCCloud extends eqLogic
         $settings['mqtt']['reconnectPeriod'] = 1000;
         $settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
 
-        $settings['system']['logLevel'] = 'info';
+
+
+
+
+        $settings['system']['logLevel'] = $logLevel;
         $settings['system']['jeedom'] = TRUE;
 
         @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
@@ -236,8 +249,6 @@ class daikinRCCloud extends eqLogic
 
     private static function handleSystemBridgeEvent($event)
     {
-        log::add('daikinRCCloud', 'debug', json_encode($event));
-
         if (isset($event['error'])) {
             $error = $event['error'];
             if ($error !== "No Error") {
