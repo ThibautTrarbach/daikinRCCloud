@@ -8,68 +8,70 @@ if (!isConnect('admin')) {
 ?>
 <form class="form-horizontal">
     <fieldset>
-        <legend><i class="fas fa-wifi"></i> {{Daikin limitation requête}}</legend>
-        <div class="form-group" style="padding-bottom:4px">
-            <table style="margin-left: auto; margin-right: auto; table-layout: auto; width: 60%">
-                <tr>
-                    <th style="text-align: left; ">{{Date dernière mise à jour : }}<span class="label configKey"
-                                                                                         data-l1key="rate_lastupdate"></span>
-                    </th>
-                    <th style="text-align: center; ">{{Maximum possible}}</th>
-                    <th style="text-align: center; ">{{Requete restante}}</th>
-                </tr>
-                <tr>
-                    <td style="text-align: left; resize: both">{{Sur 60 secondes glissantes}}</td>
-                    <td style="text-align: center; resize: both"><span class="label configKey"
-                                                                       style="background-color : green; color:white;"
-                                                                       data-l1key="rate_limitMinute"></span></td>
-                    <td style="text-align: center; resize: both"><span class="label configKey"
-                                                                       style="background-color : green; color:white;"
-                                                                       data-l1key="rate_remainingMinute"></span></td>
-                </tr>
+        <legend><i class="fas fa-wifi"></i> {{Informations globales}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Version du plugin}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Version du Plugin (A indiquer sur Community)}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey form-control input-xs" data-l1key="pluginVersion" readonly />
+            </div>
+        </div>
 
-                <tr>
-                    <td style="text-align: left; resize: both">{{Sur 24 heures glissantes}}</td>
-                    <td style="text-align: center; resize: both"><span class="label configKey"
-                                                                       style="background-color : green; color:white;"
-                                                                       data-l1key="rate_limitDay"></span></td>
-                    <td style="text-align: center; resize: both"><span class="label configKey"
-                                                                       style="background-color : green; color:white;"
-                                                                       data-l1key="rate_remainingDay"></span></td>
-                </tr>
-            </table>
+        <legend><i class="fas fa-wifi"></i> {{Daikin limitation requête}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Dernière mise à jour}}</label>
+            <div class="col-sm-4">
+                <input class="configKey form-control input-xs" data-l1key="rate_lastupdate" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Requêtes restantes sur 60 secondes glissantes}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Maximun de 20 requêtes possibles}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey form-control input-xs" data-l1key="rate_remainingMinute" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Requêtes restantes sur 24 heures glissantes}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Maximun de 200 requêtes possibles}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey form-control input-xs" data-l1key="rate_remainingDay" readonly />
+            </div>
         </div>
 
         <legend><i class="fas fa-wrench"></i> {{Daikin Onecta Client Configuration}}</legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Client ID}}</label>
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-4">
                 <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientID"
-                       placeholder="{{Client ID de votre application  Daikin Cloud}}"/>
+                    placeholder="{{Client ID de votre application  Daikin Cloud}}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Client Secret}}</label>
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-4">
                 <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientSecret"
-                       placeholder="{{Client Secret de votre application Daikin Cloud}}"/>
+                    placeholder="{{Client Secret de votre application Daikin Cloud}}" />
             </div>
         </div>
 
         <legend><i class="fas fa-tools"></i> {{Plugin Configuration}}</legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Port pour l'authentication}}</label>
-            <div class="input-group col-sm-7">
+            <div class="input-group col-sm-4">
                 <input class="configKey roundedLeft form-control" data-l1key="daikin_clientPort"
-                       placeholder="{{Default : 8765}}"/>
+                    placeholder="{{Default : 8765}}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Préfixe MQTT}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Préfixe à utiliser dans MQTT.}}"></i></sup>
             </label>
-            <div class="col-sm-7">
-                <input type="text" class="configKey form-control" data-l1key="prefix" placeholder="{{}}"/>
+            <div class="col-sm-4">
+                <input type="text" class="configKey form-control" data-l1key="prefix" placeholder="{{}}" />
             </div>
         </div>
     </fieldset>
