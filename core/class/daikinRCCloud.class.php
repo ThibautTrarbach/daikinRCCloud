@@ -227,19 +227,18 @@ class daikinRCCloud extends eqLogic
                 $cmd->setEqLogic_id($eqLogics->getId());
                 $cmd->setLogicalId($cmdData['logicalID']);
                 $cmd->setName($cmdData['name']);
+                $cmd->setType($cmdData['type']);
+                $cmd->setSubType($cmdData['subType']);
                 if (isset($cmdData['isHistorized'])) $cmd->setIsHistorized($cmdData['isHistorized'] ? 1 : 0);
                 if (isset($cmdData['isVisible'])) $cmd->setIsVisible($cmdData['isVisible'] ? 1 : 0);
                 if (isset($cmdData['generic_type'])) $cmd->setGeneric_type($cmdData['generic_type']);
                 if (isset($cmdData['template'])) $cmd->setTemplate("dashboard", $cmdData['template']);
+                if (isset($cmdData['minValue'])) $cmd->setConfiguration("minValue", $cmdData['minValue']);
+                if (isset($cmdData['maxValue'])) $cmd->setConfiguration("maxValue", $cmdData['maxValue']);
+                if (isset($cmdData['unite'])) $cmd->setUnite($cmdData['unite']);
+                if (isset($cmdData['listValue'])) $cmd->setConfiguration("listValue", $cmdData['listValue']);
             }
-            $cmd->setType($cmdData['type']);
-            $cmd->setSubType($cmdData['subType']);
-            if (isset($cmdData['unite'])) $cmd->setUnite($cmdData['unite']);
             if (isset($cmdData['value'])) $cmd->setValue($eqLogics->getCmd('info', $cmdData['value'])->getId());
-            if (isset($cmdData['minValue'])) $cmd->setConfiguration("minValue", $cmdData['minValue']);
-            if (isset($cmdData['maxValue'])) $cmd->setConfiguration("maxValue", $cmdData['maxValue']);
-            if (isset($cmdData['listValue'])) $cmd->setConfiguration("listValue", $cmdData['listValue']);
-
             $cmd->save();
         }
     }
@@ -390,12 +389,6 @@ class daikinRCCloudCmd extends cmd
     {
         if ($this->getLogicalId() == 'refresh') $this->getEqLogic()->refresh();
         else {
-
-            if (!is_array($_options) || empty($_options)) {
-                log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
-                return false;
-            }
-
             log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . "] | Options : " . json_encode($_options));
 
             $deamon = daikinRCCloud::deamon_info();
@@ -408,9 +401,17 @@ class daikinRCCloudCmd extends cmd
                         else if ($action . "_OFF" == $this->getLogicalId()) $actionValue = FALSE;
                         break;
                     case 'slider':
+                        if (!is_array($_options) || empty($_options)) {
+                            log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
+                            return false;
+                        }
                         $actionValue = $_options['slider'];
                         break;
                     case 'select':
+                        if (!is_array($_options) || empty($_options)) {
+                            log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
+                            return false;
+                        }
                         $actionValue = $_options['select'];
                         break;
                     default:
