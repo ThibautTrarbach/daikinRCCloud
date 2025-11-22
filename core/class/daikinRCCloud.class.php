@@ -389,12 +389,6 @@ class daikinRCCloudCmd extends cmd
     {
         if ($this->getLogicalId() == 'refresh') $this->getEqLogic()->refresh();
         else {
-
-            if (!is_array($_options) || empty($_options)) {
-                log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
-                return false;
-            }
-
             log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . "] | Options : " . json_encode($_options));
 
             $deamon = daikinRCCloud::deamon_info();
@@ -407,9 +401,17 @@ class daikinRCCloudCmd extends cmd
                         else if ($action . "_OFF" == $this->getLogicalId()) $actionValue = FALSE;
                         break;
                     case 'slider':
+                        if (!is_array($_options) || empty($_options)) {
+                            log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
+                            return false;
+                        }
                         $actionValue = $_options['slider'];
                         break;
                     case 'select':
+                        if (!is_array($_options) || empty($_options)) {
+                            log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides : " . json_encode($_options));
+                            return false;
+                        }
                         $actionValue = $_options['select'];
                         break;
                     default:
