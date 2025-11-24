@@ -187,6 +187,7 @@ class daikinRCCloud extends eqLogic
                 log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . $value);
                 $cmd->event($value);
             }
+            self::generateRefreshCmd($eqLogic);
         }
     }
 
@@ -242,6 +243,23 @@ class daikinRCCloud extends eqLogic
             $cmd->save();
         }
     }
+
+    public static function generateRefreshCmd($eqLogic)
+    {
+        $cmd = $eqLogic->getCmd('action', 'refresh');
+        if (!is_object($cmd)) {
+            $cmd = new cmd();
+            $cmd->setEqLogic_id($eqLogic->getId());
+            $cmd->setLogicalId('refresh');
+            $cmd->setName('Refresh');
+            $cmd->setType('action');
+            $cmd->setSubType('other');
+            $cmd->setIsVisible(0);
+            $cmd->setIsHistorized(0);
+            $cmd->setGeneric_type('REFRESH');
+            $cmd->save();
+        }
+    }   
 
     private static function handleSystemBridgeEvent($event)
     {
@@ -335,7 +353,7 @@ class daikinRCCloud extends eqLogic
 
     public function publishMqttValue($_node, $_args = array())
     {
-        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Publication Mqtt Value' . $_node . ' ' . json_encode($_args));
+        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Publication Mqtt Value onOffMode' . $_node . ' ' . json_encode($_args));
         mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT') . '/' . $_node . '/set', $_args);
     }
 
@@ -399,6 +417,7 @@ class daikinRCCloudCmd extends cmd
                     case 'other':
                         if ($action . "_ON" == $this->getLogicalId()) $actionValue = TRUE;
                         else if ($action . "_OFF" == $this->getLogicalId()) $actionValue = FALSE;
+                    //    else if ("REFRESH" == $this->getLogicalId()) self::executeRefresh();
                         break;
                     case 'slider':
                         if (!is_array($_options) || empty($_options)) {
