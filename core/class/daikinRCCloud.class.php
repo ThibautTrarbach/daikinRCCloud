@@ -142,10 +142,10 @@ class daikinRCCloud extends eqLogic
         $settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud', null);
         $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
         $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
-        $settings['daikin']['clientPort'] = config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765;
+        $settings['daikin']['clientPort'] = intval(config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765);
 
         $settings['mqtt']['host'] = $mqttInfos['ip'];
-        $settings['mqtt']['port'] = $mqttInfos['port'];
+        $settings['mqtt']['port'] = intval($mqttInfos['port']);
         $settings['mqtt']['auth'] = true;
         $settings['mqtt']['username'] = $mqttInfos['user'];
         $settings['mqtt']['password'] = $mqttInfos['password'];
@@ -157,10 +157,10 @@ class daikinRCCloud extends eqLogic
         $settings['system']['logLevel'] = $logLevel;
         $settings['system']['jeedom'] = true;
         $settings['system']['homeassistant']['enabled'] = false;
-        $settings['system']['polling']['dayInterval'] = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10);
-        $settings['system']['polling']['nightInterval'] = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20);
-        $settings['system']['polling']['nightStart'] = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22);
-        $settings['system']['polling']['nightEnd'] = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7);
+        $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
+        $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
+        $settings['system']['polling']['nightStart'] = intval(config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
+        $settings['system']['polling']['nightEnd'] = intval(config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
 
         @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
     }
