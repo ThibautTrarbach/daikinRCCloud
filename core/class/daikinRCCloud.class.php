@@ -122,16 +122,31 @@ class daikinRCCloud extends eqLogic
         }
 
         $lvlConfig = config::byKey('log::level::daikinRCCloud', 'core', '{"100":"0","200":"0","300":"0","400":"0","1000":"0","default":"1"}');
-        $logLevel= "info";
-        if ($lvlConfig['100'] == "1") $logLevel = "debug";
-        elseif ($lvlConfig['200'] == "1") $logLevel = "info";
-        elseif ($lvlConfig['300'] == "1") $logLevel = "warn";
-        elseif ($lvlConfig['400'] == "1") $logLevel = "danger";
-        elseif ($lvlConfig['1000'] == "1") $logLevel = "error";
+        switch ($lvlConfig) {
+            case '100':
+                $logLevel = "debug";
+                break;
+            case '200':
+                $logLevel = "info";
+                break;
+            case '300':
+                $logLevel = "warn";
+                break;
+            case '400':
+                $logLevel = "danger";
+                break;
+            case '1000':
+                $logLevel = "error";
+                break;
+            default:
+                $logLevel = "info";
+        }
 
         $settings['system'] = array();
         $settings['daikin'] = array();
         $settings['mqtt'] = array();
+        $settings['system']['polling'] = array();
+        $settings['system']['homeassistant'] = array();
 
         $mqttInfos = mqtt2::getFormatedInfos();
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
@@ -152,7 +167,12 @@ class daikinRCCloud extends eqLogic
 
 
         $settings['system']['logLevel'] = $logLevel;
-        $settings['system']['jeedom'] = TRUE;
+        $settings['system']['jeedom'] = true;
+        $settings['system']['homeassistant']['enabled'] = false;
+        $settings['system']['polling']['dayInterval'] = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10);
+        $settings['system']['polling']['nightInterval'] = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20);
+        $settings['system']['polling']['nightStart'] = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22);
+        $settings['system']['polling']['nightEnd'] = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7);
 
         @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
     }
@@ -169,8 +189,8 @@ class daikinRCCloud extends eqLogic
         $events = $_message[config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT')];
 
         foreach ($events as $key => $event) {
-            if ($key == 'system') {
-                self::handleSystemEvent($event);
+            if ($key == 'jeedom') {
+                self::handleSystemJeedomEvent($event);
                 continue;
             }
 
@@ -187,14 +207,7 @@ class daikinRCCloud extends eqLogic
                 log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . $value);
                 $cmd->event($value);
             }
-            self::generateRefreshCmd($eqLogic);
         }
-    }
-
-    private static function handleSystemEvent($event)
-    {
-        if (isset($event['jeedom'])) self::handleSystemJeedomEvent($event['jeedom']);
-        if (isset($event['bridge'])) self::handleSystemBridgeEvent($event['bridge']);
     }
 
     private static function handleSystemJeedomEvent($event)
@@ -241,60 +254,6 @@ class daikinRCCloud extends eqLogic
             }
             if (isset($cmdData['value'])) $cmd->setValue($eqLogics->getCmd('info', $cmdData['value'])->getId());
             $cmd->save();
-        }
-    }
-
-    public static function generateRefreshCmd($eqLogic)
-    {
-        $cmd = $eqLogic->getCmd('action', 'refresh');
-        if (!is_object($cmd)) {
-            $cmd = new cmd();
-            $cmd->setEqLogic_id($eqLogic->getId());
-            $cmd->setLogicalId('refresh');
-            $cmd->setName('Refresh');
-            $cmd->setType('action');
-            $cmd->setSubType('other');
-            $cmd->setIsVisible(0);
-            $cmd->setIsHistorized(0);
-            $cmd->setGeneric_type('REFRESH');
-            $cmd->save();
-        }
-    }   
-
-    private static function handleSystemBridgeEvent($event)
-    {
-        if (isset($event['error'])) {
-            $error = $event['error'];
-            if ($error !== "No Error") {
-                log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
-                plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
-            }
-        }
-
-        if (isset($event['authorization_request']) && $event['authorization_request']) {
-            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
-            config::save('rate_remainingDay', 0, 'daikinRCCloud');
-            log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : ' . $event['url'], __FILE__));
-            message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="' . $event['url'] . '" target="_blank"> Authentication </a>', __FILE__), null, null);
-        }
-
-        if (isset($event['authorization_timeout']) && $event['authorization_timeout']) {
-            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
-            config::save('rate_remainingDay', 0, 'daikinRCCloud');
-            log::add('daikinRCCloud', 'info', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__));
-            message::add('daikinRCCloud', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__), null, null);
-        }
-
-        if (isset($event['rate']) && $event['rate']) {
-            if (isset($event['rate']['remainingMinute'])) {
-                config::save('rate_remainingMinute', $event['rate']['remainingMinute'], 'daikinRCCloud');
-            }
-            if (isset($event['rate']['remainingDay'])) {
-                config::save('rate_remainingDay', $event['rate']['remainingDay'], 'daikinRCCloud');
-            }
-
-            config::save('rate_lastupdate', date('d-m-Y H:i:s', time()), 'daikinRCCloud');
-            log::add('daikinRCCloud', 'debug', __('Rate limite : ' . json_encode($event['rate']), __FILE__));
         }
     }
 
@@ -353,7 +312,7 @@ class daikinRCCloud extends eqLogic
 
     public function publishMqttValue($_node, $_args = array())
     {
-        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Publication Mqtt Value onOffMode' . $_node . ' ' . json_encode($_args));
+        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Publication Mqtt Value' . $_node . ' ' . json_encode($_args));
         mqtt2::publish(config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT') . '/' . $_node . '/set', $_args);
     }
 
@@ -417,7 +376,6 @@ class daikinRCCloudCmd extends cmd
                     case 'other':
                         if ($action . "_ON" == $this->getLogicalId()) $actionValue = TRUE;
                         else if ($action . "_OFF" == $this->getLogicalId()) $actionValue = FALSE;
-                    //    else if ("REFRESH" == $this->getLogicalId()) self::executeRefresh();
                         break;
                     case 'slider':
                         if (!is_array($_options) || empty($_options)) {

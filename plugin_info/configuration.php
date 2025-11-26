@@ -18,27 +18,33 @@ if (!isConnect('admin')) {
             </div>
         </div>
 
-        <legend><i class="fas fa-wifi"></i> {{Daikin limitation requête}}</legend>
+        <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}</legend>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Dernière mise à jour}}</label>
+            <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la journée}}</label>
             <div class="col-sm-4">
-                <input class="configKey form-control input-xs" data-l1key="rate_lastupdate" readonly />
+                <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_dayInterval"
+                       placeholder="{{Intervalle de rafraîchissement en minutes pendant la journée}}" />
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Requêtes restantes sur 60 secondes glissantes}}
-                <sup><i class="fas fa-question-circle tooltips" title="{{Maximun de 20 requêtes possibles}}"></i></sup>
-            </label>
+            <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la nuit}}</label>
             <div class="col-sm-4">
-                <input class="configKey form-control input-xs" data-l1key="rate_remainingMinute" readonly />
+                <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightInterval"
+                       placeholder="{{Intervalle de rafraîchissement en minutes pendant la nuit}}" />
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Requêtes restantes sur 24 heures glissantes}}
-                <sup><i class="fas fa-question-circle tooltips" title="{{Maximun de 200 requêtes possibles}}"></i></sup>
-            </label>
+            <label class="col-sm-3 control-label">{{Heure de début de la période nuit}}</label>
             <div class="col-sm-4">
-                <input class="configKey form-control input-xs" data-l1key="rate_remainingDay" readonly />
+                <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightStart"
+                       placeholder="{{Heure de début de la période nuit (0-23)}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Heure de fin de la période nuit}}</label>
+            <div class="col-sm-4">
+                <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightEnd"
+                       placeholder="{{Heure de fin de la période nuit (0-23)}}" />
             </div>
         </div>
 
