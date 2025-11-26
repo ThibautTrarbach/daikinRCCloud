@@ -122,25 +122,13 @@ class daikinRCCloud extends eqLogic
         }
 
         $lvlConfig = config::byKey('log::level::daikinRCCloud', 'core', '{"100":"0","200":"0","300":"0","400":"0","1000":"0","default":"1"}');
-        switch ($lvlConfig) {
-            case '100':
-                $logLevel = "debug";
-                break;
-            case '200':
-                $logLevel = "info";
-                break;
-            case '300':
-                $logLevel = "warn";
-                break;
-            case '400':
-                $logLevel = "danger";
-                break;
-            case '1000':
-                $logLevel = "error";
-                break;
-            default:
-                $logLevel = "info";
-        }
+
+        if ($lvlConfig['100'] == "1") $logLevel = "debug";
+        elseif ($lvlConfig['200'] == "1") $logLevel = "info";
+        elseif ($lvlConfig['300'] == "1") $logLevel = "warn";
+        elseif ($lvlConfig['400'] == "1") $logLevel = "danger";
+        elseif ($lvlConfig['1000'] == "1") $logLevel = "error";
+        else $logLevel = "info";
 
         $settings['system'] = array();
         $settings['daikin'] = array();
