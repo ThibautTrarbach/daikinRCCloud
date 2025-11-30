@@ -5,6 +5,16 @@ include_file('core', 'authentification', 'php');
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+$rqDay = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 0);
+$rqNight = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 0);
+$rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
+$rqNightEnd = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 0);
+$totalRqDay = $rqNightStart - $rqNightEnd;
+$totalrqnight = 24 - $totalRqDay;
+$NbRqsDay = ($totalRqDay * 60) / $rqDay;
+$NbRqsNight = ($totalrqnight * 60) / $rqNight;
+$NbRqsTotal = $NbRqsDay + $NbRqsNight;
+config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
 ?>
 <form class="form-horizontal">
     <fieldset>
@@ -23,28 +33,36 @@ if (!isConnect('admin')) {
             <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la journée}}</label>
             <div class="col-sm-4">
                 <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_dayInterval"
-                       placeholder="{{Intervalle de rafraîchissement en minutes pendant la journée}}" />
+                    placeholder="{{Intervalle de rafraîchissement en minutes pendant la journée}}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la nuit}}</label>
             <div class="col-sm-4">
                 <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightInterval"
-                       placeholder="{{Intervalle de rafraîchissement en minutes pendant la nuit}}" />
+                    placeholder="{{Intervalle de rafraîchissement en minutes pendant la nuit}}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Heure de début de la période nuit}}</label>
             <div class="col-sm-4">
                 <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightStart"
-                       placeholder="{{Heure de début de la période nuit (0-23)}}" />
+                    placeholder="{{Heure de début de la période nuit (0-23)}}" />
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Heure de fin de la période nuit}}</label>
             <div class="col-sm-4">
                 <input type="number" class="configKey roundedLeft form-control" data-l1key="daikin_polling_nightEnd"
-                       placeholder="{{Heure de fin de la période nuit (0-23)}}" />
+                    placeholder="{{Heure de fin de la période nuit (0-23)}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Nombre de requètes sur la journée}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder et rafraîchir la page pour voir le nouveau total}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey roundedLeft form-control" data-l1key="daikin_totalRqPerDay" readonly />
             </div>
         </div>
 

@@ -172,7 +172,7 @@ class daikinRCCloud extends eqLogic
 
     public static function handleMqttMessage($_message)
     {
-        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Message Mqtt reçu');
+        log::add('daikinRCCloud_mqtt', 'info', '[' . __FUNCTION__ . '] ' . 'Message Mqtt reçu');
         log::add('daikinRCCloud_mqtt', 'debug', json_encode($_message));
         $events = $_message[config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT')];
 
@@ -192,7 +192,7 @@ class daikinRCCloud extends eqLogic
                 $logicalID = $cmd->getLogicalId();
                 if (!isset($event[$logicalID])) continue;
                 $value = is_bool($event[$logicalID]) ? ($event[$logicalID] ? 1 : 0) : jeedom::evaluateExpression($event[$logicalID]);
-                log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . $value);
+                log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . json_encode($value));
                 $cmd->event($value);
             }
         }
