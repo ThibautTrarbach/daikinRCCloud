@@ -91,9 +91,9 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
                 <div id="help-actionRefreshMode" class="collapse" style="margin-top: 5px;">
                     <div class="alert alert-info" style="margin-bottom: 0;">
                         <small>
-                            <strong>1 - Rafraîchissement complet différé :</strong> Rafraîchissement complet depuis le cloud Daikin, différé de <code>actionRefreshDelaySeconds</code> secondes après l'action. Garantit la cohérence mais génère plus de requêtes.<br/><br/>
-                            <strong>2 - Mise à jour optimiste :</strong> Mise à jour immédiate du cache local et publication MQTT sans interroger le cloud Daikin après l'action. Plus rapide et moins de requêtes, mais pas de vérification cloud.<br/><br/>
-                            <strong>3 - Hybride (recommandé) :</strong> Combine les avantages : mise à jour optimiste immédiate + rafraîchissement complet depuis le cloud après <code>actionRefreshDelaySeconds</code> secondes. Meilleur équilibre entre réactivité et cohérence.
+                            <strong>{{1 - Rafraîchissement complet différé :}}</strong> {{Rafraîchissement complet depuis le cloud Daikin, différé de}} <code>actionRefreshDelaySeconds</code> {{secondes après l'action. Garantit la cohérence mais génère plus de requêtes.}}<br/><br/>
+                            <strong>{{2 - Mise à jour optimiste :}}</strong> {{Mise à jour immédiate du cache local et publication MQTT sans interroger le cloud Daikin après l'action. Plus rapide et moins de requêtes, mais pas de vérification cloud.}}<br/><br/>
+                            <strong>{{3 - Hybride (recommandé) :}}</strong> {{Combine les avantages : mise à jour optimiste immédiate + rafraîchissement complet depuis le cloud après}} <code>actionRefreshDelaySeconds</code> {{secondes. Meilleur équilibre entre réactivité et cohérence.}}
                         </small>
                     </div>
                 </div>
@@ -111,7 +111,7 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
                 </a>
                 <div id="help-actionRefreshDelaySeconds" class="collapse" style="margin-top: 5px;">
                     <div class="alert alert-info" style="margin-bottom: 0;">
-                        <small>Délai en secondes avant le rafraîchissement complet depuis le cloud Daikin après une action. Utilisé uniquement en mode 1 (Rafraîchissement complet différé) et mode 3 (Hybride). Plus la valeur est élevée, plus cela laissera le temps au cloud et à votre device de traiter l'information et de se mettre à jour</small>
+                        <small>{{Délai en secondes avant le rafraîchissement complet depuis le cloud Daikin après une action. Utilisé uniquement en mode 1 (Rafraîchissement complet différé) et mode 3 (Hybride). Plus la valeur est élevée, plus cela laissera le temps au cloud et à votre device de traiter l'information et de se mettre à jour}}</small>
                     </div>
                 </div>
             </div>
@@ -146,17 +146,17 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
                     <div class="alert alert-info" style="margin-bottom: 0;">
                         <strong><i class="fas fa-info-circle"></i> {{Tutoriel de configuration}}</strong><br/>
                         <small>
-                            <strong>Étape 1 :</strong> Allez sur <a href="https://developer.cloud.daikineurope.com/" target="_blank">developer.cloud.daikineurope.com</a> et connectez-vous avec votre compte Daikin<br/><br/>
-                            <strong>Étape 2 :</strong> En haut à droite, cliquez sur votre adresse email et choisissez "My Apps"<br/><br/>
-                            <strong>Étape 3 :</strong> Cliquez sur "New App"<br/><br/>
-                            <strong>Étape 4 :</strong> Donnez un nom à votre application et cliquez sur "Créer"<br/><br/>
-                            <strong>Étape 5 :</strong> Copiez le <strong>Client ID</strong> affiché et collez-le dans le champ "Client ID" ci-dessus<br/><br/>
-                            <strong>Étape 6 :</strong> Copiez le <strong>Client Secret</strong> affiché et collez-le dans le champ "Client Secret" ci-dessus<br/><br/>
-                            <strong>Étape 7 :</strong> Démarrez le daemon et ouvrez les logs. Copiez l'URL d'authentification affichée dans les logs<br/><br/>
-                            <strong>Étape 8 :</strong> Retournez sur le site Daikin Developer, éditez votre application et collez l'URL précédemment copiée dans le champ "Redirect URI", puis cliquez sur "Update"<br/><br/>
-                            <strong>Étape 9 :</strong> Dans un navigateur, ouvrez l'URL copiée à l'étape 7 et suivez le processus d'authentification<br/><br/>
-                            <strong>Étape 10 :</strong> Si tout est correct, vous verrez un message de succès. Le plugin est maintenant configuré !<br/><br/>
-                            <strong>Documentation complète :</strong> <a href="https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t" target="_blank">Voir le tutoriel complet sur la communauté Jeedom</a>
+                            <strong>{{Étape 1 :}}</strong> {{Allez sur}} <a href="https://developer.cloud.daikineurope.com/" target="_blank">developer.cloud.daikineurope.com</a> {{et connectez-vous avec votre compte Daikin}}<br/><br/>
+                            <strong>{{Étape 2 :}}</strong> {{En haut à droite, cliquez sur votre adresse email et choisissez "My Apps"}}<br/><br/>
+                            <strong>{{Étape 3 :}}</strong> {{Cliquez sur "New App"}}<br/><br/>
+                            <strong>{{Étape 4 :}}</strong> {{Donnez un nom à votre application et cliquez sur "Créer"}}<br/><br/>
+                            <strong>{{Étape 5 :}}</strong> {{Copiez le}} <strong>Client ID</strong> {{affiché et collez-le dans le champ "Client ID" ci-dessus}}<br/><br/>
+                            <strong>{{Étape 6 :}}</strong> {{Copiez le}} <strong>Client Secret</strong> {{affiché et collez-le dans le champ "Client Secret" ci-dessus}}<br/><br/>
+                            <strong>{{Étape 7 :}}</strong> {{Démarrez le daemon et ouvrez les logs. Copiez l'URL d'authentification affichée dans les logs}}<br/><br/>
+                            <strong>{{Étape 8 :}}</strong> {{Retournez sur le site Daikin Developer, éditez votre application et collez l'URL précédemment copiée dans le champ "Redirect URI", puis cliquez sur "Update"}}<br/><br/>
+                            <strong>{{Étape 9 :}}</strong> {{Dans un navigateur, ouvrez l'URL copiée à l'étape 7 et suivez le processus d'authentification}}<br/><br/>
+                            <strong>{{Étape 10 :}}</strong> {{Si tout est correct, vous verrez un message de succès. Le plugin est maintenant configuré !}}<br/><br/>
+                            <strong>{{Documentation complète :}}</strong> <a href="https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t" target="_blank">{{Voir le tutoriel complet sur la communauté Jeedom}}</a>
                         </small>
                     </div>
                 </div>

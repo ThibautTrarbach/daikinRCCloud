@@ -3,10 +3,14 @@
 	"name" : "Daikin ONECTA",
 	"pluginVersion": "0.9.0",
 	"description" : {
-		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA"
+		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA",
+		"en_US": "Plugin to manage Daikin devices via ONECTA cloud",
+		"es_ES": "Plugin para gestionar dispositivos Daikin a través de la nube ONECTA",
+		"de_DE": "Plugin zur Verwaltung von Daikin-Geräten über die ONECTA-Cloud",
+		"it_IT": "Plugin per gestire i dispositivi Daikin tramite il cloud ONECTA"
 	},
 	"licence" : "AGPL",
-	"author" : "Thibaut Trarbach",
+	"author" : "Thibaut Trarbach & Sagitaz",
 	"require" : "4.3",
 	"category" : "wellness",
 	"hasDependency" : true,
@@ -23,7 +27,11 @@
 		"forum":"https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi"
 	},
 	"language": [
-		"fr_FR"
+		"fr_FR",
+		"en_US",
+		"es_ES",
+		"de_DE",
+		"it_IT"
 	],
 	"compatibility": [
 		"smart",

@@ -23,7 +23,7 @@ class daikinRCCloud extends eqLogic
         mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
-            throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+            throw new Exception('{{Veuillez vérifier la configuration}}');
         }
 
         $daikin_path = realpath(dirname(__FILE__) . '/../../resources/daikintomqtt');
@@ -98,11 +98,11 @@ class daikinRCCloud extends eqLogic
         }
         if (!class_exists('mqtt2')) {
             $return['launchable'] = 'nok';
-            $return['launchable_message'] = __('Le plugin mqtt2 n\'est pas installé', __FILE__);
+            $return['launchable_message'] = '{{Le plugin mqtt2 n\'est pas installé}}';
         } else {
             if (mqtt2::deamon_info()['state'] != 'ok') {
                 $return['launchable'] = 'nok';
-                $return['launchable_message'] = __('Le démon mqtt2 n\'est pas demarré', __FILE__);
+                $return['launchable_message'] = '{{Le démon mqtt2 n\'est pas demarré}}';
             }
         }
         return $return;

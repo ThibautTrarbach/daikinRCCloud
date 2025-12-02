@@ -45,7 +45,7 @@ function daikinRCCloud_install()
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
     exec('sudo rm -rf ' . $pathDeamon);
-    log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
+    log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
@@ -82,7 +82,7 @@ function daikinRCCloud_update()
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
     exec('sudo rm -rf ' . $pathDeamon);
-    log::add('daikinRCCloud', 'info', __('Une mise à jour des dépendances sera nécessaire', __FILE__));
+    log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
