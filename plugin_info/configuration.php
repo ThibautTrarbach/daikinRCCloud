@@ -119,17 +119,47 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
 
         <legend><i class="fas fa-wrench"></i> {{Daikin Onecta Client Configuration}}</legend>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Client ID}}</label>
+            <label class="col-sm-3 control-label">{{Client ID}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Client ID de votre application Daikin Cloud. Obtenez-le sur developer.cloud.daikineurope.com}}"></i></sup>
+            </label>
             <div class="input-group col-sm-4">
                 <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientID"
                     placeholder="{{Client ID de votre application  Daikin Cloud}}" />
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Client Secret}}</label>
+            <label class="col-sm-3 control-label">{{Client Secret}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Client Secret de votre application Daikin Cloud. Obtenez-le sur developer.cloud.daikineurope.com}}"></i></sup>
+            </label>
             <div class="input-group col-sm-4">
                 <input type="password" class="configKey roundedLeft form-control" data-l1key="daikin_clientSecret"
                     placeholder="{{Client Secret de votre application Daikin Cloud}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <a href="#help-daikin-config" data-toggle="collapse" class="btn btn-xs btn-info">
+                    <i class="fas fa-question-circle"></i> {{Comment obtenir ces informations ?}}
+                </a>
+                <div id="help-daikin-config" class="collapse" style="margin-top: 10px;">
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        <strong><i class="fas fa-info-circle"></i> {{Tutoriel de configuration}}</strong><br/>
+                        <small>
+                            <strong>Étape 1 :</strong> Allez sur <a href="https://developer.cloud.daikineurope.com/" target="_blank">developer.cloud.daikineurope.com</a> et connectez-vous avec votre compte Daikin<br/><br/>
+                            <strong>Étape 2 :</strong> En haut à droite, cliquez sur votre adresse email et choisissez "My Apps"<br/><br/>
+                            <strong>Étape 3 :</strong> Cliquez sur "New App"<br/><br/>
+                            <strong>Étape 4 :</strong> Donnez un nom à votre application et cliquez sur "Créer"<br/><br/>
+                            <strong>Étape 5 :</strong> Copiez le <strong>Client ID</strong> affiché et collez-le dans le champ "Client ID" ci-dessus<br/><br/>
+                            <strong>Étape 6 :</strong> Copiez le <strong>Client Secret</strong> affiché et collez-le dans le champ "Client Secret" ci-dessus<br/><br/>
+                            <strong>Étape 7 :</strong> Démarrez le daemon et ouvrez les logs. Copiez l'URL d'authentification affichée dans les logs<br/><br/>
+                            <strong>Étape 8 :</strong> Retournez sur le site Daikin Developer, éditez votre application et collez l'URL précédemment copiée dans le champ "Redirect URI", puis cliquez sur "Update"<br/><br/>
+                            <strong>Étape 9 :</strong> Dans un navigateur, ouvrez l'URL copiée à l'étape 7 et suivez le processus d'authentification<br/><br/>
+                            <strong>Étape 10 :</strong> Si tout est correct, vous verrez un message de succès. Le plugin est maintenant configuré !<br/><br/>
+                            <strong>Documentation complète :</strong> <a href="https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t" target="_blank">Voir le tutoriel complet sur la communauté Jeedom</a>
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
 
