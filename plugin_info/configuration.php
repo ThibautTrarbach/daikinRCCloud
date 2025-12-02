@@ -27,6 +27,14 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
                 <input class="configKey form-control input-xs" data-l1key="pluginVersion" readonly />
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Version du daemon}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Version du Deamon (A indiquer sur Community)}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey form-control input-xs" data-l1key="deamonVersion" readonly />
+            </div>
+        </div>
 
         <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}</legend>
         <div class="form-group">
@@ -63,6 +71,49 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
             </label>
             <div class="col-sm-4">
                 <input class="configKey roundedLeft form-control" data-l1key="daikin_totalRqPerDay" readonly />
+            </div>
+        </div>
+
+        <legend><i class="fas fa-sync-alt"></i> {{Mode de rafraîchissement des actions}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Mode de rafraîchissement}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Mode de rafraîchissement après une action : 1=Rafraîchissement complet différé, 2=Mise à jour optimiste sans rafraîchissement cloud, 3=Hybride (optimiste + rafraîchissement complet différé).}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <select class="configKey form-control" data-l1key="daikin_actionRefreshMode">
+                    <option value="1">{{1 - Rafraîchissement complet différé}}</option>
+                    <option value="2">{{2 - Mise à jour optimiste (sans cloud)}}</option>
+                    <option value="3">{{3 - Hybride (optimiste + rafraîchissement complet)}}</option>
+                </select>
+                <a href="#help-actionRefreshMode" data-toggle="collapse" class="btn btn-xs btn-info" style="margin-top: 5px;">
+                    <i class="fas fa-info-circle"></i> {{Aide sur les modes}}
+                </a>
+                <div id="help-actionRefreshMode" class="collapse" style="margin-top: 5px;">
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        <small>
+                            <strong>1 - Rafraîchissement complet différé :</strong> Rafraîchissement complet depuis le cloud Daikin, différé de <code>actionRefreshDelaySeconds</code> secondes après l'action. Garantit la cohérence mais génère plus de requêtes.<br/><br/>
+                            <strong>2 - Mise à jour optimiste :</strong> Mise à jour immédiate du cache local et publication MQTT sans interroger le cloud Daikin après l'action. Plus rapide et moins de requêtes, mais pas de vérification cloud.<br/><br/>
+                            <strong>3 - Hybride (recommandé) :</strong> Combine les avantages : mise à jour optimiste immédiate + rafraîchissement complet depuis le cloud après <code>actionRefreshDelaySeconds</code> secondes. Meilleur équilibre entre réactivité et cohérence.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Délai de rafraîchissement (secondes)}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 120 secondes.}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="number" class="configKey form-control" data-l1key="daikin_actionRefreshDelaySeconds"
+                    placeholder="{{120}}" min="0" />
+                <a href="#help-actionRefreshDelaySeconds" data-toggle="collapse" class="btn btn-xs btn-info" style="margin-top: 5px;">
+                    <i class="fas fa-info-circle"></i> {{Aide}}
+                </a>
+                <div id="help-actionRefreshDelaySeconds" class="collapse" style="margin-top: 5px;">
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        <small>Délai en secondes avant le rafraîchissement complet depuis le cloud Daikin après une action. Utilisé uniquement en mode 1 (Rafraîchissement complet différé) et mode 3 (Hybride). Plus la valeur est élevée, plus cela laissera le temps au cloud et à votre device de traiter l'information et de se mettre à jour</small>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -22,6 +22,8 @@ function daikinRCCloud_install()
 {
     $pluginVersion = daikinRCCloud::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
+    $deamonVersion = daikinRCCloud::getDeamonVersion();
+    config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
     config::remove('daikin_modeproxy', 'daikinRCCloud');
     config::remove('daikin_proxyPort', 'daikinRCCloud');
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
@@ -32,9 +34,12 @@ function daikinRCCloud_install()
     config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'));
     config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud', 8765));
     config::save('daikin_polling_dayInterval', config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
-    config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
-    config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
-    config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
+    config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 30));
+    config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 21));
+    config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 8));
+    config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
+    config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+
 
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
@@ -48,6 +53,8 @@ function daikinRCCloud_update()
 {
     $pluginVersion = daikinRCCloud::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
+    $deamonVersion = daikinRCCloud::getDeamonVersion();
+    config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
     config::remove('daikin_modeproxy', 'daikinRCCloud');
     config::remove('daikin_proxyPort', 'daikinRCCloud');
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
@@ -67,6 +74,9 @@ function daikinRCCloud_update()
     config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
     config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
     config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
+
+    config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
+    config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
 
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);

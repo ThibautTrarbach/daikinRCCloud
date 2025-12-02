@@ -49,6 +49,9 @@ class daikinRCCloud extends eqLogic
             log::add('daikinRCCloud', 'error', 'Impossible de lancer le démon daikinRCCloud, vérifiez la log', 'unableStartDeamon');
             return false;
         }
+        // Mise à jour de la version du daemon
+        $deamonVersion = self::getDeamonVersion();
+        config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
         config::save('lastStart', time(), 'daikinRCCloud');
         message::removeAll('daikinRCCloud', 'unableStartDeamon');
         log::add('daikinRCCloud', 'info', 'Démon daikinRCCloud lancé');
@@ -133,8 +136,9 @@ class daikinRCCloud extends eqLogic
         $settings['system'] = array();
         $settings['daikin'] = array();
         $settings['mqtt'] = array();
+        $settings['integration'] = array();
         $settings['system']['polling'] = array();
-        $settings['system']['homeassistant'] = array();
+        $settings['integration']['homeassistant'] = array();
 
         $mqttInfos = mqtt2::getFormatedInfos();
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
@@ -153,14 +157,16 @@ class daikinRCCloud extends eqLogic
         $settings['mqtt']['reconnectPeriod'] = 1000;
         $settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
 
-
         $settings['system']['logLevel'] = $logLevel;
-        $settings['system']['jeedom'] = true;
-        $settings['system']['homeassistant']['enabled'] = false;
         $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
         $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
         $settings['system']['polling']['nightStart'] = intval(config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
         $settings['system']['polling']['nightEnd'] = intval(config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
+        $settings['system']['actionRefreshMode'] = intval(config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
+        $settings['system']['actionRefreshDelaySeconds'] = intval(config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+
+        $settings['integration']['jeedom'] = true;
+        $settings['integration']['homeassistant']['enabled'] = false;
 
         @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
     }
@@ -325,6 +331,32 @@ class daikinRCCloud extends eqLogic
         }
         log::add('daikinRCCloud', 'info', '[Plugin-Version] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
+    }
+
+    public static function getDeamonVersion()
+    {
+        $deamonVersion = '0.0.0';
+        try {
+            $packageJsonPath = dirname(__FILE__) . '/../../resources/daikintomqtt/package.json';
+            if (!file_exists($packageJsonPath)) {
+                log::add('daikinRCCloud', "warning", '[Deamon-Version] fichier package.json manquant : ' . $packageJsonPath);
+                return $deamonVersion;
+            }
+            $data = json_decode(file_get_contents($packageJsonPath), true);
+            if (!is_array($data)) {
+                log::add('daikinRCCloud', "warning", '[Deamon-Version] Impossible de décoder le fichier package.json');
+                return $deamonVersion;
+            }
+            if (isset($data['version'])) {
+                $deamonVersion = $data['version'];
+            } else {
+                log::add('daikinRCCloud', "warning", '[Deamon-Version] Clé "version" introuvable dans package.json');
+            }
+        } catch (\Exception $e) {
+            log::add('daikinRCCloud', 'debug', '[Deamon-Version] Get ERROR :: ' . $e->getMessage());
+        }
+        log::add('daikinRCCloud', 'info', '[Deamon-Version] DeamonVersion :: ' . $deamonVersion);
+        return $deamonVersion;
     }
 
 }
