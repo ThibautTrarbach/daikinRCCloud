@@ -44,7 +44,13 @@ function daikinRCCloud_install()
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    exec('sudo rm -rf ' . $pathDeamon);
+    if (is_dir($pathDeamon)) {
+        $pathDeamonEscaped = escapeshellarg($pathDeamon);
+        exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
+        if ($return_var !== 0) {
+            log::add('daikinRCCloud', 'error', 'Erreur lors de la suppression du dossier daemon : ' . implode("\n", $output));
+        }
+    }
     log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
@@ -81,7 +87,13 @@ function daikinRCCloud_update()
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    exec('sudo rm -rf ' . $pathDeamon);
+    if (is_dir($pathDeamon)) {
+        $pathDeamonEscaped = escapeshellarg($pathDeamon);
+        exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
+        if ($return_var !== 0) {
+            log::add('daikinRCCloud', 'error', 'Erreur lors de la suppression du dossier daemon : ' . implode("\n", $output));
+        }
+    }
     log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
@@ -91,5 +103,11 @@ function daikinRCCloud_remove()
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
 
-    exec('sudo rm -rf ' . $pathDeamon);
+    if (is_dir($pathDeamon)) {
+        $pathDeamonEscaped = escapeshellarg($pathDeamon);
+        exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
+        if ($return_var !== 0) {
+            log::add('daikinRCCloud', 'error', 'Erreur lors de la suppression du dossier daemon : ' . implode("\n", $output));
+        }
+    }
 }
