@@ -1,7 +1,9 @@
-theme: jekyll-theme-minimal
+theme: jekyll-theme-cayman
 title: Daikin ONECTA - Documentation
 description: Documentation du plugin Daikin ONECTA pour Jeedom
 show_downloads: false
+baseurl: /daikinRCCloud
+url: https://thibauttrarbach.github.io
 github:
   is_project_page: true
 

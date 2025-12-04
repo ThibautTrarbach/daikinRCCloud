@@ -7,4 +7,4 @@ title: Changelog Daikin ONECTA
 
 Tutte le modifiche notevoli di questo plugin saranno documentate in questo file.
 
-## Ancora non disponibile in stabile, vedere [changelog beta](changelog_beta)
+## Ancora non disponibile in stabile, vedere [changelog beta]({{ site.baseurl }}/it_IT/changelog_beta)

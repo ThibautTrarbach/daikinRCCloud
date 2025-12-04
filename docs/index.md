@@ -9,11 +9,11 @@ Welcome to the Daikin ONECTA plugin documentation for Jeedom.
 
 ## Available Languages
 
-- [Français](fr_FR/)
-- [English](en_US/)
-- [Español](es_ES/)
-- [Deutsch](de_DE/)
-- [Italiano](it_IT/)
+- [Français]({{ site.baseurl }}/fr_FR/)
+- [English]({{ site.baseurl }}/en_US/)
+- [Español]({{ site.baseurl }}/es_ES/)
+- [Deutsch]({{ site.baseurl }}/de_DE/)
+- [Italiano]({{ site.baseurl }}/it_IT/)
 
 ## Useful Links
 
