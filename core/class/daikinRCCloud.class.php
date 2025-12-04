@@ -285,7 +285,7 @@ class daikinRCCloud extends eqLogic
 
         foreach ($events as $key => $event) {
             if ($key == 'jeedom') {
-                self::handleSystemJeedomEvent($event);
+                self::handleSystemJeedomEventV2($event);
                 continue;
             }
 
@@ -334,7 +334,7 @@ class daikinRCCloud extends eqLogic
 
         foreach ($events as $key => $event) {
             if ($key == 'system') {
-                self::handleSystemEvent($event);
+                self::handleSystemEventV1($event);
                 continue;
             }
 
@@ -359,8 +359,72 @@ class daikinRCCloud extends eqLogic
     /**
      * Gestion des événements système pour daemon version < 2.0.0 (ancienne version)
      */
-    private static function handleSystemEvent($event)
+    private static function handleSystemEventV1($event)
     {
+        if (isset($event['jeedom'])) self::handleSystemJeedomEventV1($event['jeedom']);
+        if (isset($event['bridge'])) self::handleSystemBridgeEventV1($event['bridge']);
+    }
+
+    /**
+     * Gestion des événements système Jeedom pour daemon version 2.0.0+
+     */
+    private static function handleSystemJeedomEventV2($event)
+    {
+        foreach ($event as $uid => $module) {
+            $eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
+            if (!is_object($eqLogic)) {
+                $eqLogic = new eqLogic();
+                $eqLogic->setEqType_name('daikinRCCloud');
+                $eqLogic->setName($uid);
+                $eqLogic->setLogicalId($uid);
+                $eqLogic->setIsEnable(0);
+                $eqLogic->save();
+            }
+            if (is_object($eqLogic)) {
+                log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . "uid : " . $uid . " | Value : " . json_encode($module));
+                self::generateCMD($eqLogic, $module);
+            }
+        }
+
+    }
+
+    private static function handleSystemJeedomEventV1($event)
+    {
+        foreach ($event as $uid => $module) {
+            $eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
+            if (!is_object($eqLogic)) {
+                $eqLogic = new eqLogic();
+                $eqLogic->setEqType_name('daikinRCCloud');
+                $eqLogic->setName($uid);
+                $eqLogic->setLogicalId($uid);
+                $eqLogic->setIsEnable(0);
+                $eqLogic->save();
+            }
+            if (is_object($eqLogic)) {
+                log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . "uid : " . $uid . " | Value : " . json_encode($module));
+                self::generateCMD($eqLogic, $module);
+            }
+        }
+
+    }
+
+    private static function handleSystemBridgeEventV1($event)
+    {
+        if (isset($event['error'])) {
+            $error = $event['error'];
+            if ($error !== "No Error") {
+                log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
+                plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
+            }
+        }
+
+        if (isset($event['authorization_request']) && $event['authorization_request']) {
+            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
+            config::save('rate_remainingDay', 0, 'daikinRCCloud');
+            log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : ' . $event['url'], __FILE__));
+            message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="' . $event['url'] . '" target="_blank"> Authentication </a>', __FILE__), null, null);
+        }
+
         if (isset($event['authorization_timeout']) && $event['authorization_timeout']) {
             config::save('rate_remainingMinute', 0, 'daikinRCCloud');
             config::save('rate_remainingDay', 0, 'daikinRCCloud');
@@ -381,28 +445,6 @@ class daikinRCCloud extends eqLogic
         }
     }
 
-    /**
-     * Gestion des événements système Jeedom pour daemon version 2.0.0+
-     */
-    private static function handleSystemJeedomEvent($event)
-    {
-        foreach ($event as $uid => $module) {
-            $eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
-            if (!is_object($eqLogic)) {
-                $eqLogic = new eqLogic();
-                $eqLogic->setEqType_name('daikinRCCloud');
-                $eqLogic->setName($uid);
-                $eqLogic->setLogicalId($uid);
-                $eqLogic->setIsEnable(0);
-                $eqLogic->save();
-            }
-            if (is_object($eqLogic)) {
-                log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . "uid : " . $uid . " | Value : " . json_encode($module));
-                self::generateCMD($eqLogic, $module);
-            }
-        }
-
-    }
 
     public static function generateCMD($eqLogics, $data)
     {
