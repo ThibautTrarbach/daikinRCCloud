@@ -1,8 +1,13 @@
+---
+layout: default
+title: Daikin ONECTA Documentation
+---
+
 # Daikin ONECTA Documentation
 
-Bienvenue dans la documentation du plugin Daikin ONECTA pour Jeedom.
+Welcome to the Daikin ONECTA plugin documentation for Jeedom.
 
-## Langues disponibles
+## Available Languages
 
 - [Français](fr_FR/)
 - [English](en_US/)
@@ -10,9 +15,9 @@ Bienvenue dans la documentation du plugin Daikin ONECTA pour Jeedom.
 - [Deutsch](de_DE/)
 - [Italiano](it_IT/)
 
-## Liens utiles
+## Useful Links
 
 - [GitHub Repository](https://github.com/ThibautTrarbach/daikinRCCloud)
-- [Forum Jeedom](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi)
-- [Issues GitHub](https://github.com/ThibautTrarbach/daikinRCCloud/issues)
+- [Jeedom Forum](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi)
+- [GitHub Issues](https://github.com/ThibautTrarbach/daikinRCCloud/issues)
 

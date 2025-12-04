@@ -1,3 +1,8 @@
+---
+layout: default
+title: Daikin ONECTA Documentation (Beta)
+---
+
 # Daikin ONECTA Documentation
 
 ## 📋 Description

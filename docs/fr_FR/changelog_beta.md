@@ -1,4 +1,10 @@
+---
+layout: default
+title: Changelog Daikin ONECTA (Beta)
+---
+
 # Changelog Daikin ONECTA
+
 Toutes les modifications notables de ce plugin seront documentées sur cette page.
 
 ## [0.9.1] - 2025-12-05
