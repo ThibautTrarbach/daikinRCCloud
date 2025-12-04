@@ -3,6 +3,6 @@ title: Daikin ONECTA - Documentation
 description: Documentation du plugin Daikin ONECTA pour Jeedom
 show_downloads: false
 baseurl: /
-url: https://docs.github.trarbach.dev
+url: https://docs.daikinRCCloud.trarbach.dev
 github:
   is_project_page: true
