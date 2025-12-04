@@ -36,7 +36,9 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
             </div>
         </div>
 
-        <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}</legend>
+        <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}
+            <span class="label label-info" style="margin-left: 10px;"><i class="fas fa-info-circle"></i> {{Disponible à partir de la version 2.0.0 du daemon}}</span>
+        </legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la journée}}</label>
             <div class="col-sm-4">
@@ -74,7 +76,9 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
             </div>
         </div>
 
-        <legend><i class="fas fa-sync-alt"></i> {{Mode de rafraîchissement des actions}}</legend>
+        <legend><i class="fas fa-sync-alt"></i> {{Mode de rafraîchissement des actions}}
+            <span class="label label-info" style="margin-left: 10px;"><i class="fas fa-info-circle"></i> {{Disponible à partir de la version 2.0.0 du daemon}}</span>
+        </legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Mode de rafraîchissement}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Mode de rafraîchissement après une action : 1=Rafraîchissement complet différé, 2=Mise à jour optimiste sans rafraîchissement cloud, 3=Hybride (optimiste + rafraîchissement complet différé).}}"></i></sup>
