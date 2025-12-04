@@ -20,6 +20,8 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 // Fonction exécutée automatiquement après l'installation du plugin
 function daikinRCCloud_install()
 {
+    $pluginVersion = daikinRCCloud::getPluginVersion();
+    config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
     config::remove('daikin_modeproxy', 'daikinRCCloud');
     config::remove('daikin_proxyPort', 'daikinRCCloud');
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
@@ -40,6 +42,8 @@ function daikinRCCloud_install()
 // Fonction exécutée automatiquement après la mise à jour du plugin
 function daikinRCCloud_update()
 {
+    $pluginVersion = daikinRCCloud::getPluginVersion();
+    config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
     config::remove('daikin_modeproxy', 'daikinRCCloud');
     config::remove('daikin_proxyPort', 'daikinRCCloud');
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
