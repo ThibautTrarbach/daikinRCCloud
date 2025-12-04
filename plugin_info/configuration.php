@@ -179,5 +179,48 @@ config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
                 <input type="text" class="configKey form-control" data-l1key="prefix" placeholder="{{}}" />
             </div>
         </div>
+
+        <legend><i class="fas fa-code-branch"></i> {{Configuration des dépendances}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Type de référence}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Choisissez si vous voulez installer une branche ou un commit spécifique}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <select class="configKey form-control" data-l1key="daikin_dependency_type">
+                    <option value="branch">{{Branche}}</option>
+                    <option value="commit">{{Commit}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Branche ou Commit}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Nom de la branche (ex: release-beta, main, dev) ou hash du commit (ex: abc123def456)}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="text" class="configKey form-control" data-l1key="daikin_dependency_ref"
+                    placeholder="{{release-stable}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <a href="#help-dependency-config" data-toggle="collapse" class="btn btn-xs btn-info">
+                    <i class="fas fa-question-circle"></i> {{Aide sur la configuration des dépendances}}
+                </a>
+                <div id="help-dependency-config" class="collapse" style="margin-top: 10px;">
+                    <div class="alert alert-info" style="margin-bottom: 0;">
+                        <small>
+                            <strong>{{Type de référence :}}</strong><br/>
+                            {{• Branche :}} {{Installe la dernière version de la branche spécifiée (ex: release-beta, main, dev)}}<br/>
+                            {{• Commit :}} {{Installe un commit spécifique en utilisant son hash (ex: abc123def456...)}}<br/><br/>
+                            <strong>{{Branche ou Commit :}}</strong><br/>
+                            {{• Pour une branche :}} {{Indiquez le nom de la branche (par défaut: release-stable)}}<br/>
+                            {{• Pour un commit :}} {{Indiquez le hash complet du commit (ex: abc123def456789...)}}<br/><br/>
+                            <strong>{{Note :}}</strong> {{Après modification, vous devrez relancer l'installation des dépendances pour que les changements prennent effet.}}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </fieldset>
 </form>

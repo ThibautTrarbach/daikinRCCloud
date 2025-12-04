@@ -404,6 +404,55 @@ class daikinRCCloud extends eqLogic
         return $deamonVersion;
     }
 
+    /**
+     * Sauvegarde la configuration des dépendances dans un fichier JSON
+     * pour que le script pre_install.sh puisse l'utiliser
+     */
+    public static function saveDependencyConfig()
+    {
+        $configPath = dirname(__FILE__) . '/../../resources/dependency_config.json';
+        $configDir = dirname($configPath);
+        
+        // Créer le répertoire s'il n'existe pas
+        if (!is_dir($configDir)) {
+            mkdir($configDir, 0755, true);
+        }
+        
+        $dependencyType = config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch');
+        $dependencyRef = config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable');
+        
+        // Si aucune référence n'est définie, utiliser la valeur par défaut
+        if (empty($dependencyRef)) {
+            $dependencyRef = 'release-stable';
+            config::save('daikin_dependency_ref', $dependencyRef, 'daikinRCCloud');
+        }
+        
+        $config = array(
+            'type' => $dependencyType,
+            'ref' => $dependencyRef,
+            'repository' => 'https://github.com/ThibautTrarbach/daikintomqtt.git'
+        );
+        
+        $jsonContent = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents($configPath, $jsonContent);
+        chmod($configPath, 0644);
+        
+        log::add('daikinRCCloud', 'debug', '[Dependency-Config] Configuration sauvegardée : ' . $jsonContent);
+    }
+
+    /**
+     * Hook appelé après la modification d'une configuration
+     */
+    public static function postConfig_daikin_dependency_type($value)
+    {
+        self::saveDependencyConfig();
+    }
+
+    public static function postConfig_daikin_dependency_ref($value)
+    {
+        self::saveDependencyConfig();
+    }
+
 }
 
 class daikinRCCloudCmd extends cmd

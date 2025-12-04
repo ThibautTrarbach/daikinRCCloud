@@ -39,6 +39,11 @@ function daikinRCCloud_install()
     config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 8));
     config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
     config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+    config::save('daikin_dependency_type', config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch'), 'daikinRCCloud');
+    config::save('daikin_dependency_ref', config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable'), 'daikinRCCloud');
+    
+    // Sauvegarde de la configuration des dépendances
+    daikinRCCloud::saveDependencyConfig();
 
 
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
@@ -83,6 +88,11 @@ function daikinRCCloud_update()
 
     config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
     config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+    config::save('daikin_dependency_type', config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch'), 'daikinRCCloud');
+    config::save('daikin_dependency_ref', config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable'), 'daikinRCCloud');
+   
+    // Sauvegarde de la configuration des dépendances
+    daikinRCCloud::saveDependencyConfig();
 
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
