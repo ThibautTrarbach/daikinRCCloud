@@ -19,10 +19,10 @@
 	"os": {
 		"min":11
 	},
-	"changelog" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog",
-	"documentation" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
-	"changelog_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog-beta",
-	"documentation_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
+	"changelog" : "https://docs.daikinrccloud.trarbach.dev/#language#/changelog",
+	"documentation" : "https://docs.daikinrccloud.trarbach.dev/#language#/",
+	"changelog_beta" : "https://docs.daikinrccloud.trarbach.dev/#language#/changelog_beta",
+	"documentation_beta" : "https://docs.daikinrccloud.trarbach.dev/#language#/index_beta",
 	"link" : {
 		"forum":"https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi"
 	},
