@@ -29,18 +29,18 @@ function daikinRCCloud_install()
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
     config::remove('daikin_communicationTimeout', 'daikinRCCloud');
     config::remove('daikin_communicationRetries', 'daikinRCCloud');
-    config::save('topic', config::byKey('topic', 'daikinRCCloud', 'daikinToMQTT'));
-    config::save('daikin_clientID', config::byKey('daikin_clientID', 'daikinRCCloud'));
-    config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'));
-    config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud', 8765));
-    config::save('daikin_polling_dayInterval', config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
-    config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 30));
-    config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 21));
-    config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 8));
-    config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
-    config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
-    config::save('daikin_dependency_type', config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch'), 'daikinRCCloud');
-    config::save('daikin_dependency_ref', config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable'), 'daikinRCCloud');
+    config::save('topic', "daikinToMQTT", 'daikinRCCloud');
+    config::save('daikin_clientID', '', 'daikinRCCloud');
+    config::save('daikin_clientSecret', '', 'daikinRCCloud');
+    config::save('daikin_clientPort', 8765, 'daikinRCCloud');
+    config::save('daikin_polling_dayInterval', 10, 'daikinRCCloud');
+    config::save('daikin_polling_nightInterval', 20, 'daikinRCCloud');
+    config::save('daikin_polling_nightStart', 22, 'daikinRCCloud');
+    config::save('daikin_polling_nightEnd', 7, 'daikinRCCloud');
+    config::save('daikin_actionRefreshMode', 3, 'daikinRCCloud');
+    config::save('daikin_actionRefreshDelaySeconds', 120, 'daikinRCCloud');
+    config::save('daikin_dependency_type', 'branch', 'daikinRCCloud');
+    config::save('daikin_dependency_ref', 'release-stable', 'daikinRCCloud');
     
     // Sauvegarde de la configuration des dépendances
     daikinRCCloud::saveDependencyConfig();

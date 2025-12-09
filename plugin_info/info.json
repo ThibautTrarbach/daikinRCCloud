@@ -1,7 +1,7 @@
 {
 	"id" : "daikinRCCloud",
 	"name" : "Daikin ONECTA",
-	"pluginVersion": "0.9.1",
+	"pluginVersion": "0.9.2",
 	"description" : {
 		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA",
 		"en_US": "Plugin to manage Daikin devices via ONECTA cloud",
@@ -11,7 +11,7 @@
 	},
 	"licence" : "AGPL",
 	"author" : "Thibaut Trarbach & Sagitaz",
-	"require" : "4.3",
+	"require" : "4.4",
 	"category" : "wellness",
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
