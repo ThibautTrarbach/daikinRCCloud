@@ -17,41 +17,62 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-// Fonction exécutée automatiquement après l'installation du plugin
-function daikinRCCloud_install()
-{
-    $pluginVersion = daikinRCCloud::getPluginVersion();
-    config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
-    $deamonVersion = daikinRCCloud::getDeamonVersion();
-    config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
+// Fonction helper pour récupérer une config ou la valeur par défaut si vide
+function daikinRCCloud_getConfigValue($key, $default = null) {
+    $value = config::byKey($key, 'daikinRCCloud', $default);
+    return ($value === '' || $value === null) ? $default : $value;
+}
+
+// Fonction commune pour la configuration du plugin (install et update)
+function daikinRCCloud_configurePlugin($isUpdate = false) {
+    // Sauvegarde des versions
+    try {
+        $pluginVersion = daikinRCCloud::getPluginVersion();
+        config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
+        $deamonVersion = daikinRCCloud::getDeamonVersion();
+        config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
+    } catch (\Exception $e) {
+        log::add('daikinRCCloud', 'error', '{{Erreur lors de la récupération de la version du plugin : }} ' . $e->getMessage());
+    }
+    
+    // Suppression des anciennes configurations
     config::remove('daikin_modeproxy', 'daikinRCCloud');
     config::remove('daikin_proxyPort', 'daikinRCCloud');
     config::remove('daikin_proxyWebPort', 'daikinRCCloud');
     config::remove('daikin_communicationTimeout', 'daikinRCCloud');
     config::remove('daikin_communicationRetries', 'daikinRCCloud');
-
-    config::save('topic', config::byKey('topic', 'daikinRCCloud', 'daikinToMQTT'), 'daikinRCCloud');
-    config::save('daikin_clientID', config::byKey('daikin_clientID', 'daikinRCCloud'), 'daikinRCCloud');
-    config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'), 'daikinRCCloud');
-    config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud', 8765), 'daikinRCCloud');
-
-    config::save('daikin_polling_dayInterval', config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10), 'daikinRCCloud');
-    config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20), 'daikinRCCloud');
-    config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22), 'daikinRCCloud');
-    config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7), 'daikinRCCloud');
-
-    config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3), 'daikinRCCloud');
-    config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120), 'daikinRCCloud');
-    config::save('daikin_dependency_type', config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch'), 'daikinRCCloud');
-    config::save('daikin_dependency_ref', config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable'), 'daikinRCCloud');
-   
+    config::remove('rate_lastupdate', 'daikinRCCloud');
+    config::remove('rate_remainingMinute', 'daikinRCCloud');
+    config::remove('rate_remainingDay', 'daikinRCCloud');
+    
+    // Sauvegarde des configurations avec gestion des valeurs vides
+    config::save('topic', daikinRCCloud_getConfigValue('topic', 'daikinToMQTT'), 'daikinRCCloud');
+    
+    $clientID = daikinRCCloud_getConfigValue('daikin_clientID', '');
+    if ($clientID !== '') config::save('daikin_clientID', $clientID, 'daikinRCCloud');
+    
+    $clientSecret = daikinRCCloud_getConfigValue('daikin_clientSecret', '');
+    if ($clientSecret !== '') config::save('daikin_clientSecret', $clientSecret, 'daikinRCCloud');
+    
+    config::save('daikin_clientPort', daikinRCCloud_getConfigValue('daikin_clientPort', 8765), 'daikinRCCloud');
+    config::save('daikin_polling_dayInterval', daikinRCCloud_getConfigValue('daikin_polling_dayInterval', 10), 'daikinRCCloud');
+    config::save('daikin_polling_nightInterval', daikinRCCloud_getConfigValue('daikin_polling_nightInterval', 20), 'daikinRCCloud');
+    config::save('daikin_polling_nightStart', daikinRCCloud_getConfigValue('daikin_polling_nightStart', 22), 'daikinRCCloud');
+    config::save('daikin_polling_nightEnd', daikinRCCloud_getConfigValue('daikin_polling_nightEnd', 7), 'daikinRCCloud');
+    config::save('daikin_actionRefreshMode', daikinRCCloud_getConfigValue('daikin_actionRefreshMode', 3), 'daikinRCCloud');
+    config::save('daikin_actionRefreshDelaySeconds', daikinRCCloud_getConfigValue('daikin_actionRefreshDelaySeconds', 120), 'daikinRCCloud');
+    config::save('daikin_dependency_type', daikinRCCloud_getConfigValue('daikin_dependency_type', 'branch'), 'daikinRCCloud');
+    config::save('daikin_dependency_ref', daikinRCCloud_getConfigValue('daikin_dependency_ref', 'release-stable'), 'daikinRCCloud');
+    
     // Sauvegarde de la configuration des dépendances
     daikinRCCloud::saveDependencyConfig();
+}
 
-
+// Fonction commune pour la suppression du dossier daemon
+function daikinRCCloud_removeDaemonFolder() {
     $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
     log::add('daikinRCCloud', 'debug', $pathDeamon);
-
+    
     if (is_dir($pathDeamon)) {
         $pathDeamonEscaped = escapeshellarg($pathDeamon);
         exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
@@ -59,68 +80,26 @@ function daikinRCCloud_install()
             log::add('daikinRCCloud', 'error', '{{Erreur lors de la suppression du dossier daemon : }} ' . implode("\n", $output));
         }
     }
+}
+
+// Fonction exécutée automatiquement après l'installation du plugin
+function daikinRCCloud_install()
+{
+    daikinRCCloud_configurePlugin(false);
+    daikinRCCloud_removeDaemonFolder();
     log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
 function daikinRCCloud_update()
 {
-    $pluginVersion = daikinRCCloud::getPluginVersion();
-    config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
-    $deamonVersion = daikinRCCloud::getDeamonVersion();
-    config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
-    config::remove('daikin_modeproxy', 'daikinRCCloud');
-    config::remove('daikin_proxyPort', 'daikinRCCloud');
-    config::remove('daikin_proxyWebPort', 'daikinRCCloud');
-    config::remove('daikin_communicationTimeout', 'daikinRCCloud');
-    config::remove('daikin_communicationRetries', 'daikinRCCloud');
-
-    config::remove('rate_lastupdate', 'daikinRCCloud');
-    config::remove('rate_remainingMinute', 'daikinRCCloud');
-    config::remove('rate_remainingDay', 'daikinRCCloud');
-
-    config::save('topic', config::byKey('topic', 'daikinRCCloud', 'daikinToMQTT'), 'daikinRCCloud');
-    config::save('daikin_clientID', config::byKey('daikin_clientID', 'daikinRCCloud'), 'daikinRCCloud');
-    config::save('daikin_clientSecret', config::byKey('daikin_clientSecret', 'daikinRCCloud'), 'daikinRCCloud');
-    config::save('daikin_clientPort', config::byKey('daikin_clientPort', 'daikinRCCloud', 8765), 'daikinRCCloud');
-
-    config::save('daikin_polling_dayInterval', config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10), 'daikinRCCloud');
-    config::save('daikin_polling_nightInterval', config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20), 'daikinRCCloud');
-    config::save('daikin_polling_nightStart', config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22), 'daikinRCCloud');
-    config::save('daikin_polling_nightEnd', config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7), 'daikinRCCloud');
-
-    config::save('daikin_actionRefreshMode', config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3), 'daikinRCCloud');
-    config::save('daikin_actionRefreshDelaySeconds', config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120), 'daikinRCCloud');
-    config::save('daikin_dependency_type', config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch'), 'daikinRCCloud');
-    config::save('daikin_dependency_ref', config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable'), 'daikinRCCloud');
-   
-    // Sauvegarde de la configuration des dépendances
-    daikinRCCloud::saveDependencyConfig();
-
-    $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
-    log::add('daikinRCCloud', 'debug', $pathDeamon);
-
-    if (is_dir($pathDeamon)) {
-        $pathDeamonEscaped = escapeshellarg($pathDeamon);
-        exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
-        if ($return_var !== 0) {
-            log::add('daikinRCCloud', 'error', '{{Erreur lors de la suppression du dossier daemon : }} ' . implode("\n", $output));
-        }
-    }
+    daikinRCCloud_configurePlugin(true);
+    daikinRCCloud_removeDaemonFolder();
     log::add('daikinRCCloud', 'info', '{{Une mise à jour des dépendances sera nécessaire}}');
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function daikinRCCloud_remove()
 {
-    $pathDeamon = dirname(__FILE__) . '/../resources/daikintomqtt';
-    log::add('daikinRCCloud', 'debug', $pathDeamon);
-
-    if (is_dir($pathDeamon)) {
-        $pathDeamonEscaped = escapeshellarg($pathDeamon);
-        exec('sudo rm -rf ' . $pathDeamonEscaped . ' 2>&1', $output, $return_var);
-        if ($return_var !== 0) {
-            log::add('daikinRCCloud', 'error', '{{Erreur lors de la suppression du dossier daemon : }} ' . implode("\n", $output));
-        }
-    }
+    daikinRCCloud_removeDaemonFolder();
 }
