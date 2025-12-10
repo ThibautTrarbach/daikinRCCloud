@@ -83,6 +83,7 @@
     "Commit": "Commit",
     "Branche ou Commit": "Branch oder Commit",
     "Nom de la branche (ex: release-beta, main, dev) ou hash du commit (ex: abc123def456)": "Branch-Name (z.B.: release-beta, main, dev) oder Commit-Hash (z.B.: abc123def456)",
+    "release-stable": "release-stable",
     "Aide sur la configuration des dépendances": "Hilfe zur Abhängigkeitskonfiguration",
     "Type de référence :": "Referenztyp:",
     "• Branche :": "• Branch:",
@@ -151,10 +152,27 @@
   "plugins/daikinRCCloud/core/class/daikinRCCloud.class.php": {
     "Veuillez vérifier la configuration": "Bitte überprüfen Sie die Konfiguration",
     "Le plugin mqtt2 n'est pas installé": "Das Plugin mqtt2 ist nicht installiert",
-    "Le démon mqtt2 n'est pas demarré": "Der Daemon mqtt2 ist nicht gestartet"
+    "Le démon mqtt2 n'est pas demarré": "Der Daemon mqtt2 ist nicht gestartet",
+    "Impossible de lancer le démon daikinRCCloud, vérifiez la log": "Daemon daikinRCCloud kann nicht gestartet werden, bitte Log überprüfen",
+    "Démon daikinRCCloud lancé": "Daemon daikinRCCloud gestartet",
+    "Format de message MQTT invalide ou préfixe incorrect": "Ungültiges MQTT-Nachrichtenformat oder falsches Präfix",
+    "Événement invalide pour la clé : ": "Ungültiges Ereignis für Schlüssel: ",
+    "Impossible de créer ou récupérer l'équipement pour : ": "Gerät kann nicht erstellt oder abgerufen werden für: ",
+    "Erreur lors de l'évaluation de la valeur pour ": "Fehler bei der Auswertung des Werts für ",
+    "Erreur : ": "Fehler: ",
+    "Commande info liée introuvable (ID: ": "Verknüpfte Info-Befehl nicht gefunden (ID: ",
+    "Type 'other' non reconnu pour l'action : ": "Typ 'other' für Aktion nicht erkannt: ",
+    "Options invalides pour slider : ": "Ungültige Optionen für Slider: ",
+    "Options invalides pour select : ": "Ungültige Optionen für Select: ",
+    "Sous-type non géré : ": "Nicht unterstützter Untertyp: ",
+    "Impossible de déterminer la valeur de l'action": "Aktionswert kann nicht bestimmt werden"
   },
   "plugins/daikinRCCloud/plugin_info/install.php": {
-    "Une mise à jour des dépendances sera nécessaire": "Eine Aktualisierung der Abhängigkeiten wird erforderlich sein"
+    "Une mise à jour des dépendances sera nécessaire": "Eine Aktualisierung der Abhängigkeiten wird erforderlich sein",
+    "Erreur lors de la suppression du dossier daemon : ": "Fehler beim Löschen des Daemon-Ordners: "
+  },
+  "plugins/daikinRCCloud/plugin_info/configuration.php": {
+    "Erreur lors du chargement de la configuration : ": "Fehler beim Laden der Konfiguration: "
   },
   "info.json": {
     "Plugin pour gérer les appareils Daikin via le cloud ONECTA": "Plugin zur Verwaltung von Daikin-Geräten über die ONECTA-Cloud"

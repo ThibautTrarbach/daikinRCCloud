@@ -21,7 +21,7 @@ try {
     }
     config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
 } catch (\Exception $e) {
-    log::add('daikinRCCloud', 'error', 'Erreur lors du chargement de la configuration : ' . $e->getMessage());
+    log::add('daikinRCCloud', 'error', '{{Erreur lors du chargement de la configuration : }} ' . $e->getMessage());
 }
 ?>
 

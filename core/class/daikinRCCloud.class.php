@@ -66,7 +66,7 @@ class daikinRCCloud extends eqLogic
             $i++;
         }
         if ($i >= 10) {
-            log::add('daikinRCCloud', 'error', 'Impossible de lancer le démon daikinRCCloud, vérifiez la log', 'unableStartDeamon');
+            log::add('daikinRCCloud', 'error', '{{Impossible de lancer le démon daikinRCCloud, vérifiez la log}}', 'unableStartDeamon');
             return false;
         }
         // Mise à jour de la version du daemon
@@ -74,7 +74,7 @@ class daikinRCCloud extends eqLogic
         config::save('deamonVersion', $deamonVersion, 'daikinRCCloud');
         config::save('lastStart', time(), 'daikinRCCloud');
         message::removeAll('daikinRCCloud', 'unableStartDeamon');
-        log::add('daikinRCCloud', 'info', 'Démon daikinRCCloud lancé');
+        log::add('daikinRCCloud', 'info', '{{Démon daikinRCCloud lancé}}');
         return true;
     }
 
@@ -277,7 +277,7 @@ class daikinRCCloud extends eqLogic
         
         $prefix = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
         if (!isset($_message[$prefix]) || !is_array($_message[$prefix])) {
-            log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . 'Format de message MQTT invalide ou préfixe incorrect');
+            log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . '{{Format de message MQTT invalide ou préfixe incorrect}}');
             return;
         }
         
@@ -290,7 +290,7 @@ class daikinRCCloud extends eqLogic
             }
 
             if (!is_array($event)) {
-                log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . "Événement invalide pour la clé : " . $key);
+                log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . "{{Événement invalide pour la clé : }} " . $key);
                 continue;
             }
 
@@ -302,7 +302,7 @@ class daikinRCCloud extends eqLogic
             }
 
             if (!is_object($eqLogic)) {
-                log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "Impossible de créer ou récupérer l'équipement pour : " . $key);
+                log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Impossible de créer ou récupérer l'équipement pour : }} " . $key);
                 continue;
             }
 
@@ -317,7 +317,7 @@ class daikinRCCloud extends eqLogic
                     log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . json_encode($value));
                     $cmd->event($value);
                 } catch (Exception $e) {
-                    log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "Erreur lors de l'évaluation de la valeur pour " . $logicalID . " : " . $e->getMessage());
+                    log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Erreur lors de l'évaluation de la valeur pour }} " . $logicalID . " : " . $e->getMessage());
                 }
             }
         }
@@ -413,7 +413,7 @@ class daikinRCCloud extends eqLogic
         if (isset($event['error'])) {
             $error = $event['error'];
             if ($error !== "No Error") {
-                log::add('daikinRCCloud', 'error', '[DAEMON] ' . "Erreur : " . $error);
+                log::add('daikinRCCloud', 'error', '[DAEMON] ' . "{{Erreur : }} " . $error);
                 plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
             }
         }
@@ -680,7 +680,7 @@ class daikinRCCloudCmd extends cmd
 
         $valueCmd = cmd::byId($this->getValue());
         if (!is_object($valueCmd)) {
-            log::add('daikinRCCloud', 'error', '[' . __FUNCTION__ . "] | Commande info liée introuvable (ID: " . $this->getValue() . ")");
+            log::add('daikinRCCloud', 'error', '[' . __FUNCTION__ . "] | {{Commande info liée introuvable (ID: }} " . $this->getValue() . ")");
             return false;
         }
         $action = $valueCmd->getLogicalId();
@@ -693,31 +693,31 @@ class daikinRCCloudCmd extends cmd
                 } elseif ($action . "_OFF" == $this->getLogicalId()) {
                     $actionValue = false;
                 } else {
-                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Type 'other' non reconnu pour l'action : " . $action);
+                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | {{Type 'other' non reconnu pour l'action : }} " . $action);
                     return false;
                 }
                 break;
             case 'slider':
                 if (!is_array($_options) || !isset($_options['slider'])) {
-                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides pour slider : " . json_encode($_options));
+                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | {{Options invalides pour slider : }} " . json_encode($_options));
                     return false;
                 }
                 $actionValue = $_options['slider'];
                 break;
             case 'select':
                 if (!is_array($_options) || !isset($_options['select'])) {
-                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Options invalides pour select : " . json_encode($_options));
+                    log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | {{Options invalides pour select : }} " . json_encode($_options));
                     return false;
                 }
                 $actionValue = $_options['select'];
                 break;
             default:
-                log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | Sous-type non géré : " . $this->getSubType());
+                log::add('daikinRCCloud', 'warning', '[' . __FUNCTION__ . "] | {{Sous-type non géré : }} " . $this->getSubType());
                 return false;
         }
 
         if ($actionValue === null) {
-            log::add('daikinRCCloud', 'error', '[' . __FUNCTION__ . "] | Impossible de déterminer la valeur de l'action");
+            log::add('daikinRCCloud', 'error', '[' . __FUNCTION__ . "] | {{Impossible de déterminer la valeur de l'action}}");
             return false;
         }
 
