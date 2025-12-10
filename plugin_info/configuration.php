@@ -5,17 +5,26 @@ include_file('core', 'authentification', 'php');
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
-$rqDay = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 0);
-$rqNight = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 0);
-$rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
-$rqNightEnd = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 0);
-$totalRqDay = $rqNightStart - $rqNightEnd;
-$totalrqnight = 24 - $totalRqDay;
-$NbRqsDay = ($totalRqDay * 60) / $rqDay;
-$NbRqsNight = ($totalrqnight * 60) / $rqNight;
-$NbRqsTotal = $NbRqsDay + $NbRqsNight;
-config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
+try {
+    $rqDay = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 0);
+    $rqNight = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 0);
+    $rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
+    $rqNightEnd = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 0);
+    $totalRqDay = $rqNightStart - $rqNightEnd;
+    $totalrqnight = 24 - $totalRqDay;
+    if ($rqDay > 0 && $rqNight > 0 && $rqNightStart >= 0 && $rqNightEnd >= 0) {
+    $NbRqsDay = ($totalRqDay * 60) / $rqDay;
+    $NbRqsNight = ($totalrqnight * 60) / $rqNight;
+    $NbRqsTotal = $NbRqsDay + $NbRqsNight;
+    } else {
+        $NbRqsTotal = 200;
+    }
+    config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
+} catch (\Exception $e) {
+    log::add('daikinRCCloud', 'error', '{{Erreur lors du chargement de la configuration : }} ' . $e->getMessage());
+}
 ?>
+
 <form class="form-horizontal">
     <fieldset>
         <legend><i class="fas fa-wifi"></i> {{Informations globales}}</legend>
