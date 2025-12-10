@@ -169,7 +169,8 @@
   },
   "plugins/daikinRCCloud/plugin_info/install.php": {
     "Une mise à jour des dépendances sera nécessaire": "Será necesaria una actualización de dependencias",
-    "Erreur lors de la suppression du dossier daemon : ": "Error al eliminar la carpeta del daemon: "
+    "Erreur lors de la suppression du dossier daemon : ": "Error al eliminar la carpeta del daemon: ",
+    "Erreur lors de la récupération de la version du plugin : ": "Error al recuperar la versión del plugin: "
   },
   "plugins/daikinRCCloud/plugin_info/configuration.php": {
     "Erreur lors du chargement de la configuration : ": "Error al cargar la configuración: "
