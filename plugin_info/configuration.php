@@ -11,9 +11,13 @@ $rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
 $rqNightEnd = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 0);
 $totalRqDay = $rqNightStart - $rqNightEnd;
 $totalrqnight = 24 - $totalRqDay;
+if ($rqDay > 0 && $rqNight > 0 && $rqNightStart >= 0 && $rqNightEnd >= 0) {
 $NbRqsDay = ($totalRqDay * 60) / $rqDay;
 $NbRqsNight = ($totalrqnight * 60) / $rqNight;
 $NbRqsTotal = $NbRqsDay + $NbRqsNight;
+} else {
+    $NbRqsTotal = 200;
+}
 config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
 ?>
 <form class="form-horizontal">
