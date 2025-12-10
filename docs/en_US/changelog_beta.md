@@ -7,7 +7,17 @@ title: Daikin ONECTA Changelog (Beta)
 
 All notable changes to this plugin will be documented on this page.
 
-## [0.9.2] - 2025-12-10
+## [0.9.3] - 2025-12-10
+
+### Improved
+- Improved plugin update process
+- Improved plugin logs with translation
+- Fixed empty value handling in configuration page
+- Better error handling in configuration page and in tasks executed during plugin installation or update
+
+---
+
+## [0.9.2] - 2025-12-09
 
 ### Fixed
 - Fixed a configuration update bug
