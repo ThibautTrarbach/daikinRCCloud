@@ -7,6 +7,16 @@ title: Changelog Daikin ONECTA (Beta)
 
 Tutte le modifiche notevoli di questo plugin saranno documentate su questa pagina.
 
+## [0.9.2] - 2025-12-10
+
+### Corretto
+- Correzione di un bug di aggiornamento della configurazione
+
+### Cambiamento importante
+- Il plugin ora richiede Jeedom 4.4 come minimo
+
+---
+
 ## [0.9.1] - 2025-12-05
 
 ### Informazioni

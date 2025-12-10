@@ -7,10 +7,20 @@ title: Changelog Daikin ONECTA (Beta)
 
 Toutes les modifications notables de ce plugin seront documentées sur cette page.
 
+## [0.9.2] - 2025-12-10
+
+### Correction 
+- Corrections d'un bug de mise à jour de la configuration
+
+### Breaking change
+- Le plugin nécessite maintenant un Jeedom 4.4 au minimum 
+
+---
+
 ## [0.9.1] - 2025-12-05
 
 ### Infos 
-- Le Deamon 2.0.0 n'est pas encore disponible correctement. Dans les prochains jours, on vous proposera de le tester en mode alpha pour éviter d'impacter vos productions pendant la période de chauffe
+- Le Deamon 2.0.x n'est pas encore disponible correctement. Dans les prochains jours, on vous proposera de le tester en mode alpha pour éviter d'impacter vos productions pendant la période de chauffe
 
 ### Ajouté
 - Configuration des dépendances : possibilité de choisir la branche ou le commit à installer
@@ -29,7 +39,7 @@ Toutes les modifications notables de ce plugin seront documentées sur cette pag
 
 ---
 
-## [0.9.0] - En l'ans 2022 (Plus de souvenir de la date)
+## [0.9.0] - En l'an 2022 (Plus de souvenir de la date)
 
 ### Ajouté
 - Version initiale du plugin
