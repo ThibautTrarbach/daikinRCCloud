@@ -89,7 +89,7 @@ Para diagnosticar un problema:
 Si no encuentra la solución, solicite ayuda indicando:
 
 | Información | Dónde encontrarla |
-|-------------|---------------|
+|-------------|-------------------|
 | Versión del plugin | Configuración → Informaciones |
 | Versión del servicio interno | Configuración → Informaciones |
 | Versión de Jeedom | Página de inicio de Jeedom |

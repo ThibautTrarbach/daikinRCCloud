@@ -5,7 +5,7 @@ title: Installation - Daikin ONECTA
 
 # Installation
 
-Diese Anleitung führt Sie Schritt für Schritt durch die Installation des Plugins und das Erscheinen Ihrer Daikin-Geräte in Jeedom.
+Diese Anleitung führt Sie durch die Installation des Plugins und das Sichtbarmachen Ihrer Daikin-Geräte in Jeedom.
 
 ## Bevor Sie beginnen
 
@@ -13,31 +13,31 @@ Stellen Sie sicher, dass Sie Folgendes haben:
 
 - Jeedom **4.4** oder neuer
 - Ein **Daikin-Onecta-Konto** (dasselbe wie in der Mobile App)
-- Ihre Daikin-Geräte bereits eingerichtet und in der Onecta-App sichtbar
+- Ihre Daikin-Geräte bereits konfiguriert und in der Onecta-App sichtbar
 
 ## Schritt 1: Plugin installieren
 
 1. Öffnen Sie **Plugins → Plugin-Verwaltung** in Jeedom.
-2. Suchen Sie **Daikin ONECTA**.
-3. Klicken Sie auf **Installieren**, dann **Aktivieren**.
+2. Suchen Sie nach **Daikin ONECTA**.
+3. Klicken Sie auf **Installieren**, dann auf **Aktivieren**.
 
-## Schritt 2: Plugin mqtt2 installieren
+## Schritt 2: mqtt2-Plugin installieren
 
-Das Plugin **mqtt2** ist **obligatorisch**. Es dient als internes Relay zwischen dem Daikin-Plugin und Ihren Geräten. In der Regel müssen Sie darin nichts Besonderes konfigurieren.
+Das **mqtt2**-Plugin ist **obligatorisch**. Es fungiert als internes Relais zwischen dem Daikin-Plugin und Ihren Geräten. In den meisten Fällen benötigen Sie keine spezielle Konfiguration darin.
 
-1. Installieren Sie das Plugin **mqtt2** über den Jeedom-Market (falls noch nicht geschehen).
+1. Installieren Sie das **mqtt2**-Plugin aus dem Jeedom-Markt (falls noch nicht installiert).
 2. Aktivieren Sie es.
-3. Prüfen Sie unter **Werkzeuge → Gesundheit**, ob mqtt2 gestartet ist.
+3. Prüfen Sie unter **Werkzeuge → Gesundheit**, ob mqtt2 läuft.
 
 ## Schritt 3: Abhängigkeiten installieren
 
-Das Plugin benötigt zusätzliche Komponenten. Jeedom installiert diese automatisch:
+Das Plugin benötigt zusätzliche Komponenten, um zu funktionieren. Jeedom installiert diese automatisch:
 
-1. Gehen Sie zur Seite des Plugins **Daikin ONECTA**.
-2. Klicken Sie auf **Abhängigkeiten neu installieren** (oder über die entsprechende Schaltfläche in der Plugin-Verwaltung).
-3. Warten Sie, bis die Installation abgeschlossen ist (das kann einige Minuten dauern).
+1. Gehen Sie zur **Daikin ONECTA**-Plugin-Seite.
+2. Klicken Sie auf **Abhängigkeiten neu installieren** (oder verwenden Sie die entsprechende Schaltfläche in der Plugin-Verwaltung).
+3. Warten Sie, bis die Installation abgeschlossen ist (dies kann einige Minuten dauern).
 
-> **Achtung:** Nach jedem Plugin-Update starten Sie die Abhängigkeitsinstallation erneut, wenn Jeedom Sie dazu auffordert.
+> **Hinweis:** Führen Sie nach jedem Plugin-Update die Abhängigkeitsinstallation erneut aus, wenn Jeedom Sie dazu auffordert.
 
 ## Schritt 4: Daikin-Verbindung konfigurieren
 
@@ -52,20 +52,20 @@ Weitere Details zu den Verbindungsmodi finden Sie auf der Seite [Authentifizieru
 
 1. Gehen Sie zu **Werkzeuge → Gesundheit** (oder zur Plugin-Seite).
 2. Starten Sie den **Daemon** des Daikin-ONECTA-Plugins.
-3. Prüfen Sie, ob der Status **Gestartet** anzeigt.
+3. Prüfen Sie, ob der Status **Läuft** anzeigt.
 
-## Schritt 6: Ihre Geräte prüfen
+## Schritt 6: Geräte prüfen
 
-1. Kehren Sie zur Seite **Plugins → Daikin ONECTA** zurück.
+1. Kehren Sie zu **Plugins → Daikin ONECTA** zurück.
 2. Ihre Daikin-Geräte sollten unter **Meine Geräte** erscheinen.
 
-Wenn kein Gerät erscheint, lesen Sie die Seite [Fehlerbehebung]({{ site.baseurl }}/de_DE/depannage.html).
+Wenn kein Gerät erscheint, siehe die Seite [Fehlerbehebung]({{ site.baseurl }}/de_DE/depannage.html).
 
-## Und weiter?
+## Wie geht es weiter?
 
 - [Plugin-Einstellungen konfigurieren]({{ site.baseurl }}/de_DE/configuration.html)
-- [Lernen Sie, Ihre Geräte zu nutzen]({{ site.baseurl }}/de_DE/utilisation.html)
+- [Erfahren Sie, wie Sie Ihre Geräte nutzen]({{ site.baseurl }}/de_DE/utilisation.html)
 
 ---
 
-[Vorherige: Startseite]({{ site.baseurl }}/de_DE/) — [Nächste: Konfiguration]({{ site.baseurl }}/de_DE/configuration.html)
+[Vorherige: Startseite]({{ site.baseurl }}/de_DE/) — [Weiter: Konfiguration]({{ site.baseurl }}/de_DE/configuration.html)

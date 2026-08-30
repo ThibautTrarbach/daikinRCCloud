@@ -5,24 +5,24 @@ title: Konfiguration - Daikin ONECTA
 
 # Konfiguration
 
-Die Konfigurationsseite finden Sie unter **Plugins → Daikin ONECTA → Konfiguration**.
+Die Konfigurationsseite befindet sich unter **Plugins → Daikin ONECTA → Konfiguration**.
 
-Die meisten Benutzer müssen nur den Abschnitt **Daikin-Verbindung** anpassen. Die übrigen Einstellungen sind über das Kontrollkästchen **Erweiterte Konfiguration** erreichbar.
+Die meisten Benutzer müssen nur den Abschnitt **Daikin-Verbindung** ändern. Weitere Einstellungen sind über das Kontrollkästchen **Erweiterte Konfiguration** verfügbar.
 
 ---
 
 ## Daikin-Verbindung
 
-Das ist der wichtigste Abschnitt. Er verknüpft Jeedom mit Ihrem Daikin-Konto.
+Dies ist der wichtigste Abschnitt. Er verknüpft Jeedom mit Ihrem Daikin-Konto.
 
 ### Authentifizierungsmodus
 
-Zwei Modi stehen zur Verfügung:
+Zwei Modi sind verfügbar:
 
-| Modus | Für wen? | Tagesquota |
-|-------|----------|------------|
-| **Mobile App** (empfohlen) | Nutzer mit der Daikin-Onecta-App | 3000 Abfragen/Tag |
-| **Developer Portal** | Fortgeschrittene Nutzer mit einer App im Daikin-Entwicklerportal | 200 Abfragen/Tag |
+| Modus | Für wen? | Tageskontingent |
+|------|-----------|-------------|
+| **Mobile App** (empfohlen) | Benutzer mit der Daikin-Onecta-App | 3000 Anfragen/Tag |
+| **Developer Portal** | Fortgeschrittene Benutzer, die eine App im Daikin Developer Portal erstellt haben | 200 Anfragen/Tag |
 
 > **Empfohlen:** Wählen Sie **Mobile App** und verwenden Sie dieselben Zugangsdaten wie in der Daikin-Onecta-App auf Ihrem Smartphone.
 
@@ -35,15 +35,15 @@ Je nach gewähltem Modus:
 - **Mobile App:** Geben Sie Ihre **Onecta-E-Mail** und Ihr **Onecta-Passwort** ein.
 - **Developer Portal:** Geben Sie die **Client ID** und das **Client Secret** Ihrer Daikin-Developer-Anwendung ein.
 
-### Tägliches API-Quota
+### Tägliches API-Kontingent
 
-Dieses Feld zeigt die maximal erlaubten Cloud-Abfragen pro Tag je nach Verbindungsmodus. Es wird automatisch berechnet und ist nicht editierbar.
+Dieses Feld zeigt die maximale Anzahl der pro Tag erlaubten Cloud-Anfragen gemäß Ihrem Verbindungsmodus an. Es wird automatisch berechnet und kann nicht bearbeitet werden.
 
-Was das konkret bedeutet, erfahren Sie unter [Limits und Best Practices]({{ site.baseurl }}/de_DE/quota-api.html).
+Um zu verstehen, was dies in der Praxis bedeutet, siehe [Limits und Best Practices]({{ site.baseurl }}/de_DE/quota-api.html).
 
 ### Versionen
 
-Die Versionen des Plugins und des internen Dienstes werden schreibgeschützt angezeigt. Geben Sie diese an, wenn Sie im Forum um Hilfe bitten.
+Plugin- und interne Dienstversionen werden schreibgeschützt angezeigt. Geben Sie diese an, wenn Sie im Forum um Hilfe bitten.
 
 ---
 
@@ -51,77 +51,77 @@ Die Versionen des Plugins und des internen Dienstes werden schreibgeschützt ang
 
 Aktivieren Sie **Erweiterte Konfiguration**, um zusätzliche Einstellungen anzuzeigen. **Die meisten Benutzer können die Standardwerte beibehalten.**
 
-### Aktualisierungsintervall
+### Aktualisierungsfrequenz
 
-Diese Einstellungen legen fest, wie oft Jeedom die Daikin-Cloud abfragt, um den Status Ihrer Geräte zu erfahren.
+Diese Einstellungen legen fest, wie oft Jeedom die Daikin-Cloud nach dem Status Ihrer Geräte abfragt.
 
 | Einstellung | Standard | Beschreibung |
-|-------------|----------|-------------|
-| **Intervall tagsüber** | 15 Min. | Prüfintervall zwischen Morgen und Abend |
-| **Intervall nachts** | 30 Min. | Prüfintervall in der Nacht (spart Quota) |
-| **Nachtbeginn** | 22 Uhr | Uhrzeit, ab der die Nachtperiode beginnt |
-| **Nachtende** | 7 Uhr | Uhrzeit, ab der die Nachtperiode endet |
+|---------|--------|-------------|
+| **Tagesintervall** | 15 Min. | Abfragefrequenz zwischen Morgen und Abend |
+| **Nachtintervall** | 30 Min. | Abfragefrequenz während der Nacht (spart Kontingent) |
+| **Nachtbeginn** | 22 Uhr | Uhrzeit, zu der die Nachtperiode beginnt |
+| **Nachtende** | 7 Uhr | Uhrzeit, zu der die Nachtperiode endet |
 
-> **Tipp:** Mit dem Modus Mobile App und aktivierten Echtzeit-Updates können Sie diese Intervalle erhöhen, ohne an Reaktionsfähigkeit zu verlieren.
+> **Tipp:** Mit dem Mobile-App-Modus und aktivierten Echtzeit-Updates können Sie diese Intervalle erhöhen, ohne an Reaktionsfähigkeit zu verlieren.
 
-Das Feld **Geplante Anfragen/Tag** schätzt, wie viele GET-Abfragen der Daemon täglich plant (Polling + Energiestatistiken), unter Berücksichtigung des Authentifizierungsmodus und des WebSocket. Die Aktualisierung erfolgt automatisch, wenn Sie Einstellungen ändern. Befehle und Refresh nach Aktion kommen zu dieser Schätzung hinzu.
+Das Feld **Geplante Anfragen/Tag** schätzt, wie viele GET-Anfragen der Daemon pro Tag plant (Polling + Energiestatistiken), basierend auf Authentifizierungsmodus und WebSocket. Es aktualisiert sich automatisch, wenn Sie Einstellungen ändern. Befehle und Aktualisierung nach Aktionen erhöhen diese Schätzung.
 
 ### Verhalten nach einem Befehl
 
-Wenn Sie einen Befehl auslösen (Temperatur ändern, Klima einschalten…), kann das Plugin auf drei Arten reagieren:
+Wenn Sie einen Befehl auslösen (Temperatur ändern, Klimaanlage einschalten usw.), kann das Plugin auf drei Arten reagieren:
 
 | Modus | Verhalten | Wann verwenden |
-|-------|-----------|----------------|
-| **1 — Verzögerter vollständiger Refresh** | Wartet und prüft den tatsächlichen Status bei Daikin | Wenn Sie eine systematische Cloud-Bestätigung wünschen |
-| **2 — Sofortige Aktualisierung** | Aktualisiert Jeedom sofort, ohne Daikin zu prüfen | Um Quota zu sparen, wenn die Reaktionsfähigkeit ausreicht |
+|------|----------|-------------|
+| **1 — Verzögerte vollständige Aktualisierung** | Wartet und prüft dann den tatsächlichen Zustand bei Daikin | Wenn Sie eine systematische Cloud-Bestätigung wünschen |
+| **2 — Sofortige Aktualisierung** | Aktualisiert Jeedom sofort ohne Daikin-Abfrage | Um Kontingent zu sparen, wenn die Reaktionsfähigkeit ausreicht |
 | **3 — Hybrid** (Standard) | Sofortige Aktualisierung + Daikin-Prüfung nach Verzögerung | **Empfohlen** — gutes Gleichgewicht zwischen Reaktionsfähigkeit und Zuverlässigkeit |
 
-**Refresh-Verzögerung:** In Modus 1 und 3 die Wartezeit vor der Prüfung bei Daikin (Standard: 60 Sekunden). Behalten Sie diese Verzögerung bei, wenn Ihre Geräte etwas Zeit zum Reagieren brauchen.
+**Aktualisierungsverzögerung:** In den Modi 1 und 3 die Wartezeit vor der Daikin-Abfrage (Standard: 60 Sekunden). Behalten Sie diese Verzögerung bei, wenn Ihre Geräte einen Moment brauchen, um zu reagieren.
 
-**Prüfstrategie:**
+**Verifizierungsstrategie:**
 
 | Strategie | Beschreibung |
-|-----------|-------------|
-| **Zusammenführung mit Synchronisation** (Standard) | Wenn bald eine geplante Synchronisation ansteht, wartet das Plugin, statt eine zusätzliche Anfrage zu senden |
-| **Dedizierte Prüfung** | Das Plugin fragt Daikin gezielt nach jedem Befehl ab |
-| **Keine Prüfung** | Keine Cloud-Abfrage nach einem Befehl |
+|----------|-------------|
+| **Mit Synchronisation zusammenführen** (Standard) | Wenn eine geplante Synchronisation bald ansteht, wartet das Plugin statt eine zusätzliche Anfrage zu senden |
+| **Dedizierte Verifizierung** | Das Plugin fragt Daikin gezielt nach jedem Befehl ab |
+| **Keine Verifizierung** | Keine Cloud-Anfrage nach einem Befehl |
 
-**Refresh Energiestatistiken:** Tägliche Uhrzeit (Standard 23:58 Uhr), zu der das Plugin die kWh-Verbrauchszähler aktualisiert.
+**Aktualisierung der Energiestatistiken:** Tägliche Uhrzeit (Standard 23:58 Uhr), zu der das Plugin die kWh-Verbrauchszähler aktualisiert.
 
 ### Automatische Modellunterstützung
 
 | Option | Standard | Beschreibung |
-|--------|----------|-------------|
-| **Unbekannte Modelle** | Aktiviert | Ermöglicht die automatische Steuerung nicht explizit gelisteter Daikin-Modelle |
+|--------|--------|-------------|
+| **Unbekannte Modelle** | Aktiviert | Steuert automatisch Daikin-Modelle, die nicht explizit aufgeführt sind |
 | **Nur-Lese-Sensoren** | Aktiviert | Zeigt Außentemperaturen, Diagnosen usw. an |
-| **Veröffentlichung bei Änderung** | Aktiviert | Aktualisiert Jeedom nur, wenn sich ein Wert tatsächlich geändert hat |
+| **Bei Änderung veröffentlichen** | Aktiviert | Aktualisiert Jeedom nur, wenn sich ein Wert tatsächlich geändert hat |
 
-Deaktivieren Sie **Unbekannte Modelle** nur, wenn Sie abnormes Verhalten mit einem nicht erkannten Gerät feststellen.
+Deaktivieren Sie **Unbekannte Modelle** nur, wenn Sie abnormalen Verhalten bei einem nicht erkannten Gerät feststellen.
 
 ### Zusätzliche Optionen
 
 | Option | Standard | Beschreibung |
-|--------|----------|-------------|
-| **WebSocket Echtzeit** | Aktiviert | Empfängt Statusänderungen live (nur Modus Mobile App) |
-| **Authentifizierungsport** | 8765 | Lokaler Port nur für Developer Portal |
-| **MQTT-Präfix** | daikinToMQTT | Standard beibehalten, außer bei Konflikt mit einem anderen Plugin |
+|--------|--------|-------------|
+| **Echtzeit-WebSocket** | Aktiviert | Empfängt Zustandsänderungen live (nur Mobile-App-Modus) |
+| **Authentifizierungsport** | 8765 | Lokaler Port nur für Developer-Portal-Verbindung |
+| **MQTT-Präfix** | daikinToMQTT | Standard beibehalten, sofern kein Konflikt mit einem anderen Plugin besteht |
 
 ---
 
 ## Experteneinstellungen
 
-> **Ändern Sie diese Einstellungen nur, wenn der Support es verlangt oder Sie wissen warum.**
+> **Ändern Sie diese Einstellungen nur, wenn der Support Sie dazu auffordert oder wenn Sie wissen, warum.**
 
 ### HTTP-Transport
 
-Wenn das Plugin nicht mit Daikin kommunizieren kann (wiederholte Netzwerkfehler, Firewall-Blockade), wechseln Sie von **Node.js** zu **curl**. Das nutzt eine andere Netzwerk-Engine, die manchmal Blockaden umgeht.
+Wenn das Plugin nicht mit Daikin kommunizieren kann (wiederholte Netzwerkfehler, Firewall blockiert), wechseln Sie von **Node.js** zu **curl**. Dies verwendet eine andere Netzwerk-Engine, die manchmal Blockaden umgeht.
 
 ### Abhängigkeitskonfiguration
 
-Ermöglicht die Auswahl, welche Version des internen Plugin-Dienstes installiert wird (Branch oder exakte Version). **Behalten Sie die Standardwerte** (`release-beta`) bei, sofern der Support nichts anderes angibt.
+Ermöglicht die Auswahl, welche Version des internen Dienstes des Plugins installiert wird (Branch oder exakte Version). **Standardwerte beibehalten** (`release-beta`), sofern der Support nichts anderes anweist.
 
-Starten Sie nach jeder Änderung die Abhängigkeitsinstallation erneut.
+Führen Sie nach jeder Änderung die Abhängigkeitsinstallation erneut aus.
 
 ---
 
-[Vorherige: Installation]({{ site.baseurl }}/de_DE/installation.html) — [Nächste: Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html)
+[Vorherige: Installation]({{ site.baseurl }}/de_DE/installation.html) — [Weiter: Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html)

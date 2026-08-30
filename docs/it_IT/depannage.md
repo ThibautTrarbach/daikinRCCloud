@@ -5,106 +5,106 @@ title: Risoluzione problemi - Daikin ONECTA
 
 # Risoluzione problemi
 
-Questa pagina risponde ai problemi più frequenti riscontrati con il plugin Daikin ONECTA.
+Questa pagina risponde ai problemi più comuni del plugin Daikin ONECTA.
 
-## I miei dispositivi non appaiono
+## I miei dispositivi non compaiono
 
-**Verifiche da fare nell'ordine:**
+**Verifiche da eseguire nell'ordine:**
 
-1. Il **servizio del plugin** è avviato? (Strumenti → Salute)
-2. Il plugin **mqtt2** è installato, attivato e avviato?
-3. Le **dipendenze** sono installate? (pulsante « Reinstalla le dipendenze »)
-4. Le tue **credenziali Daikin** sono corrette? (prova sull'applicazione Onecta mobile)
-5. I dispositivi sono visibili nell'applicazione **Daikin Onecta** sul telefono?
+1. Il **servizio del plugin** è in esecuzione? (Strumenti → Salute)
+2. Il plugin **mqtt2** è installato, attivo e in esecuzione?
+3. Le **dipendenze** sono installate? (pulsante « Reinstalla dipendenze »)
+4. Le **credenziali Daikin** sono corrette? (verifica sull'app mobile Onecta)
+5. I dispositivi sono visibili nell'app **Daikin Onecta** sul telefono?
 
 **Azioni:**
 
 - Riavvia il servizio del plugin.
-- Salva nuovamente la configurazione, poi riavvia.
-- Consulta i log (vedi sotto).
+- Salva nuovamente la configurazione, quindi riavvia.
+- Controlla i log (vedi sotto).
 
 ## Il servizio del plugin non si avvia
 
-**Cause frequenti:**
+**Cause comuni:**
 
 | Causa | Soluzione |
 |-------|-----------|
-| Dipendenze non installate | Clicca su « Reinstalla le dipendenze » |
+| Dipendenze non installate | Fai clic su « Reinstalla dipendenze » |
 | Credenziali Daikin errate | Verifica email/password o Client ID/Secret |
-| mqtt2 non avviato | Avvia il plugin mqtt2 |
+| mqtt2 non in esecuzione | Avvia il plugin mqtt2 |
 
 Dopo la correzione, riavvia il servizio del plugin.
 
-## Errore di connessione a Daikin
+## Errore di connessione Daikin
 
 ### Modalità Mobile App
 
-- Verifica di poterti connettere all'applicazione Daikin Onecta sul telefono.
+- Verifica di poter accedere all'app Daikin Onecta sul telefono.
 - Se hai cambiato la password, aggiornala nella configurazione del plugin.
-- Riavvia il servizio dopo la modifica.
+- Riavvia il servizio dopo ogni modifica.
 
 ### Modalità Developer Portal
 
 - Verifica che Client ID e Client Secret siano corretti.
-- Se Daikin ha invalidato la chiave, ripeti la procedura di connessione (vedi [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html)).
+- Se Daikin ha invalidato la tua chiave, riavvia la procedura di connessione (vedi [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html)).
 - Verifica che la porta di autenticazione (predefinito: 8765) non sia bloccata.
 
-## I miei comandi non reagiscono
+## I miei comandi non rispondono
 
 1. Il dispositivo è **attivato** in Jeedom?
-2. C'è un **codice errore** visualizzato sul dispositivo? (scheda Dispositivo)
-3. Il servizio del plugin è ancora **avviato**?
-4. La quota giornaliera è **esaurita**? (vedi [Limiti e buone pratiche]({{ site.baseurl }}/it_IT/quota-api.html))
+2. È presente un **codice errore** sul dispositivo? (scheda Dispositivo)
+3. Il servizio del plugin è ancora **in esecuzione**?
+4. La **quota giornaliera è esaurita**? (vedi [Limiti e buone pratiche]({{ site.baseurl }}/it_IT/quota-api.html))
 
-Prova a inviare lo stesso comando dall'applicazione Daikin Onecta sul telefono. Se non funziona neanche lì, il problema proviene dal dispositivo o dal cloud Daikin, non da Jeedom.
+Prova a inviare lo stesso comando dall'app Daikin Onecta sul telefono. Se non funziona neanche lì, il problema riguarda il dispositivo o il cloud Daikin, non Jeedom.
 
 ## Pochi comandi sul mio dispositivo
 
-I comandi dipendono dal modello del dispositivo. Se vedi pochi comandi:
+I comandi dipendono dal modello del dispositivo. Se ne vedi pochi:
 
-1. Verifica che l'opzione **Modelli sconosciuti** sia attivata (Configurazione avanzata).
-2. Attendi alcuni minuti dopo l'avvio del plugin — la sincronizzazione può richiedere tempo.
+1. Verifica che **Modelli sconosciuti** sia attivato (Configurazione avanzata).
+2. Attendi alcuni minuti dopo l'avvio del plugin — la sincronizzazione può richiedere un momento.
 3. Riavvia il servizio del plugin.
 
-Se il modello è molto recente, segnalalo sul [forum Jeedom](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55) per migliorare il supporto.
+Se il tuo modello è molto recente, segnalalo sul [forum Jeedom](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55) per migliorare il supporto.
 
 ## Errori di rete ripetuti
 
-Se il plugin mostra errori di connessione al cloud Daikin (timeout, blocchi):
+Se il plugin mostra errori di connessione al cloud (timeout, blocchi):
 
 1. Apri **Plugin → Daikin ONECTA → Configurazione → Configurazione avanzata**.
-2. Passa il **Trasporto HTTP** da « Node.js » a « curl ».
+2. Cambia il **trasporto HTTP** da « Node.js » a « curl ».
 3. Salva e riavvia il servizio.
 
-## Consultare i log
+## Controllare i log
 
 Per diagnosticare un problema:
 
-1. Vai in **Analisi → Log** in Jeedom.
+1. Vai su **Analisi → Log** in Jeedom.
 2. Filtra per plugin: `daikinRCCloud`.
-3. Cerca i messaggi di errore (in rosso).
+3. Cerca messaggi di errore (in rosso).
 
 ## Chiedere aiuto
 
-Se non trovi la soluzione, chiedi aiuto indicando:
+Se non trovi una soluzione, chiedi aiuto includendo:
 
 | Informazione | Dove trovarla |
 |--------------|---------------|
 | Versione del plugin | Configurazione → Informazioni |
 | Versione del servizio interno | Configurazione → Informazioni |
-| Versione di Jeedom | Pagina principale Jeedom |
-| Modalità di connessione usata | Configurazione → Modalità di autenticazione |
-| Descrizione del problema | Cosa ti aspettavi vs cosa succede |
+| Versione Jeedom | Pagina principale Jeedom |
+| Modalità di connessione utilizzata | Configurazione → Modalità di autenticazione |
+| Descrizione del problema | Cosa ti aspettavi rispetto a cosa è successo |
 | Estratto dei log | Analisi → Log, filtro daikinRCCloud |
 
 ### Forum Jeedom
 
 - [Thread di discussione del plugin](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55)
-- Su Jeedom 4.4+, usa il pulsante **Crea un post Community** sulla pagina del plugin per precompilare un modulo di aiuto.
+- Su Jeedom 4.4+, usa il pulsante **Crea post Community** sulla pagina del plugin per precompilare un modulo di aiuto.
 
 ### GitHub
 
-Per segnalare un bug: [Issues GitHub](https://github.com/ThibautTrarbach/daikinRCCloud/issues)
+Per segnalare un bug: [GitHub Issues](https://github.com/ThibautTrarbach/daikinRCCloud/issues)
 
 ---
 

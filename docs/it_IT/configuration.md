@@ -7,13 +7,13 @@ title: Configurazione - Daikin ONECTA
 
 La pagina di configurazione si trova in **Plugin → Daikin ONECTA → Configurazione**.
 
-La maggior parte degli utenti deve modificare solo la sezione **Connessione Daikin**. Le altre impostazioni sono accessibili tramite la casella **Configurazione avanzata**.
+La maggior parte degli utenti deve modificare solo la sezione **Connessione Daikin**. Le altre impostazioni sono disponibili tramite la casella **Configurazione avanzata**.
 
 ---
 
 ## Connessione Daikin
 
-È la sezione più importante. Permette di collegare Jeedom al tuo account Daikin.
+È la sezione più importante. Collega Jeedom al tuo account Daikin.
 
 ### Modalità di autenticazione
 
@@ -21,80 +21,80 @@ Sono disponibili due modalità:
 
 | Modalità | Per chi? | Quota giornaliera |
 |----------|----------|-------------------|
-| **Mobile App** (consigliata) | Utenti con l'applicazione Daikin Onecta | 3000 interrogazioni/giorno |
-| **Developer Portal** | Utenti avanzati che hanno creato un'applicazione sul portale sviluppatori Daikin | 200 interrogazioni/giorno |
+| **Mobile App** (consigliata) | Utenti con l'app Daikin Onecta | 3000 richieste/giorno |
+| **Developer Portal** | Utenti avanzati che hanno creato un'app sul portale sviluppatori Daikin | 200 richieste/giorno |
 
-> **Consigliato:** scegli **Mobile App** e usa le stesse credenziali dell'applicazione Daikin Onecta sul telefono.
+> **Consigliato:** scegli **Mobile App** e usa le stesse credenziali dell'app Daikin Onecta sul telefono.
 
-Consulta la pagina [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html) per i dettagli di ciascuna modalità.
+Consulta la pagina [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html) per i dettagli su ciascuna modalità.
 
 ### Credenziali
 
 A seconda della modalità scelta:
 
-- **Mobile App:** inserisci la tua **email Onecta** e la tua **password Onecta**.
+- **Mobile App:** inserisci l'**email Onecta** e la **password Onecta**.
 - **Developer Portal:** inserisci il **Client ID** e il **Client Secret** della tua applicazione Daikin Developer.
 
 ### Quota API giornaliera
 
-Questo campo mostra il numero massimo di interrogazioni cloud autorizzate al giorno in base alla modalità di connessione. È calcolato automaticamente e non è modificabile.
+Questo campo mostra il numero massimo di richieste cloud consentite al giorno in base alla modalità di connessione. Viene calcolato automaticamente e non è modificabile.
 
-Per capire cosa implica concretamente, consulta [Limiti e buone pratiche]({{ site.baseurl }}/it_IT/quota-api.html).
+Per capire cosa significa nella pratica, consulta [Limiti e buone pratiche]({{ site.baseurl }}/it_IT/quota-api.html).
 
 ### Versioni
 
-Le versioni del plugin e del servizio interno sono visualizzate in sola lettura. Indicale se chiedi aiuto sul forum.
+Le versioni del plugin e del servizio interno sono visualizzate in sola lettura. Includile quando chiedi aiuto sul forum.
 
 ---
 
 ## Configurazione avanzata
 
-Seleziona **Configurazione avanzata** per visualizzare le impostazioni aggiuntive. **La maggior parte degli utenti può lasciare i valori predefiniti.**
+Seleziona **Configurazione avanzata** per mostrare impostazioni aggiuntive. **La maggior parte degli utenti può lasciare i valori predefiniti.**
 
 ### Frequenza di aggiornamento
 
-Queste impostazioni determinano la frequenza con cui Jeedom interroga il cloud Daikin per conoscere lo stato dei dispositivi.
+Queste impostazioni determinano la frequenza con cui Jeedom interroga il cloud Daikin per lo stato dei dispositivi.
 
 | Impostazione | Predefinito | Descrizione |
 |--------------|-------------|-------------|
-| **Intervallo diurno** | 15 min | Frequenza di verifica tra mattina e sera |
-| **Intervallo notturno** | 30 min | Frequenza di verifica durante la notte (risparmia quota) |
-| **Inizio notte** | 22:00 | Ora in cui inizia il periodo notturno |
-| **Fine notte** | 7:00 | Ora in cui termina il periodo notturno |
+| **Intervallo diurno** | 15 min | Frequenza di controllo tra mattina e sera |
+| **Intervallo notturno** | 30 min | Frequenza di controllo durante la notte (risparmia quota) |
+| **Inizio notte** | 22:00 | Ora di inizio del periodo notturno |
+| **Fine notte** | 07:00 | Ora di fine del periodo notturno |
 
-> **Consiglio:** con la modalità Mobile App e gli aggiornamenti in tempo reale attivati, puoi aumentare questi intervalli senza perdere reattività.
+> **Suggerimento:** con la modalità Mobile App e gli aggiornamenti in tempo reale attivati, puoi aumentare questi intervalli senza perdere reattività.
 
-Il campo **Numero di richieste pianificate/giorno** stima quante interrogazioni GET il daemon pianificherà ogni giorno (polling + statistiche energia), tenendo conto della modalità di autenticazione e del WebSocket. L'aggiornamento è automatico quando modifichi le impostazioni. I comandi e i refresh post-azione si aggiungono a questa stima.
+Il campo **Richieste pianificate/giorno** stima quante richieste GET il daemon programmerà ogni giorno (polling + statistiche energetiche), in base alla modalità di autenticazione e al WebSocket. Si aggiorna automaticamente quando modifichi le impostazioni. I comandi e l'aggiornamento post-azione si aggiungono a questa stima.
 
 ### Comportamento dopo un comando
 
-Quando invii un comando (cambiare la temperatura, accendere la clim…), il plugin può reagire in tre modi:
+Quando invii un comando (cambio temperatura, accensione climatizzatore, ecc.), il plugin può reagire in tre modi:
 
 | Modalità | Comportamento | Quando usarla |
 |----------|---------------|---------------|
-| **1 — Refresh completo differito** | Attende poi verifica lo stato reale presso Daikin | Se vuoi una conferma sistematica dal cloud |
-| **2 — Aggiornamento immediato** | Aggiorna Jeedom subito, senza verificare Daikin | Per risparmiare quota, se la reattività basta |
-| **3 — Ibrido** (predefinito) | Aggiornamento immediato + verifica Daikin dopo un ritardo | **Consigliato** — buon equilibrio reattività / affidabilità |
+| **1 — Aggiornamento completo differito** | Attende, poi verifica lo stato reale con Daikin | Se desideri una conferma sistematica dal cloud |
+| **2 — Aggiornamento immediato** | Aggiorna Jeedom subito senza verificare con Daikin | Per risparmiare quota se la reattività è sufficiente |
+| **3 — Ibrido** (predefinito) | Aggiornamento immediato + verifica Daikin dopo un ritardo | **Consigliato** — buon equilibrio tra reattività e affidabilità |
 
-**Ritardo di refresh:** nelle modalità 1 e 3, tempo di attesa prima della verifica presso Daikin (predefinito: 60 secondi). Lascia questo ritardo se i dispositivi impiegano un po' a reagire.
+**Ritardo di aggiornamento:** nelle modalità 1 e 3, tempo di attesa prima della verifica con Daikin (predefinito: 60 secondi). Mantieni questo ritardo se i tuoi dispositivi impiegano un momento a reagire.
 
 **Strategia di verifica:**
 
 | Strategia | Descrizione |
 |-----------|-------------|
-| **Fusione con la sincronizzazione** (predefinito) | Se una sincronizzazione pianificata arriva presto, il plugin attende invece di fare una richiesta aggiuntiva |
+| **Unione con sincronizzazione** (predefinito) | Se una sincronizzazione pianificata è imminente, il plugin attende invece di effettuare una richiesta aggiuntiva |
 | **Verifica dedicata** | Il plugin interroga Daikin specificamente dopo ogni comando |
-| **Nessuna verifica** | Nessuna interrogazione cloud dopo un comando |
+| **Nessuna verifica** | Nessuna richiesta cloud dopo un comando |
 
-**Refresh statistiche energia:** ora quotidiana (predefinito 23:58) in cui il plugin aggiorna i contatori di consumo kWh.
+**Aggiornamento statistiche energetiche:** ora giornaliera (predefinito 23:58) in cui il plugin aggiorna i contatori di consumo in kWh.
 
 ### Supporto automatico dei modelli
 
 | Opzione | Predefinito | Descrizione |
 |---------|-------------|-------------|
-| **Modelli sconosciuti** | Attivato | Permette di controllare automaticamente i modelli Daikin non elencati esplicitamente |
-| **Sensori in sola lettura** | Attivato | Mostra temperature esterne, diagnostiche, ecc. |
-| **Pubblicazione se variazione** | Attivato | Aggiorna Jeedom solo quando un valore è effettivamente cambiato |
+| **Modelli sconosciuti** | Attivato | Controlla automaticamente i modelli Daikin non elencati esplicitamente |
+| **Sensori in sola lettura** | Attivato | Mostra temperature esterne, diagnostica, ecc. |
+| **Pubblica al cambiamento** | Attivato | Aggiorna Jeedom solo quando un valore è effettivamente cambiato |
 
 Disattiva **Modelli sconosciuti** solo se riscontri un comportamento anomalo con un dispositivo non riconosciuto.
 
@@ -102,9 +102,9 @@ Disattiva **Modelli sconosciuti** solo se riscontri un comportamento anomalo con
 
 | Opzione | Predefinito | Descrizione |
 |---------|-------------|-------------|
-| **WebSocket tempo reale** | Attivato | Riceve i cambiamenti di stato in diretta (solo modalità Mobile App) |
-| **Porta di autenticazione** | 8765 | Porta locale per la connessione Developer Portal |
-| **Prefisso MQTT** | daikinToMQTT | Lasciare predefinito salvo conflitto con un altro plugin |
+| **WebSocket in tempo reale** | Attivato | Riceve i cambiamenti di stato in diretta (solo modalità Mobile App) |
+| **Porta di autenticazione** | 8765 | Porta locale solo per la connessione Developer Portal |
+| **Prefisso MQTT** | daikinToMQTT | Lascia il valore predefinito salvo conflitto con un altro plugin |
 
 ---
 
@@ -114,13 +114,13 @@ Disattiva **Modelli sconosciuti** solo se riscontri un comportamento anomalo con
 
 ### Trasporto HTTP
 
-Se il plugin non riesce a comunicare con Daikin (errori di rete ripetuti, blocco da firewall), passa da **Node.js** a **curl**. Usa un altro motore di rete che a volte aggira i blocchi.
+Se il plugin non riesce a comunicare con Daikin (errori di rete ripetuti, firewall che blocca), passa da **Node.js** a **curl**. Utilizza un altro motore di rete che a volte aggira i blocchi.
 
 ### Configurazione delle dipendenze
 
-Permette di scegliere quale versione del servizio interno del plugin viene installata (branch o versione precisa). **Lascia i valori predefiniti** (`release-beta`) salvo indicazione contraria del supporto.
+Consente di scegliere quale versione del servizio interno del plugin installare (branch o versione esatta). **Lascia i valori predefiniti** (`release-beta`) salvo indicazioni contrarie del supporto.
 
-Dopo ogni modifica, rilancia l'installazione delle dipendenze.
+Dopo ogni modifica, reinstalla le dipendenze.
 
 ---
 

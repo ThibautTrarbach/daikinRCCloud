@@ -7,16 +7,16 @@ title: Authentication - Daikin ONECTA
 
 For Jeedom to control your Daikin devices, the plugin must connect to your Daikin ONECTA cloud account. Two connection modes are available.
 
-## Which mode should I choose?
+## Which mode to choose?
 
 | | Mobile App | Developer Portal |
 |---|-----------|------------------|
 | **Recommended for** | All users | Developers, advanced testing |
 | **Credentials** | Onecta email + password | Client ID + Client Secret |
-| **Same account as the mobile app?** | Yes | No (separate developer account) |
+| **Same account as mobile app?** | Yes | No (separate developer account) |
 | **Daily quota** | 3000 requests | 200 requests |
 | **Real-time updates** | Yes | No |
-| **Configuration** | Simple (2 fields) | Complex (OAuth procedure) |
+| **Setup** | Simple (2 fields) | Complex (OAuth procedure) |
 
 > **Recommended:** use **Mobile App** mode with your Daikin Onecta app credentials.
 
@@ -41,9 +41,9 @@ This is the simplest mode. It uses the same account as the **Daikin Onecta** or 
 - Your password is stored securely in Jeedom.
 - Real-time updates are enabled by default, making the plugin very responsive without consuming much quota.
 
-### If something goes wrong
+### Troubleshooting
 
-- Check that you can log in to the Daikin Onecta app on your phone with the same credentials.
+- Verify you can log in to the Daikin Onecta app on your phone with the same credentials.
 - If you changed your Onecta password, update it in the plugin configuration.
 - Restart the plugin service after any change.
 
@@ -57,10 +57,10 @@ This mode is for users who created an application on the [Daikin developer porta
 
 1. Open **Plugins → Daikin ONECTA → Configuration**.
 2. Select **Developer Portal (OAuth)**.
-3. Enter the **Client ID** and **Client Secret** from your application.
+3. Enter the **Client ID** and **Client Secret** of your application.
 4. Click **Save**.
 
-### First-time connection tutorial
+### First connection tutorial
 
 #### Step 1: Create a developer account
 
@@ -72,13 +72,13 @@ Click your email address at the top right, then choose **My Apps**.
 
 #### Step 3: Create an application
 
-Click **New App**, give it a name (e.g. “Jeedom”), and confirm.
+Click **New App**, give it a name (e.g. "Jeedom") and confirm.
 
-#### Step 4: Copy the credentials
+#### Step 4: Copy credentials
 
 Copy the **Client ID** and **Client Secret** into the plugin configuration, then save.
 
-#### Step 5: Start the plugin and retrieve the URL
+#### Step 5: Start the plugin and get the URL
 
 1. Start the plugin service.
 2. Open the plugin **logs** (**Analysis → Logs**, filter `daikinRCCloud`).
@@ -94,18 +94,18 @@ Copy the **Client ID** and **Client Secret** into the plugin configuration, then
 #### Step 7: Authorize access
 
 1. Open the authentication URL in a browser.
-2. Accept the certificate if your browser displays it.
+2. Accept the certificate if your browser shows it.
 3. Follow the Daikin authorization procedure.
 
 #### Step 8: Verify
 
-A success message confirms that the connection is established. Your devices should appear in Jeedom.
+A success message confirms the connection is established. Your devices should appear in Jeedom.
 
-### If something goes wrong
+### Troubleshooting
 
 - If Daikin invalidates your API key, restart the connection procedure from step 5.
-- Check that the authentication port (default: 8765) is not blocked by a firewall.
-- See the [Jeedom Community tutorial](https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t) if your key was invalidated.
+- Verify the authentication port (default: 8765) is not blocked by a firewall.
+- See the [Jeedom community tutorial](https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t) if your key was invalidated.
 
 ---
 

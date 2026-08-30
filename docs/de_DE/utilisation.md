@@ -5,158 +5,158 @@ title: Nutzung - Daikin ONECTA
 
 # Nutzung
 
-Diese Seite erklärt, wie Sie Ihre Daikin-Geräte im Alltag in Jeedom nutzen: Geräte finden, verfügbare Befehle verstehen, sie auf dem Dashboard anzeigen und in Szenarien einbinden.
+Diese Seite erklärt, wie Sie Ihre Daikin-Geräte im Alltag in Jeedom nutzen: Geräte finden, verfügbare Befehle verstehen, auf dem Dashboard anzeigen und in Szenarien integrieren.
 
-## Ihre Geräte finden
+## Geräte finden
 
 1. Öffnen Sie **Plugins → Daikin ONECTA**.
 2. Ihre Geräte erscheinen unter **Meine Geräte** als Karten.
 
-Sie werden bei der ersten Synchronisation **automatisch** hinzugefügt. Es gibt keine Schaltfläche „Gerät hinzufügen“.
+Sie werden **automatisch** bei der ersten Synchronisation hinzugefügt. Es gibt keine Schaltfläche „Gerät hinzufügen".
 
 ### Gerät anpassen
 
-Klicken Sie auf die Gerätekarte, um zur Konfiguration zu gelangen:
+Klicken Sie auf die Gerätekarte, um auf die Konfiguration zuzugreifen:
 
 | Einstellung | Beschreibung |
-|-------------|-------------|
-| **Name** | Gerät umbenennen (z. B. „Klima Wohnzimmer“) |
-| **Übergeordnetes Objekt** | Einer Raum- oder Etagenstruktur zuordnen |
+|---------|-------------|
+| **Name** | Gerät umbenennen (z. B. „Klimaanlage Wohnzimmer") |
+| **Übergeordnetes Objekt** | An einen Raum oder eine Etage in Ihrer Hausautomation anbinden |
 | **Kategorie** | Heizung, Komfort usw. |
 | **Aktivieren** | Gerät aktivieren oder deaktivieren |
-| **Sichtbar** | Gerät im Dashboard anzeigen oder ausblenden |
+| **Sichtbar** | Gerät auf dem Dashboard anzeigen oder ausblenden |
 
 ### Geräteinformationen
 
-Im Tab **Gerät** zeigt ein Kasten die von Daikin gemeldeten Informationen:
+Im Tab **Gerät** zeigt ein Feld Informationen an, die von Daikin gemeldet werden:
 
-| Information | Nutzen |
-|-------------|--------|
-| **Modell** | Referenz Ihres Geräts |
+| Information | Verwendung |
+|-------------|-----|
+| **Modell** | Ihre Gerätereferenz |
 | **Seriennummer** | Eindeutige Kennung |
 | **Firmware-Version** | Version der eingebetteten Software |
-| **Fehlercode** | Möglicher Warncode — konsultieren Sie die Geräteanleitung oder den Daikin-Support bei angezeigtem Code |
+| **Fehlercode** | Möglicher Warnungscode — prüfen Sie Ihr Gerätehandbuch oder den Daikin-Support, wenn ein Code angezeigt wird |
 
 ---
 
 ## Verfügbare Befehle
 
-Die Befehle werden automatisch je nach Gerätemodell erstellt. Sie finden sie im Tab **Befehle** jedes Geräts.
+Befehle werden automatisch basierend auf Ihrem Gerätemodell erstellt. Sie befinden sich im Tab **Befehle** jedes Geräts.
 
-> **Hinweis:** Nicht alle unten genannten Befehle sind auf Ihrem Gerät verfügbar. Das hängt vom Modell ab.
+> **Hinweis:** Nicht alle unten aufgeführten Befehle sind unbedingt auf Ihrem Gerät verfügbar. Dies hängt vom Modell ab.
 
 ### Hauptsteuerung
 
 | Was Sie tun möchten | Befehl in Jeedom |
-|---------------------|------------------|
-| Ein- / Ausschalten | **State** (oder Betrieb) |
-| Modus ändern (Kühlung, Heizung, Auto, Trocknen, Lüfter) | **Operation Mode** |
+|---------------------|-------------------|
+| Ein / Aus | **State** (oder Power) |
+| Modus ändern (Kühlung, Heizung, Auto, Entfeuchtung, Lüfter) | **Operation Mode** |
 | Solltemperatur einstellen | **Temperature Control** |
 
 ### Belüftung
 
 | Was Sie tun möchten | Befehl in Jeedom |
-|---------------------|------------------|
+|---------------------|-------------------|
 | Belüftungsmodus wählen | **Fan Current Mode** |
 | Lüftergeschwindigkeit einstellen | **Fan Fixed** |
-| Luftstrom horizontal ausrichten | **Fan Horizontal** (je nach Modell) |
-| Luftstrom vertikal ausrichten | **Fan Vertical** (je nach Modell) |
+| Luftstrom horizontal ausrichten | **Fan Horizontal** (modellabhängig) |
+| Luftstrom vertikal ausrichten | **Fan Vertical** (modellabhängig) |
 
 ### Spezialmodi
 
 | Was Sie tun möchten | Befehl in Jeedom |
-|---------------------|------------------|
+|---------------------|-------------------|
 | Eco-Modus aktivieren | **Eco Mode** |
 | Powerful-Modus aktivieren | **Powerful Mode** |
 | Streamer-Modus aktivieren (Reinigung) | **Streamer Mode** |
 
 ### Informationen (Nur-Lese)
 
-| Was Sie abfragen möchten | Befehl in Jeedom |
-|--------------------------|------------------|
+| Was Sie prüfen möchten | Befehl in Jeedom |
+|------------------------|-------------------|
 | Raumtemperatur | **Room Temperature** |
 | Außentemperatur | **Outdoor Temperature** |
 | Raumluftfeuchtigkeit | **Room Humidity** |
 
 ### Energieverbrauch
 
-| Was Sie abfragen möchten | Befehl in Jeedom |
-|--------------------------|------------------|
+| Was Sie prüfen möchten | Befehl in Jeedom |
+|------------------------|-------------------|
 | Heizverbrauch (Tag / Woche / Monat) | **Heating Consumption D/W/M** |
 | Kühlverbrauch (Tag / Woche / Monat) | **Cooling Consumption D/W/M** |
 
-Die Zähler werden automatisch täglich aktualisiert (Standard: gegen 23:58 Uhr).
+Zähler werden automatisch täglich aktualisiert (standardmäßig gegen 23:58 Uhr).
 
 ### Zeitpläne und erweiterte Modi
 
 | Was Sie tun möchten | Befehl in Jeedom |
-|---------------------|------------------|
-| Onecta-Zeitplan aktivieren / deaktivieren | **Schedule** (je nach Modell) |
-| Urlaubsmodus aktivieren | **Preset Away** (je nach Modell) |
-| Firmware-Update starten | **Firmware Update** (wenn von Daikin angeboten) |
+|---------------------|-------------------|
+| Onecta-Zeitplan aktivieren / deaktivieren | **Schedule** (modellabhängig) |
+| Abwesenheitsmodus aktivieren | **Preset Away** (modellabhängig) |
+| Firmware-Update starten | **Firmware Update** (falls von Daikin angeboten) |
 
 ---
 
-## Multi-Zone-Geräte
+## Multi-Zonen-Geräte
 
-Einige Modelle, insbesondere **Altherma**-Wärmepumpen, haben mehrere unabhängige Zonen. Dann sehen Sie separate Befehle für jede Zone:
+Einige Modelle, insbesondere **Altherma**-Wärmepumpen, haben mehrere unabhängige Zonen. In diesem Fall sehen Sie separate Befehle für jede Zone:
 
 - **Zone 1:** Hauptheizung
 - **Zone 2:** Warmwasser oder zweite Heizzone
 
-Jede Zone hat eigene Befehle für Betrieb, Modus und Sollwert.
+Jede Zone hat eigene Ein/Aus-, Modus- und Sollwertbefehle.
 
 ---
 
-## Auf dem Dashboard anzeigen
+## Anzeige auf dem Dashboard
 
-Um Ihre Geräte vom Jeedom-Startbildschirm zu steuern:
+Um Ihre Geräte vom Jeedom-Startbildschirm aus zu steuern:
 
 1. Öffnen Sie das Gerät und gehen Sie zum Tab **Befehle**.
-2. Machen Sie die gewünschten Befehle **sichtbar** (Kontrollkästchen in der Spalte Optionen).
-3. Fügen Sie sie über den Jeedom-Design-Konfigurator Ihrem Dashboard hinzu.
+2. Machen Sie die Befehle, die Sie anzeigen möchten, **sichtbar** (Kontrollkästchen in der Spalte Optionen).
+3. Fügen Sie sie über den Jeedom-Design-Konfigurator zu Ihrem Dashboard hinzu.
 
-Binäre Befehle (Ein/Aus) erscheinen als Schaltflächen. Temperatursollwerte als Schieberegler (Slider).
+Binäre Befehle (Ein/Aus) erscheinen als Schaltflächen. Sollwerte erscheinen als Schieberegler.
 
-**Tipp:** Für den täglichen Gebrauch sollten mindestens **State**, **Operation Mode** und **Temperature Control** sichtbar sein.
+**Tipp:** Für den täglichen Gebrauch machen Sie mindestens **State**, **Operation Mode** und **Temperature Control** sichtbar.
 
 ---
 
-## In Szenarien verwenden
+## Verwendung in Szenarien
 
-Ihre Daikin-Geräte können wie andere Geräte in beliebige Jeedom-Szenarien eingebunden werden.
+Ihre Daikin-Geräte können wie jedes andere Gerät in jedes Jeedom-Szenario integriert werden.
 
 ### Beispiele
 
 **Sommerkomfort:**
-> Wenn Wohnzimmertemperatur > 26 °C → Klima einschalten, Kühlmodus, Sollwert 24 °C
+> Wenn Wohnzimmertemperatur > 26°C → Klimaanlage im Kühlmodus einschalten, Sollwert 24°C
 
 **Nachtmodus:**
-> Um 22:00 Uhr → Eco-Modus auf allen Klimaanlagen aktivieren
+> Um 22:00 Uhr → Eco-Modus an allen Klimaanlagen aktivieren
 
-**Urlaubsabfahrt:**
-> Wenn Modus „Abwesenheit“ aktiv → Preset Away an der Wärmepumpe aktivieren
+**Urlaub:**
+> Wenn „Abwesenheit"-Modus aktiv → Preset Away an der Wärmepumpe aktivieren
 
-**Energie sparen:**
-> Wenn niemand zu Hause → Klimatisierung ausschalten
+**Energieeinsparung:**
+> Wenn niemand zu Hause ist → Klimaanlage ausschalten
 
 **Heimkehr:**
-> Wenn Geolokalisierung Rückkehr erkennt → Klima einschalten, Auto-Modus, Sollwert 22 °C
+> Wenn Geolokalisierung Rückkehr erkennt → Klimaanlage einschalten, Auto-Modus, Sollwert 22°C
 
-Um ein Szenario zu erstellen, gehen Sie zu **Werkzeuge → Szenarien** und nutzen Sie die Befehle Ihrer Daikin-Geräte als Aktionen oder Bedingungen.
+Um ein Szenario zu erstellen, gehen Sie zu **Werkzeuge → Szenarien** und verwenden Sie die Befehle Ihrer Daikin-Geräte als Aktionen oder Bedingungen.
 
 ---
 
-## Befehle bearbeiten
+## Befehle ändern
 
-Die Befehle werden automatisch vom Plugin erzeugt. Sie können:
+Befehle werden automatisch vom Plugin generiert. Sie können:
 
 - Einen Befehl umbenennen
-- Die Sichtbarkeit ändern
-- Einheit oder Symbol anpassen
+- Seine Sichtbarkeit ändern
+- Seine Einheit oder sein Symbol ändern
 
-> **Achtung:** Vermeiden Sie das Löschen automatisch erzeugter Befehle. Sie können bei der nächsten Synchronisation neu erstellt werden.
+> **Warnung:** Vermeiden Sie das Löschen automatisch generierter Befehle. Sie können bei der nächsten Synchronisation neu erstellt werden.
 
 ---
 
-[Vorherige: Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html) — [Nächste: Limits und Best Practices]({{ site.baseurl }}/de_DE/quota-api.html)
+[Vorherige: Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html) — [Weiter: Limits und Best Practices]({{ site.baseurl }}/de_DE/quota-api.html)

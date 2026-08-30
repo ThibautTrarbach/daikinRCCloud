@@ -39,7 +39,7 @@ No es una limitación del plugin, sino una regla impuesta por el servicio en la 
 En la página de configuración (sección avanzada), el campo **Número de peticiones planificadas/día** estima cuántas consultas GET planificará el daemon cada día, en función de sus intervalos día/noche, del modo de autenticación y del WebSocket.
 
 | Configuración | Detalle | Total planificado |
-|---------------|--------|----------------|
+|---------------|--------|-------------------|
 | Developer Portal, valores predeterminados (15 min día, 30 min noche, noche 22h→7h) | 60 polls día + 18 polls noche + 1 stats energía | **~79 GET/día** |
 | Mobile App + WebSocket activado, mismos intervalos | Red de seguridad 30/60 min: 30 + 9 + 1 | **~40 GET/día** |
 

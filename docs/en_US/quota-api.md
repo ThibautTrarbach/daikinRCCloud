@@ -7,32 +7,32 @@ title: Limits and best practices - Daikin ONECTA
 
 Daikin limits how many times Jeedom can query the cloud per day. This page explains why this limit exists and how to optimize it.
 
-## Why is there a limit?
+## Why a limit?
 
-For the plugin to work, it must regularly ask Daikin for your device status (temperature, mode, on/off…). Each request counts toward a **daily quota** set by Daikin. This quota resets every day at midnight.
+To work, the plugin must regularly ask Daikin for your device status (temperature, mode, on/off, etc.). Each request counts toward a **daily quota** set by Daikin. This quota resets every day at midnight.
 
 This is not a plugin limitation, but a rule imposed by the Daikin ONECTA cloud service.
 
 ## Quota by connection mode
 
 | Connection mode | Allowed requests per day |
-|-----------------|---------------------------|
+|-----------------|-------------------------|
 | **Mobile App** (recommended) | 3000 |
 | **Developer Portal** | 200 |
 
-> **Recommended:** use **Mobile App** mode to benefit from a much more comfortable quota.
+> **Recommended:** use **Mobile App** mode for a much more comfortable quota.
 
 ## What consumes quota?
 
 | Action | Consumption |
 |--------|-------------|
-| Scheduled synchronization (every 15 min by default) | 1 request (for all your devices at once) |
-| Command (change temperature, turn on…) | 1 request per change |
+| Scheduled sync (every 15 min by default) | 1 request (for all your devices at once) |
+| Command (change temperature, turn on, etc.) | 1 request per change |
 | Verification after a command | 1 request (depending on settings) |
 | kWh counter update (each evening) | 1 request |
 | Real-time update (WebSocket, Mobile App mode) | **0** requests |
 
-**Important:** one synchronization queries **all** your devices at once. Having 1 or 5 air conditioners consumes the same number of requests.
+**Important:** one sync queries **all** your devices at once. Having 1 or 5 air conditioners consumes the same number of requests.
 
 ## Estimate shown in configuration
 
@@ -45,30 +45,30 @@ On the configuration page (advanced section), the **Scheduled requests/day** fie
 
 These figures do not include your commands, post-action refresh (depending on settings), or the daemon startup GET (+1 on each restart).
 
-## Tips to optimize
+## Optimization tips
 
 ### For most users
 
-1. **Use Mobile App mode** — quota 15 times higher.
-2. **Leave default settings** — they are designed for a good balance.
+1. **Use Mobile App mode** — 15 times higher quota.
+2. **Keep default settings** — they are designed for a good balance.
 3. **Keep WebSocket enabled** (Mobile App mode) — state changes arrive in real time without consuming quota.
 
-### If you are in Developer Portal mode (200/day)
+### If you use Developer Portal mode (200/day)
 
-- Do not reduce synchronization intervals below 15 minutes.
+- Do not reduce sync intervals below 15 minutes.
 - Avoid scenarios that send many commands in quick succession.
 - Consider switching to Mobile App mode.
 
 ### If you have many devices and automations
 
-- Slightly increase synchronization intervals (e.g. 20 min during the day, 45 min at night).
+- Slightly increase sync intervals (e.g. 20 min day, 45 min night).
 - Hybrid mode (default) for post-command behavior is the most economical.
 
-## What happens if quota is reached?
+## What happens when quota is reached?
 
-The plugin automatically slows down synchronizations when quota is almost exhausted. Your commands keep working, but status updates may be less frequent until the next day.
+The plugin automatically slows sync when quota is almost exhausted. Your commands still work, but state updates may be less frequent until the next day.
 
-In Developer Portal mode, exceeding the quota can block all requests until midnight.
+In Developer Portal mode, exceeding quota can block all requests until midnight.
 
 ---
 

@@ -48,15 +48,15 @@ Los comandos se crean automáticamente según el modelo de su dispositivo. Se en
 ### Control principal
 
 | Lo que desea hacer | Comando en Jeedom |
-|--------------------------|---------------------|
-| Encender / apagar | **State** (o Marcha) |
+|---------------------|-------------------|
+| Encender / apagar | **State** (o Power) |
 | Cambiar el modo (frío, calor, auto, seco, ventilador) | **Operation Mode** |
 | Ajustar la temperatura deseada | **Temperature Control** |
 
 ### Ventilación
 
 | Lo que desea hacer | Comando en Jeedom |
-|--------------------------|---------------------|
+|---------------------|-------------------|
 | Elegir el modo de ventilación | **Fan Current Mode** |
 | Ajustar la velocidad del ventilador | **Fan Fixed** |
 | Orientar el flujo de aire horizontalmente | **Fan Horizontal** (según modelo) |
@@ -65,7 +65,7 @@ Los comandos se crean automáticamente según el modelo de su dispositivo. Se en
 ### Modos especiales
 
 | Lo que desea hacer | Comando en Jeedom |
-|--------------------------|---------------------|
+|---------------------|-------------------|
 | Activar el modo económico | **Eco Mode** |
 | Activar el modo potente | **Powerful Mode** |
 | Activar el modo streamer (purificación) | **Streamer Mode** |
@@ -73,7 +73,7 @@ Los comandos se crean automáticamente según el modelo de su dispositivo. Se en
 ### Información (solo lectura)
 
 | Lo que desea consultar | Comando en Jeedom |
-|------------------------------|---------------------|
+|------------------------|-------------------|
 | Temperatura ambiente | **Room Temperature** |
 | Temperatura exterior | **Outdoor Temperature** |
 | Humedad ambiente | **Room Humidity** |
@@ -81,7 +81,7 @@ Los comandos se crean automáticamente según el modelo de su dispositivo. Se en
 ### Consumo energético
 
 | Lo que desea consultar | Comando en Jeedom |
-|------------------------------|---------------------|
+|------------------------|-------------------|
 | Consumo calefacción (día / semana / mes) | **Heating Consumption D/W/M** |
 | Consumo refrigeración (día / semana / mes) | **Cooling Consumption D/W/M** |
 
@@ -90,7 +90,7 @@ Los contadores se actualizan automáticamente cada día (hacia las 23h58 por def
 ### Programaciones y modos avanzados
 
 | Lo que desea hacer | Comando en Jeedom |
-|--------------------------|---------------------|
+|---------------------|-------------------|
 | Activar / desactivar una programación Onecta | **Schedule** (según modelo) |
 | Activar el modo vacaciones | **Preset Away** (según modelo) |
 | Lanzar una actualización de firmware | **Firmware Update** (si Daikin la propone) |
@@ -101,8 +101,8 @@ Los contadores se actualizan automáticamente cada día (hacia las 23h58 por def
 
 Algunos modelos, especialmente las bombas de calor **Altherma**, disponen de varias zonas independientes. En ese caso, verá comandos separados para cada zona:
 
-- **Zona 1**: calefacción principal
-- **Zona 2**: agua caliente sanitaria, o segunda zona de calefacción
+- **Zona 1:** calefacción principal
+- **Zona 2:** agua caliente sanitaria, o segunda zona de calefacción
 
 Cada zona tiene sus propios comandos de marcha, modo y consigna.
 

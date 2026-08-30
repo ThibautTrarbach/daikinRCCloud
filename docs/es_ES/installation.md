@@ -37,7 +37,7 @@ El plugin necesita componentes adicionales para funcionar. Jeedom los instala au
 2. Haga clic en **Reinstalar dependencias** (o mediante el botón dedicado en la gestión de plugins).
 3. Espere a que finalice la instalación (puede tardar unos minutos).
 
-> **Atención:** tras cada actualización del plugin, relance la instalación de dependencias si Jeedom se lo indica.
+> **Nota:** tras cada actualización del plugin, relance la instalación de dependencias si Jeedom se lo indica.
 
 ## Paso 4: Configurar la conexión Daikin
 
@@ -52,7 +52,7 @@ Para más detalles sobre los modos de conexión, consulte la página [Autenticac
 
 1. Vaya a **Herramientas → Salud** (o a la página del plugin).
 2. Inicie el **daemon** del plugin Daikin ONECTA.
-3. Compruebe que el estado indica **Iniciado**.
+3. Compruebe que el estado indica **En ejecución**.
 
 ## Paso 6: Verificar sus dispositivos
 

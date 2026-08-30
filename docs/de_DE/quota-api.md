@@ -5,71 +5,71 @@ title: Limits und Best Practices - Daikin ONECTA
 
 # Limits und Best Practices
 
-Daikin begrenzt, wie oft Jeedom die Cloud pro Tag abfragen darf. Diese Seite erklärt, warum diese Grenze existiert und wie Sie sie optimieren.
+Daikin begrenzt, wie oft Jeedom pro Tag die Cloud abfragen kann. Diese Seite erklärt, warum diese Grenze existiert und wie Sie sie optimieren.
 
 ## Warum eine Grenze?
 
-Damit das Plugin funktioniert, muss es regelmäßig den Status Ihrer Geräte bei Daikin abfragen (Temperatur, Modus, Ein/Aus…). Jede Anfrage zählt in ein **Tagesquota**, das von Daikin festgelegt wird. Das Quota wird täglich um Mitternacht zurückgesetzt.
+Damit das Plugin funktioniert, muss es regelmäßig Daikin nach dem Status Ihrer Geräte fragen (Temperatur, Modus, Ein/Aus usw.). Jede Anfrage zählt zu einem **Tageskontingent**, das von Daikin festgelegt wird. Dieses Kontingent wird täglich um Mitternacht zurückgesetzt.
 
-Das ist keine Einschränkung des Plugins, sondern eine Regel des Daikin-ONECTA-Cloud-Dienstes.
+Dies ist keine Plugin-Beschränkung, sondern eine Regel, die vom Daikin-ONECTA-Cloud-Dienst auferlegt wird.
 
-## Quota je nach Verbindungsmodus
+## Kontingent nach Verbindungsmodus
 
-| Verbindungsmodus | Erlaubte Abfragen pro Tag |
-|------------------|---------------------------|
+| Verbindungsmodus | Erlaubte Anfragen pro Tag |
+|-----------------|-------------------------|
 | **Mobile App** (empfohlen) | 3000 |
 | **Developer Portal** | 200 |
 
-> **Empfohlen:** Verwenden Sie den Modus **Mobile App**, um ein deutlich komfortableres Quota zu nutzen.
+> **Empfohlen:** Verwenden Sie den Modus **Mobile App** für ein deutlich komfortableres Kontingent.
 
-## Was verbraucht Quota?
+## Was verbraucht Kontingent?
 
 | Aktion | Verbrauch |
-|--------|-----------|
-| Geplante Synchronisation (Standard: alle 15 Min.) | 1 Abfrage (für alle Geräte gleichzeitig) |
-| Befehl (Temperatur ändern, einschalten…) | 1 Abfrage pro Änderung |
-| Prüfung nach einem Befehl | 1 Abfrage (je nach Einstellungen) |
-| Aktualisierung der kWh-Zähler (jeden Abend) | 1 Abfrage |
-| Echtzeit-Update (WebSocket, Modus Mobile App) | **0** Abfragen |
+|--------|-------------|
+| Geplante Synchronisation (standardmäßig alle 15 Min.) | 1 Anfrage (für alle Ihre Geräte gleichzeitig) |
+| Befehl (Temperatur ändern, einschalten usw.) | 1 Anfrage pro Änderung |
+| Verifizierung nach einem Befehl | 1 Anfrage (je nach Einstellungen) |
+| kWh-Zähleraktualisierung (jeden Abend) | 1 Anfrage |
+| Echtzeit-Update (WebSocket, Mobile-App-Modus) | **0** Anfragen |
 
-**Wichtig:** Eine Synchronisation fragt **alle** Ihre Geräte in einem Vorgang ab. 1 oder 5 Klimaanlagen verbrauchen dieselbe Anzahl an Abfragen.
+**Wichtig:** Eine Synchronisation fragt **alle** Ihre Geräte gleichzeitig ab. Ob Sie 1 oder 5 Klimaanlagen haben, verbraucht dieselbe Anzahl von Anfragen.
 
-## Schätzung in der Konfiguration
+## In der Konfiguration angezeigte Schätzung
 
-Auf der Konfigurationsseite (erweiterter Abschnitt) schätzt das Feld **Geplante Anfragen/Tag**, wie viele GET-Abfragen der Daemon täglich plant — abhängig von Ihren Tag-/Nacht-Intervallen, dem Authentifizierungsmodus und dem WebSocket.
+Auf der Konfigurationsseite (erweiterter Abschnitt) schätzt das Feld **Geplante Anfragen/Tag**, wie viele GET-Anfragen der Daemon pro Tag plant, basierend auf Ihren Tag-/Nachtintervallen, Authentifizierungsmodus und WebSocket.
 
-| Konfiguration | Detail | Geplant gesamt |
-|---------------|--------|----------------|
-| Developer Portal, Standard (15 Min. Tag, 30 Min. Nacht, Nacht 22→7 Uhr) | 60 Polls Tag + 18 Polls Nacht + 1 Energiestatistik | **~79 GET/Tag** |
-| Mobile App + WebSocket aktiv, gleiche Intervalle | Sicherheitsnetz 30/60 Min.: 30 + 9 + 1 | **~40 GET/Tag** |
+| Konfiguration | Detail | Geplante Summe |
+|---------------|--------|-----------------|
+| Developer Portal, Standardwerte (15 Min. Tag, 30 Min. Nacht, Nacht 22 Uhr→7 Uhr) | 60 Tag-Abfragen + 18 Nacht-Abfragen + 1 Energiestatistik | **~79 GET/Tag** |
+| Mobile App + WebSocket aktiviert, gleiche Intervalle | Sicherheitsnetz 30/60 Min.: 30 + 9 + 1 | **~40 GET/Tag** |
 
-Diese Zahlen umfassen nicht Ihre Befehle, Refresh nach Aktion (je nach Einstellungen) noch den GET beim Daemon-Start (+1 bei jedem Neustart).
+Diese Zahlen umfassen nicht Ihre Befehle, die Aktualisierung nach Aktionen (je nach Einstellungen) oder den Daemon-Start-GET (+1 bei jedem Neustart).
 
-## Tipps zur Optimierung
+## Optimierungstipps
 
 ### Für die meisten Benutzer
 
-1. **Nutzen Sie den Modus Mobile App** — 15-mal höheres Quota.
-2. **Behalten Sie die Standardwerte** — sie sind für ein gutes Gleichgewicht ausgelegt.
-3. **Lassen Sie WebSocket aktiviert** (Modus Mobile App) — Statusänderungen kommen in Echtzeit ohne Quota-Verbrauch.
+1. **Mobile-App-Modus verwenden** — 15-mal höheres Kontingent.
+2. **Standardeinstellungen beibehalten** — sie sind für ein gutes Gleichgewicht ausgelegt.
+3. **WebSocket aktiviert lassen** (Mobile-App-Modus) — Zustandsänderungen kommen in Echtzeit an, ohne Kontingent zu verbrauchen.
 
-### Im Modus Developer Portal (200/Tag)
+### Wenn Sie den Developer-Portal-Modus verwenden (200/Tag)
 
-- Reduzieren Sie die Synchronisationsintervalle nicht unter 15 Minuten.
-- Vermeiden Sie Szenarien mit vielen schnell aufeinanderfolgenden Befehlen.
-- Erwägen Sie den Wechsel zum Modus Mobile App.
+- Reduzieren Sie Synchronisationsintervalle nicht unter 15 Minuten.
+- Vermeiden Sie Szenarien, die viele Befehle in schneller Folge senden.
+- Erwägen Sie den Wechsel zum Mobile-App-Modus.
 
-### Bei vielen Geräten und Automatisierungen
+### Wenn Sie viele Geräte und Automationen haben
 
-- Erhöhen Sie die Synchronisationsintervalle leicht (z. B. 20 Min. tagsüber, 45 Min. nachts).
-- Der Hybridmodus (Standard) für das Verhalten nach Befehlen ist am sparsamsten.
+- Erhöhen Sie die Synchronisationsintervalle leicht (z. B. 20 Min. Tag, 45 Min. Nacht).
+- Der Hybrid-Modus (Standard) für das Verhalten nach Befehlen ist am sparsamsten.
 
-## Was passiert, wenn das Quota erreicht ist?
+## Was passiert, wenn das Kontingent erreicht ist?
 
-Das Plugin verlangsamt automatisch die Synchronisationen, wenn das Quota fast aufgebraucht ist. Ihre Befehle funktionieren weiter, aber Statusaktualisierungen können bis zum nächsten Tag seltener werden.
+Das Plugin verlangsamt automatisch die Synchronisation, wenn das Kontingent fast erschöpft ist. Ihre Befehle funktionieren weiterhin, aber Zustandsaktualisierungen können seltener sein, bis zum nächsten Tag.
 
-Im Modus Developer Portal kann ein Quota-Überschreitung alle Abfragen bis Mitternacht blockieren.
+Im Developer-Portal-Modus kann das Überschreiten des Kontingents alle Anfragen bis Mitternacht blockieren.
 
 ---
 
-[Vorherige: Nutzung]({{ site.baseurl }}/de_DE/utilisation.html) — [Nächste: Fehlerbehebung]({{ site.baseurl }}/de_DE/depannage.html)
+[Vorherige: Nutzung]({{ site.baseurl }}/de_DE/utilisation.html) — [Weiter: Fehlerbehebung]({{ site.baseurl }}/de_DE/depannage.html)
