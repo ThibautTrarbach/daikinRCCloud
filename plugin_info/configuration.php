@@ -77,7 +77,7 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
             </label>
             <div class="col-sm-4">
                 <select class="configKey form-control" data-l1key="daikin_authMode" id="daikin_authMode">
-                    <option value="developer_portal">{{Developer Portal (OAuth, recommandé)}}</option>
+                    <option value="developer_portal">{{Developer Portal (OAuth)}}</option>
                     <option value="mobile_app">{{Mobile App}}</option>
                 </select>
             </div>

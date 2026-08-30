@@ -19,12 +19,12 @@ Es la sección más importante. Permite vincular Jeedom a su cuenta Daikin.
 
 Hay dos modos disponibles:
 
-| Modo | ¿Para quién? | Cuota diaria |
-|------|-----------|------------------|
-| **Developer Portal** (recomendado) | Todos los usuarios | 200 consultas/día |
-| **Mobile App** | Usuarios avanzados con credenciales Onecta | 3000 consultas/día |
+| Modo | Descripción | Cuota diaria |
+|------|-------------|--------------|
+| **Developer Portal** | Aplicación en el [portal de desarrolladores Daikin](https://developer.cloud.daikineurope.com/) | 200 consultas/día |
+| **Mobile App** | Credenciales de la cuenta Onecta (aplicación móvil) | 3000 consultas/día |
 
-> **Recomendado:** elija **Developer Portal** y cree una aplicación en el [portal de desarrolladores Daikin](https://developer.cloud.daikineurope.com/).
+Consulte la página [Autenticación]({{ site.baseurl }}/es_ES/authentification.html) para el detalle de cada modo.
 
 Consulte la página [Autenticación]({{ site.baseurl }}/es_ES/authentification.html) para el detalle de cada modo.
 

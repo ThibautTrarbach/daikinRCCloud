@@ -17,7 +17,7 @@ Non è una limitazione del plugin, ma una regola imposta dal servizio cloud Daik
 
 | Modalità di connessione | Richieste consentite al giorno |
 |-------------------------|--------------------------------|
-| **Developer Portal** (consigliato) | 200 |
+| **Developer Portal** | 200 |
 | **Mobile App** | 3000 |
 
 ## Cosa consuma la quota?
@@ -45,7 +45,7 @@ Queste cifre non includono i comandi, l'aggiornamento post-azione (a seconda del
 
 ## Suggerimenti per l'ottimizzazione
 
-### Per la maggior parte degli utenti (Developer Portal)
+### Modalità Developer Portal (200/giorno)
 
 1. **Mantieni le impostazioni predefinite** — sono progettate per un buon equilibrio con la quota di 200 richieste/giorno.
 2. **Non ridurre gli intervalli di sincronizzazione** al di sotto di 15 minuti.

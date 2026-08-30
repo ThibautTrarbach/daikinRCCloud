@@ -49,7 +49,7 @@
     "Délai en secondes avant le rafraîchissement complet depuis le cloud Daikin après une action. Utilisé uniquement en mode 1 (Rafraîchissement complet différé) et mode 3 (Hybride). Plus la valeur est élevée, plus cela laissera le temps au cloud et à votre device de traiter l'information et de se mettre à jour": "Ritardo in secondi prima dell'aggiornamento completo dal cloud Daikin dopo un'azione. Utilizzato solo in modalità 1 (Aggiornamento completo differito) e modalità 3 (Ibrido). Più alto è il valore, più tempo avrà il cloud e il tuo dispositivo per elaborare le informazioni e aggiornarsi",
     "Daikin Onecta Client Configuration": "Configurazione client Daikin Onecta",
     "Mode d'authentification": "Modalità di autenticazione",
-    "Developer Portal (OAuth, recommandé)": "Developer Portal (OAuth, consigliato)",
+    "Developer Portal (OAuth)": "Developer Portal (OAuth)",
     "Mobile App": "Mobile App",
     "Client ID": "Client ID",
     "Client ID de votre application Daikin Cloud. Obtenez-le sur developer.cloud.daikineurope.com": "Client ID della tua applicazione Daikin Cloud. Ottienilo su developer.cloud.daikineurope.com",

@@ -54,7 +54,7 @@ Se il tuo modello non è elencato esplicitamente, il plugin tenta di supportarlo
 |--------------|-----------|
 | **Jeedom** | Versione 4.4 o superiore |
 | **Plugin mqtt2** | Obbligatorio — installato e attivo su Jeedom |
-| **Account Daikin Developer** | Applicazione creata su [developer.cloud.daikineurope.com](https://developer.cloud.daikineurope.com/) (modalità Developer Portal consigliata) |
+| **Account Daikin** | **Developer Portal** (applicazione su [developer.cloud.daikineurope.com](https://developer.cloud.daikineurope.com/)) o **Mobile App** (account Onecta) |
 | **Accesso Internet** | Necessario per comunicare con il cloud Daikin |
 
 ## Sommario

@@ -19,12 +19,10 @@ C'est la section la plus importante. Elle permet de lier Jeedom à votre compte 
 
 Deux modes sont disponibles :
 
-| Mode | Pour qui ? | Quota journalier |
-|------|-----------|------------------|
-| **Developer Portal** (recommandé) | Tous les utilisateurs | 200 interrogations/jour |
-| **Mobile App** | Utilisateurs avancés avec identifiants Onecta | 3000 interrogations/jour |
-
-> **Recommandé :** choisissez **Developer Portal** et créez une application sur le [portail développeur Daikin](https://developer.cloud.daikineurope.com/).
+| Mode | Description | Quota journalier |
+|------|-------------|------------------|
+| **Developer Portal** | Application sur le [portail développeur Daikin](https://developer.cloud.daikineurope.com/) | 200 interrogations/jour |
+| **Mobile App** | Identifiants du compte Onecta (application mobile) | 3000 interrogations/jour |
 
 Consultez la page [Authentification]({{ site.baseurl }}/fr_FR/authentification.html) pour le détail de chaque mode.
 

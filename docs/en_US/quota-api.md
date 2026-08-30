@@ -17,7 +17,7 @@ This is not a plugin limitation, but a rule imposed by the Daikin ONECTA cloud s
 
 | Connection mode | Allowed requests per day |
 |-----------------|-------------------------|
-| **Developer Portal** (recommended) | 200 |
+| **Developer Portal** | 200 |
 | **Mobile App** | 3000 |
 
 ## What consumes quota?
@@ -45,7 +45,7 @@ These figures do not include your commands, post-action refresh (depending on se
 
 ## Optimization tips
 
-### For most users (Developer Portal)
+### Developer Portal mode (200/day)
 
 1. **Keep default settings** — they are designed for a good balance with the 200 requests/day quota.
 2. **Do not reduce sync intervals** below 15 minutes.
