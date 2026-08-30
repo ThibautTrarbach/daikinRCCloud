@@ -77,8 +77,8 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                 <div id="daikin-auth-quota-hint-developer" class="alert alert-info" style="margin-bottom: 0;">
                     <small><i class="fas fa-info-circle"></i> {{Developer Portal : quota API de 200 requêtes/jour. Configuration OAuth requise (Client ID / Secret).}}</small>
                 </div>
-                <div id="daikin-auth-quota-hint-mobile" class="alert alert-success" style="margin-bottom: 0; display:none;">
-                    <small><i class="fas fa-check-circle"></i> {{Le mode Mobile App utilise vos identifiants Onecta (même compte que l'application mobile). Quota API : 3000 requêtes/jour. Aucune configuration OAuth manuelle requise.}}</small>
+                <div id="daikin-auth-quota-hint-mobile" class="alert alert-info" style="margin-bottom: 0; display:none;">
+                    <small><i class="fas fa-info-circle"></i> {{Le mode Mobile App utilise vos identifiants Onecta (même compte que l'application mobile). Quota API : 3000 requêtes/jour. Aucune configuration OAuth manuelle requise.}}</small>
                 </div>
             </div>
         </div>
