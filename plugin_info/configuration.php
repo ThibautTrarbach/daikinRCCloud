@@ -2,28 +2,39 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 include_file('core', 'authentification', 'php');
+include_file('core', 'daikinRCCloud', 'class');
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+$pollingEstimate = array(
+    'valid' => false,
+    'total' => 200,
+    'pollsCron' => 0,
+    'pollsDay' => 0,
+    'pollsNight' => 0,
+    'energyStats' => 1,
+    'effectiveDayInterval' => 15,
+    'effectiveNightInterval' => 30,
+    'wsSafetyNetApplied' => false,
+);
+$pollingEstimateDetail = '';
 try {
     $authMode = config::byKey('daikin_authMode', 'daikinRCCloud', 'developer_portal');
     $dailyQuotaLimit = ($authMode === 'mobile_app') ? 3000 : 200;
     config::save('daikin_dailyQuotaLimit', $dailyQuotaLimit, 'daikinRCCloud');
 
-    $rqDay = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 0);
-    $rqNight = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 0);
-    $rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
-    $rqNightEnd = config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 0);
-    $totalRqDay = $rqNightStart - $rqNightEnd;
-    $totalrqnight = 24 - $totalRqDay;
-    if ($rqDay > 0 && $rqNight > 0 && $rqNightStart >= 0 && $rqNightEnd >= 0) {
-        $NbRqsDay = ($totalRqDay * 60) / $rqDay;
-        $NbRqsNight = ($totalrqnight * 60) / $rqNight;
-        $NbRqsTotal = $NbRqsDay + $NbRqsNight;
-    } else {
-        $NbRqsTotal = $dailyQuotaLimit;
-    }
-    config::save('daikin_totalRqPerDay', round($NbRqsTotal), 'daikinRCCloud');
+    $pollingEstimate = daikinRCCloud::computePollingEstimate(array(
+        'dayInterval' => intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 15)),
+        'nightInterval' => intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 30)),
+        'nightStart' => intval(config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22)),
+        'nightEnd' => intval(config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7)),
+        'authMode' => $authMode,
+        'enableWebSocket' => (bool) config::byKey('daikin_enableWebSocket', 'daikinRCCloud', 1),
+        'dailyQuotaLimit' => $dailyQuotaLimit,
+    ));
+    config::save('daikin_totalRqPerDay', intval($pollingEstimate['total']), 'daikinRCCloud');
+    config::save('daikin_pollingCronPerDay', intval($pollingEstimate['pollsCron']), 'daikinRCCloud');
+    $pollingEstimateDetail = daikinRCCloud::formatPollingEstimateDetail($pollingEstimate);
 } catch (\Exception $e) {
     log::add('daikinRCCloud', 'error', '{{Erreur lors du chargement de la configuration : }} ' . $e->getMessage());
 }
@@ -200,11 +211,13 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">{{Nombre de requètes sur la journée (polling)}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Estimation basée sur les intervalles de polling. Sauvegarder et rafraîchir la page pour recalculer.}}"></i></sup>
+                <label class="col-sm-3 control-label">{{Nombre de requètes planifiées/jour}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Estimation des GET cloud planifiés (polling + stats énergie), alignée sur le daemon daikintomqtt. Mise à jour automatique lors de la modification des réglages. Hors commandes et refresh post-action. +1 GET supplémentaire à chaque redémarrage du daemon.}}"></i></sup>
                 </label>
-                <div class="col-sm-4">
+                <div class="col-sm-8">
                     <input class="configKey roundedLeft form-control" data-l1key="daikin_totalRqPerDay" readonly />
+                    <input class="configKey" data-l1key="daikin_pollingCronPerDay" type="hidden" />
+                    <p id="daikin-polling-estimate-detail" class="help-block" style="margin-bottom: 0;"><?php echo htmlspecialchars($pollingEstimateDetail, ENT_QUOTES, 'UTF-8'); ?></p>
                 </div>
             </div>
 

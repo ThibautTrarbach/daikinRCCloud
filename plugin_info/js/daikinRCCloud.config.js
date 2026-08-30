@@ -14,6 +14,139 @@
         }
     }
 
+    function parseIntField(root, key, fallback) {
+        var input = root.querySelector('.configKey[data-l1key="' + key + '"]');
+        if (!input) {
+            return fallback;
+        }
+        var value = parseInt(input.value, 10);
+        return isNaN(value) ? fallback : value;
+    }
+
+    function isWebSocketEnabled(root) {
+        var input = root.querySelector('.configKey[data-l1key="daikin_enableWebSocket"]');
+        return !input || input.checked;
+    }
+
+    function getAuthMode(root) {
+        var authSelect = root.querySelector('#daikin_authMode');
+        return authSelect ? authSelect.value : 'developer_portal';
+    }
+
+    function getDailyQuotaLimit(authMode) {
+        return authMode === 'mobile_app' ? 3000 : 200;
+    }
+
+    /**
+     * Miroir de daikinRCCloud::computePollingEstimate() / daikintomqtt cron.ts
+     */
+    function computePollingEstimate(params) {
+        var dayInterval = params.dayInterval;
+        var nightInterval = params.nightInterval;
+        var nightStart = params.nightStart;
+        var nightEnd = params.nightEnd;
+        var authMode = params.authMode;
+        var enableWebSocket = params.enableWebSocket;
+        var dailyQuotaLimit = params.dailyQuotaLimit;
+
+        var invalid = dayInterval <= 0 || nightInterval <= 0 || nightStart < 0 || nightStart > 23 || nightEnd < 0 || nightEnd > 23;
+        if (invalid) {
+            return {
+                valid: false,
+                pollsDay: 0,
+                pollsNight: 0,
+                pollsCron: 0,
+                energyStats: 1,
+                total: dailyQuotaLimit,
+                effectiveDayInterval: dayInterval,
+                effectiveNightInterval: nightInterval,
+                wsSafetyNetApplied: false
+            };
+        }
+
+        var nightHours;
+        if (nightStart > nightEnd) {
+            nightHours = (24 - nightStart) + nightEnd;
+        } else {
+            nightHours = Math.max(0, nightEnd - nightStart);
+        }
+        var dayHours = 24 - nightHours;
+
+        var effectiveDayInterval = dayInterval;
+        var effectiveNightInterval = nightInterval;
+        var wsSafetyNetApplied = false;
+        if (authMode === 'mobile_app' && enableWebSocket) {
+            var newDayInterval = Math.max(dayInterval, 30);
+            var newNightInterval = Math.max(nightInterval, 60);
+            wsSafetyNetApplied = (newDayInterval !== dayInterval || newNightInterval !== nightInterval);
+            effectiveDayInterval = newDayInterval;
+            effectiveNightInterval = newNightInterval;
+        }
+
+        var pollsDay = Math.ceil(dayHours * 60 / effectiveDayInterval);
+        var pollsNight = Math.ceil(nightHours * 60 / effectiveNightInterval);
+        var pollsCron = pollsDay + pollsNight;
+        var energyStats = 1;
+
+        return {
+            valid: true,
+            pollsDay: pollsDay,
+            pollsNight: pollsNight,
+            pollsCron: pollsCron,
+            energyStats: energyStats,
+            total: pollsCron + energyStats,
+            effectiveDayInterval: effectiveDayInterval,
+            effectiveNightInterval: effectiveNightInterval,
+            wsSafetyNetApplied: wsSafetyNetApplied
+        };
+    }
+
+    function formatPollingEstimateDetail(estimate) {
+        if (!estimate.valid) {
+            return 'Intervalles invalides — estimation indisponible';
+        }
+
+        var detail = estimate.pollsDay + ' polls jour (intervalle ' + estimate.effectiveDayInterval + ' min) + '
+            + estimate.pollsNight + ' polls nuit (intervalle ' + estimate.effectiveNightInterval + ' min) + '
+            + estimate.energyStats + ' stats énergie = ' + estimate.total + ' GET planifiés/jour';
+
+        if (estimate.wsSafetyNetApplied) {
+            detail += ' — Filet WebSocket actif (Mobile App)';
+        }
+
+        detail += '. Hors commandes, refresh post-action et redémarrage du daemon (+1 GET).';
+
+        return detail;
+    }
+
+    function updatePollingEstimate() {
+        var root = getConfigRoot();
+        var authMode = getAuthMode(root);
+        var estimate = computePollingEstimate({
+            dayInterval: parseIntField(root, 'daikin_polling_dayInterval', 15),
+            nightInterval: parseIntField(root, 'daikin_polling_nightInterval', 30),
+            nightStart: parseIntField(root, 'daikin_polling_nightStart', 22),
+            nightEnd: parseIntField(root, 'daikin_polling_nightEnd', 7),
+            authMode: authMode,
+            enableWebSocket: isWebSocketEnabled(root),
+            dailyQuotaLimit: getDailyQuotaLimit(authMode)
+        });
+
+        var totalInput = root.querySelector('.configKey[data-l1key="daikin_totalRqPerDay"]');
+        var cronInput = root.querySelector('.configKey[data-l1key="daikin_pollingCronPerDay"]');
+        var detailEl = root.querySelector('#daikin-polling-estimate-detail');
+
+        if (totalInput) {
+            totalInput.value = String(estimate.total);
+        }
+        if (cronInput) {
+            cronInput.value = String(estimate.pollsCron);
+        }
+        if (detailEl) {
+            detailEl.textContent = formatPollingEstimateDetail(estimate);
+        }
+    }
+
     function updateVersionsDisplay() {
         var root = getConfigRoot();
         var pluginVersion = root.querySelector('.configKey[data-l1key="pluginVersion"]');
@@ -58,6 +191,8 @@
         root.querySelectorAll('.daikin-auth-port').forEach(function(el) {
             el.style.display = isDeveloper ? '' : 'none';
         });
+
+        updatePollingEstimate();
     }
 
     function updateAdvancedMode() {
@@ -69,6 +204,18 @@
         }
         advancedBlock.style.display = toggle.checked ? '' : 'none';
         initTooltips();
+    }
+
+    function isPollingEstimateField(target) {
+        if (!target || !target.getAttribute) {
+            return false;
+        }
+        var key = target.getAttribute('data-l1key');
+        return key === 'daikin_polling_dayInterval'
+            || key === 'daikin_polling_nightInterval'
+            || key === 'daikin_polling_nightStart'
+            || key === 'daikin_polling_nightEnd'
+            || key === 'daikin_enableWebSocket';
     }
 
     function daikinRCCloud_initConfigUI() {
@@ -87,6 +234,7 @@
         updateVersionsDisplay();
         updateAuthMode();
         updateAdvancedMode();
+        updatePollingEstimate();
         initTooltips();
         return true;
     }
@@ -99,6 +247,7 @@
             return;
         }
         updateVersionsDisplay();
+        updatePollingEstimate();
     }
 
     function watchConfigContainer() {
@@ -121,6 +270,9 @@
         document.addEventListener('change', function(event) {
             var target = event.target;
             if (!target || !target.id) {
+                if (isPollingEstimateField(target)) {
+                    updatePollingEstimate();
+                }
                 return;
             }
             if (target.id === 'daikin_configAdvanced') {
@@ -130,6 +282,15 @@
             if (target.id === 'daikin_authMode') {
                 updateAuthMode();
                 initTooltips();
+            }
+            if (isPollingEstimateField(target)) {
+                updatePollingEstimate();
+            }
+        });
+
+        document.addEventListener('input', function(event) {
+            if (isPollingEstimateField(event.target)) {
+                updatePollingEstimate();
             }
         });
 
@@ -145,4 +306,5 @@
     }, 2500);
 
     window.daikinRCCloud_initConfigUI = daikinRCCloud_initConfigUI;
+    window.daikinRCCloud_computePollingEstimate = computePollingEstimate;
 })();

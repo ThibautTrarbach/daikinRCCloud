@@ -555,6 +555,102 @@ class daikinRCCloud extends eqLogic
         self::saveDependencyConfig();
     }
 
+    /**
+     * Estime le nombre de requêtes GET planifiées par jour (miroir daikintomqtt cron.ts).
+     *
+     * @param array $params dayInterval, nightInterval, nightStart, nightEnd, authMode, enableWebSocket, dailyQuotaLimit
+     * @return array
+     */
+    public static function computePollingEstimate(array $params = array())
+    {
+        $dayInterval = isset($params['dayInterval']) ? intval($params['dayInterval']) : 15;
+        $nightInterval = isset($params['nightInterval']) ? intval($params['nightInterval']) : 30;
+        $nightStart = isset($params['nightStart']) ? intval($params['nightStart']) : 22;
+        $nightEnd = isset($params['nightEnd']) ? intval($params['nightEnd']) : 7;
+        $authMode = isset($params['authMode']) ? $params['authMode'] : 'developer_portal';
+        $enableWebSocket = array_key_exists('enableWebSocket', $params) ? (bool) $params['enableWebSocket'] : true;
+        $dailyQuotaLimit = isset($params['dailyQuotaLimit']) ? intval($params['dailyQuotaLimit']) : 200;
+
+        $invalid = ($dayInterval <= 0 || $nightInterval <= 0 || $nightStart < 0 || $nightStart > 23 || $nightEnd < 0 || $nightEnd > 23);
+        if ($invalid) {
+            return array(
+                'valid' => false,
+                'pollsDay' => 0,
+                'pollsNight' => 0,
+                'pollsCron' => 0,
+                'energyStats' => 1,
+                'total' => $dailyQuotaLimit,
+                'effectiveDayInterval' => $dayInterval,
+                'effectiveNightInterval' => $nightInterval,
+                'wsSafetyNetApplied' => false,
+                'dayHours' => 0,
+                'nightHours' => 0,
+            );
+        }
+
+        if ($nightStart > $nightEnd) {
+            $nightHours = (24 - $nightStart) + $nightEnd;
+        } else {
+            $nightHours = max(0, $nightEnd - $nightStart);
+        }
+        $dayHours = 24 - $nightHours;
+
+        $effectiveDayInterval = $dayInterval;
+        $effectiveNightInterval = $nightInterval;
+        $wsSafetyNetApplied = false;
+        if ($authMode === 'mobile_app' && $enableWebSocket) {
+            $newDayInterval = max($dayInterval, 30);
+            $newNightInterval = max($nightInterval, 60);
+            $wsSafetyNetApplied = ($newDayInterval !== $dayInterval || $newNightInterval !== $nightInterval);
+            $effectiveDayInterval = $newDayInterval;
+            $effectiveNightInterval = $newNightInterval;
+        }
+
+        $pollsDay = (int) ceil($dayHours * 60 / $effectiveDayInterval);
+        $pollsNight = (int) ceil($nightHours * 60 / $effectiveNightInterval);
+        $pollsCron = $pollsDay + $pollsNight;
+        $energyStats = 1;
+
+        return array(
+            'valid' => true,
+            'pollsDay' => $pollsDay,
+            'pollsNight' => $pollsNight,
+            'pollsCron' => $pollsCron,
+            'energyStats' => $energyStats,
+            'total' => $pollsCron + $energyStats,
+            'effectiveDayInterval' => $effectiveDayInterval,
+            'effectiveNightInterval' => $effectiveNightInterval,
+            'wsSafetyNetApplied' => $wsSafetyNetApplied,
+            'dayHours' => $dayHours,
+            'nightHours' => $nightHours,
+        );
+    }
+
+    /**
+     * Texte descriptif de l'estimation polling pour l'UI de configuration.
+     *
+     * @param array $estimate Résultat de computePollingEstimate()
+     * @return string
+     */
+    public static function formatPollingEstimateDetail(array $estimate)
+    {
+        if (empty($estimate['valid'])) {
+            return '{{Intervalles invalides — estimation indisponible}}';
+        }
+
+        $detail = $estimate['pollsDay'] . ' {{polls jour (intervalle}} ' . $estimate['effectiveDayInterval'] . ' {{min)}} + '
+            . $estimate['pollsNight'] . ' {{polls nuit (intervalle}} ' . $estimate['effectiveNightInterval'] . ' {{min)}} + '
+            . $estimate['energyStats'] . ' {{stats énergie =}} ' . $estimate['total'] . ' {{GET planifiés/jour}}';
+
+        if (!empty($estimate['wsSafetyNetApplied'])) {
+            $detail .= ' — {{Filet WebSocket actif (Mobile App)}}';
+        }
+
+        $detail .= '. {{Hors commandes, refresh post-action et redémarrage du daemon (+1 GET).}}';
+
+        return $detail;
+    }
+
     // --- Daemon V3 (à implémenter quand daikintomqtt >= 3.0.0) ---
     // private static function configureSettingsV3($_path) { ... }
     // private static function handleMqttMessageV3($_message) { ... }
