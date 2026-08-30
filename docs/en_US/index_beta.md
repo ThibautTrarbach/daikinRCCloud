@@ -13,8 +13,8 @@ The **Daikin ONECTA** plugin allows you to control and monitor your ONECTA-compa
 
 - 🔄 Automatic synchronization of Daikin equipment
 - 🎛️ Full control of equipment (mode, temperature, ventilation, etc.)
-- ⏰ Refresh interval configuration (day/night) - *Available from daemon 2.0.0*
-- 🔧 Configurable refresh modes after action - *Available from daemon 2.0.0*
+- ⏰ Refresh interval configuration (day/night)
+- 🔧 Configurable refresh modes after action
 - 📡 Communication via MQTT
 - 🌍 Multilingual support (FR, EN, ES, DE, IT)
 

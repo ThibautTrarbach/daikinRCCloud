@@ -45,9 +45,7 @@ try {
             </div>
         </div>
 
-        <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}
-            <span class="label label-info" style="margin-left: 10px;"><i class="fas fa-info-circle"></i> {{Disponible à partir de la version 2.0.0 du daemon}}</span>
-        </legend>
+        <legend><i class="fas fa-wifi"></i> {{Daikin Polling Settings}}</legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Intervalle de rafraîchissement pendant la journée}}</label>
             <div class="col-sm-4">
@@ -85,9 +83,7 @@ try {
             </div>
         </div>
 
-        <legend><i class="fas fa-sync-alt"></i> {{Mode de rafraîchissement des actions}}
-            <span class="label label-info" style="margin-left: 10px;"><i class="fas fa-info-circle"></i> {{Disponible à partir de la version 2.0.0 du daemon}}</span>
-        </legend>
+        <legend><i class="fas fa-sync-alt"></i> {{Mode de rafraîchissement des actions}}</legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Mode de rafraîchissement}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Mode de rafraîchissement après une action : 1=Rafraîchissement complet différé, 2=Mise à jour optimiste sans rafraîchissement cloud, 3=Hybride (optimiste + rafraîchissement complet différé).}}"></i></sup>
@@ -195,6 +191,14 @@ try {
 
         <legend><i class="fas fa-code-branch"></i> {{Configuration des dépendances}}</legend>
         <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <div class="alert alert-warning" style="margin-bottom: 10px;">
+                    <small><i class="fas fa-exclamation-triangle"></i> {{Le daemon daikintomqtt >= 2.0.0 est obligatoire. Les branches release-stable, dev et release-dev ne sont plus supportées.}}</small>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label">{{Type de référence}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Choisissez si vous voulez installer une branche ou un commit spécifique}}"></i></sup>
             </label>
@@ -211,7 +215,7 @@ try {
             </label>
             <div class="col-sm-4">
                 <input type="text" class="configKey form-control" data-l1key="daikin_dependency_ref"
-                    placeholder="{{release-stable}}" />
+                    placeholder="{{release-beta}}" />
             </div>
         </div>
         <div class="form-group">
@@ -227,7 +231,7 @@ try {
                             {{• Branche :}} {{Installe la dernière version de la branche spécifiée (ex: release-beta, main, dev)}}<br/>
                             {{• Commit :}} {{Installe un commit spécifique en utilisant son hash (ex: abc123def456...)}}<br/><br/>
                             <strong>{{Branche ou Commit :}}</strong><br/>
-                            {{• Pour une branche :}} {{Indiquez le nom de la branche (par défaut: release-stable)}}<br/>
+                            {{• Pour une branche :}} {{Indiquez le nom de la branche (par défaut: release-beta)}}<br/>
                             {{• Pour un commit :}} {{Indiquez le hash complet du commit (ex: abc123def456789...)}}<br/><br/>
                             <strong>{{Note :}}</strong> {{Après modification, vous devrez relancer l'installation des dépendances pour que les changements prennent effet.}}
                         </small>

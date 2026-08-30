@@ -75,15 +75,15 @@
     "Default : 8765": "Par défaut : 8765",
     "Préfixe MQTT": "Préfixe MQTT",
     "Préfixe à utiliser dans MQTT.": "Préfixe à utiliser dans MQTT.",
-    "Disponible à partir de la version 2.0.0 du daemon": "Disponible à partir de la version 2.0.0 du daemon",
     "Configuration des dépendances": "Configuration des dépendances",
+    "Le daemon daikintomqtt >= 2.0.0 est obligatoire. Les branches release-stable, dev et release-dev ne sont plus supportées.": "Le daemon daikintomqtt >= 2.0.0 est obligatoire. Les branches release-stable, dev et release-dev ne sont plus supportées.",
     "Type de référence": "Type de référence",
     "Choisissez si vous voulez installer une branche ou un commit spécifique": "Choisissez si vous voulez installer une branche ou un commit spécifique",
     "Branche": "Branche",
     "Commit": "Commit",
     "Branche ou Commit": "Branche ou Commit",
     "Nom de la branche (ex: release-beta, main, dev) ou hash du commit (ex: abc123def456)": "Nom de la branche (ex: release-beta, main, dev) ou hash du commit (ex: abc123def456)",
-    "release-stable": "release-stable",
+    "release-beta": "release-beta",
     "Aide sur la configuration des dépendances": "Aide sur la configuration des dépendances",
     "Type de référence :": "Type de référence :",
     "• Branche :": "• Branche :",
@@ -92,7 +92,7 @@
     "Installe un commit spécifique en utilisant son hash (ex: abc123def456...)": "Installe un commit spécifique en utilisant son hash (ex: abc123def456...)",
     "Branche ou Commit :": "Branche ou Commit :",
     "• Pour une branche :": "• Pour une branche :",
-    "Indiquez le nom de la branche (par défaut: release-stable)": "Indiquez le nom de la branche (par défaut: release-stable)",
+    "Indiquez le nom de la branche (par défaut: release-beta)": "Indiquez le nom de la branche (par défaut: release-beta)",
     "• Pour un commit :": "• Pour un commit :",
     "Indiquez le hash complet du commit (ex: abc123def456789...)": "Indiquez le hash complet du commit (ex: abc123def456789...)",
     "Note :": "Note :",
@@ -165,12 +165,14 @@
     "Options invalides pour slider : ": "Options invalides pour slider : ",
     "Options invalides pour select : ": "Options invalides pour select : ",
     "Sous-type non géré : ": "Sous-type non géré : ",
-    "Impossible de déterminer la valeur de l'action": "Impossible de déterminer la valeur de l'action"
+    "Impossible de déterminer la valeur de l'action": "Impossible de déterminer la valeur de l'action",
+    "Le daemon daikintomqtt >= 2.0.0 est requis. Réinstallez les dépendances du plugin.": "Le daemon daikintomqtt >= 2.0.0 est requis. Réinstallez les dépendances du plugin."
   },
   "plugins/daikinRCCloud/plugin_info/install.php": {
     "Une mise à jour des dépendances sera nécessaire": "Une mise à jour des dépendances sera nécessaire",
     "Erreur lors de la suppression du dossier daemon : ": "Erreur lors de la suppression du dossier daemon : ",
-    "Erreur lors de la récupération de la version du plugin : ": "Erreur lors de la récupération de la version du plugin : "
+    "Erreur lors de la récupération de la version du plugin : ": "Erreur lors de la récupération de la version du plugin : ",
+    "Migration daemon V1 → V2 : branche mise à jour vers release-beta": "Migration daemon V1 → V2 : branche mise à jour vers release-beta"
   },
   "plugins/daikinRCCloud/plugin_info/configuration.php": {
     "Erreur lors du chargement de la configuration : ": "Erreur lors du chargement de la configuration : "

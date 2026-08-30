@@ -7,6 +7,21 @@ title: Daikin ONECTA Changelog (Beta)
 
 All notable changes to this plugin will be documented on this page.
 
+## [0.10.0] - 2026-08-30
+
+### Breaking change
+- Daemon V1 (< 2.0.0) is no longer supported — mandatory migration to daemon V2
+- Default dependency branch: `release-beta`
+- Automatic migration of V1 branches (`release-stable`, `dev`, etc.) to `release-beta` on update
+
+### Removed
+- V1 plugin code (configuration, MQTT messages, OAuth handling via MQTT)
+
+### Changed
+- Version branching kept with commented V3 stubs for future evolution
+
+---
+
 ## [0.9.3] - 2025-12-10
 
 ### Improved

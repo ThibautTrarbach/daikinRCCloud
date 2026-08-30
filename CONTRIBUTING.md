@@ -41,7 +41,7 @@ To propose a new feature:
 - Follow existing PHP code conventions
 - Add comments for complex code
 - Test your changes before submitting
-- Ensure the code works with daemon V1 and V2 versions if applicable
+- Ensure the code works with daemon version 2.0.0 or higher
 
 ### Translations
 
@@ -75,7 +75,7 @@ daikinRCCloud/
 - [ ] Documentation is up to date
 - [ ] Translations are complete (if applicable)
 - [ ] Logs do not contain sensitive information
-- [ ] Code is compatible with daemon V1 and V2 versions
+- [ ] Code is compatible with daemon version 2.0.0 or higher
 
 ## 📞 Contact
 

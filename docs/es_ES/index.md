@@ -13,8 +13,8 @@ El plugin **Daikin ONECTA** permite controlar y monitorear sus dispositivos Daik
 
 - 🔄 Sincronización automática de equipos Daikin
 - 🎛️ Control completo de equipos (modo, temperatura, ventilación, etc.)
-- ⏰ Configuración de intervalos de actualización (día/noche) - *Disponible desde daemon 2.0.0*
-- 🔧 Modos de actualización configurables después de acción - *Disponible desde daemon 2.0.0*
+- ⏰ Configuración de intervalos de actualización (día/noche)
+- 🔧 Modos de actualización configurables después de acción
 - 📡 Comunicación vía MQTT
 - 🌍 Soporte multilingüe (FR, EN, ES, DE, IT)
 

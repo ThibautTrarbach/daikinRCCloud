@@ -25,7 +25,6 @@ function daikinRCCloud_getConfigValue($key, $default = null) {
 
 // Fonction commune pour la configuration du plugin (install et update)
 function daikinRCCloud_configurePlugin($isUpdate = false) {
-    // Sauvegarde des versions
     try {
         $pluginVersion = daikinRCCloud::getPluginVersion();
         config::save('pluginVersion', $pluginVersion, 'daikinRCCloud');
@@ -62,7 +61,14 @@ function daikinRCCloud_configurePlugin($isUpdate = false) {
     config::save('daikin_actionRefreshMode', daikinRCCloud_getConfigValue('daikin_actionRefreshMode', 3), 'daikinRCCloud');
     config::save('daikin_actionRefreshDelaySeconds', daikinRCCloud_getConfigValue('daikin_actionRefreshDelaySeconds', 120), 'daikinRCCloud');
     config::save('daikin_dependency_type', daikinRCCloud_getConfigValue('daikin_dependency_type', 'branch'), 'daikinRCCloud');
-    config::save('daikin_dependency_ref', daikinRCCloud_getConfigValue('daikin_dependency_ref', 'release-stable'), 'daikinRCCloud');
+
+    $dependencyRef = daikinRCCloud_getConfigValue('daikin_dependency_ref', 'release-beta');
+    $v1Branches = array('release-stable', 'release-dev', 'dev', 'stable');
+    if ($isUpdate && in_array($dependencyRef, $v1Branches, true)) {
+        $dependencyRef = 'release-beta';
+        log::add('daikinRCCloud', 'info', '{{Migration daemon V1 → V2 : branche mise à jour vers release-beta}}');
+    }
+    config::save('daikin_dependency_ref', $dependencyRef, 'daikinRCCloud');
     
     // Sauvegarde de la configuration des dépendances
     daikinRCCloud::saveDependencyConfig();

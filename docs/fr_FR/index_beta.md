@@ -13,8 +13,8 @@ Le plugin **Daikin ONECTA** permet de piloter et de surveiller vos équipements 
 
 - 🔄 Synchronisation automatique des équipements Daikin
 - 🎛️ Contrôle complet des équipements (mode, température, ventilation, etc.)
-- ⏰ Configuration des intervalles de rafraîchissement (jour/nuit) - *Disponible à partir du daemon 2.0.0*
-- 🔧 Modes de rafraîchissement configurables après action - *Disponible à partir du daemon 2.0.0*
+- ⏰ Configuration des intervalles de rafraîchissement (jour/nuit)
+- 🔧 Modes de rafraîchissement configurables après action
 - 📡 Communication via MQTT
 - 🌍 Support multilingue (FR, EN, ES, DE, IT)
 

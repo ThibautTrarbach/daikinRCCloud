@@ -13,8 +13,8 @@ Das Plugin **Daikin ONECTA** ermöglicht die Steuerung und Überwachung Ihrer ON
 
 - 🔄 Automatische Synchronisierung von Daikin-Geräten
 - 🎛️ Vollständige Gerätesteuerung (Modus, Temperatur, Belüftung usw.)
-- ⏰ Konfiguration von Aktualisierungsintervallen (Tag/Nacht) - *Verfügbar ab Daemon 2.0.0*
-- 🔧 Konfigurierbare Aktualisierungsmodi nach Aktion - *Verfügbar ab Daemon 2.0.0*
+- ⏰ Konfiguration von Aktualisierungsintervallen (Tag/Nacht)
+- 🔧 Konfigurierbare Aktualisierungsmodi nach Aktion
 - 📡 Kommunikation über MQTT
 - 🌍 Mehrsprachige Unterstützung (FR, EN, ES, DE, IT)
 
