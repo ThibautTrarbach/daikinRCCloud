@@ -54,12 +54,22 @@ function daikinRCCloud_configurePlugin($isUpdate = false) {
     if ($clientSecret !== '') config::save('daikin_clientSecret', $clientSecret, 'daikinRCCloud');
     
     config::save('daikin_clientPort', daikinRCCloud_getConfigValue('daikin_clientPort', 8765), 'daikinRCCloud');
-    config::save('daikin_polling_dayInterval', daikinRCCloud_getConfigValue('daikin_polling_dayInterval', 10), 'daikinRCCloud');
-    config::save('daikin_polling_nightInterval', daikinRCCloud_getConfigValue('daikin_polling_nightInterval', 20), 'daikinRCCloud');
+    config::save('daikin_polling_dayInterval', daikinRCCloud_getConfigValue('daikin_polling_dayInterval', 15), 'daikinRCCloud');
+    config::save('daikin_polling_nightInterval', daikinRCCloud_getConfigValue('daikin_polling_nightInterval', 30), 'daikinRCCloud');
     config::save('daikin_polling_nightStart', daikinRCCloud_getConfigValue('daikin_polling_nightStart', 22), 'daikinRCCloud');
     config::save('daikin_polling_nightEnd', daikinRCCloud_getConfigValue('daikin_polling_nightEnd', 7), 'daikinRCCloud');
     config::save('daikin_actionRefreshMode', daikinRCCloud_getConfigValue('daikin_actionRefreshMode', 3), 'daikinRCCloud');
-    config::save('daikin_actionRefreshDelaySeconds', daikinRCCloud_getConfigValue('daikin_actionRefreshDelaySeconds', 120), 'daikinRCCloud');
+    config::save('daikin_actionRefreshDelaySeconds', daikinRCCloud_getConfigValue('daikin_actionRefreshDelaySeconds', 60), 'daikinRCCloud');
+    config::save('daikin_actionRefreshStrategy', daikinRCCloud_getConfigValue('daikin_actionRefreshStrategy', 'merge_with_poll'), 'daikinRCCloud');
+    config::save('daikin_mergeWithPollWindowMinutes', daikinRCCloud_getConfigValue('daikin_mergeWithPollWindowMinutes', 5), 'daikinRCCloud');
+    config::save('daikin_commandCoalesceMs', daikinRCCloud_getConfigValue('daikin_commandCoalesceMs', 400), 'daikinRCCloud');
+    config::save('daikin_energyStatsRefreshTime', daikinRCCloud_getConfigValue('daikin_energyStatsRefreshTime', '23:58'), 'daikinRCCloud');
+    config::save('daikin_dynamicFallback', daikinRCCloud_getConfigValue('daikin_dynamicFallback', 1), 'daikinRCCloud');
+    config::save('daikin_exposeReadOnly', daikinRCCloud_getConfigValue('daikin_exposeReadOnly', 1), 'daikinRCCloud');
+    config::save('daikin_publishOnDelta', daikinRCCloud_getConfigValue('daikin_publishOnDelta', 1), 'daikinRCCloud');
+    config::save('daikin_authMode', daikinRCCloud_getConfigValue('daikin_authMode', 'developer_portal'), 'daikinRCCloud');
+    config::save('daikin_enableWebSocket', daikinRCCloud_getConfigValue('daikin_enableWebSocket', 1), 'daikinRCCloud');
+    config::save('daikin_httpTransport', daikinRCCloud_getConfigValue('daikin_httpTransport', 'node'), 'daikinRCCloud');
     config::save('daikin_dependency_type', daikinRCCloud_getConfigValue('daikin_dependency_type', 'branch'), 'daikinRCCloud');
 
     $dependencyRef = daikinRCCloud_getConfigValue('daikin_dependency_ref', 'release-beta');

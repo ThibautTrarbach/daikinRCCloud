@@ -194,10 +194,22 @@ class daikinRCCloud extends eqLogic
         $mqttInfos = mqtt2::getFormatedInfos();
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
 
+        $authMode = config::byKey('daikin_authMode', 'daikinRCCloud', 'developer_portal');
+        $settings['daikin']['authMode'] = $authMode;
         $settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud', null);
         $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
         $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
         $settings['daikin']['clientPort'] = intval(config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765);
+        $settings['daikin']['email'] = config::byKey('daikin_onectaEmail', 'daikinRCCloud', null);
+        $onectaPassword = config::byKey('daikin_onectaPassword', 'daikinRCCloud', null);
+        if ($onectaPassword !== null && $onectaPassword !== '') {
+            $decryptedPassword = utils::decrypt($onectaPassword);
+            $settings['daikin']['password'] = ($decryptedPassword !== false && $decryptedPassword !== '') ? $decryptedPassword : $onectaPassword;
+        } else {
+            $settings['daikin']['password'] = null;
+        }
+        $settings['daikin']['enableWebSocket'] = (bool) config::byKey('daikin_enableWebSocket', 'daikinRCCloud', 1);
+        $settings['daikin']['httpTransport'] = config::byKey('daikin_httpTransport', 'daikinRCCloud', 'node');
 
         $settings['mqtt']['host'] = $mqttInfos['ip'];
         $settings['mqtt']['port'] = intval($mqttInfos['port']);
@@ -209,12 +221,19 @@ class daikinRCCloud extends eqLogic
         $settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
 
         $settings['system']['logLevel'] = $logLevel;
-        $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
-        $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
+        $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 15));
+        $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 30));
         $settings['system']['polling']['nightStart'] = intval(config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
         $settings['system']['polling']['nightEnd'] = intval(config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
         $settings['system']['actionRefreshMode'] = intval(config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
-        $settings['system']['actionRefreshDelaySeconds'] = intval(config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+        $settings['system']['actionRefreshDelaySeconds'] = intval(config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 60));
+        $settings['system']['actionRefreshStrategy'] = config::byKey('daikin_actionRefreshStrategy', 'daikinRCCloud', 'merge_with_poll');
+        $settings['system']['mergeWithPollWindowMinutes'] = intval(config::byKey('daikin_mergeWithPollWindowMinutes', 'daikinRCCloud', 5));
+        $settings['system']['commandCoalesceMs'] = intval(config::byKey('daikin_commandCoalesceMs', 'daikinRCCloud', 400));
+        $settings['system']['energyStatsRefreshTime'] = config::byKey('daikin_energyStatsRefreshTime', 'daikinRCCloud', '23:58');
+        $settings['system']['dynamicFallback'] = (bool) config::byKey('daikin_dynamicFallback', 'daikinRCCloud', 1);
+        $settings['system']['exposeReadOnly'] = (bool) config::byKey('daikin_exposeReadOnly', 'daikinRCCloud', 1);
+        $settings['system']['publishOnDelta'] = (bool) config::byKey('daikin_publishOnDelta', 'daikinRCCloud', 1);
 
         $settings['integration']['jeedom'] = true;
         $settings['integration']['homeassistant']['enabled'] = false;
@@ -224,6 +243,20 @@ class daikinRCCloud extends eqLogic
 
     public static function preConfig_daikin_password($value)
     {
+        return utils::encrypt($value);
+    }
+
+    public static function preConfig_daikin_onectaPassword($value)
+    {
+        if ($value === '' || $value === null) {
+            $values = array(
+                'plugin' => 'daikinRCCloud',
+                'key' => 'daikin_onectaPassword',
+            );
+            $sql = 'SELECT `value` FROM config WHERE `key`=:key AND plugin=:plugin';
+            $result = DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
+            return (is_array($result) && isset($result['value'])) ? $result['value'] : '';
+        }
         return utils::encrypt($value);
     }
 

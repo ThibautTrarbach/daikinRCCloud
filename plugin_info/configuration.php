@@ -6,6 +6,10 @@ if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
 try {
+    $authMode = config::byKey('daikin_authMode', 'daikinRCCloud', 'developer_portal');
+    $dailyQuotaLimit = ($authMode === 'mobile_app') ? 3000 : 200;
+    config::save('daikin_dailyQuotaLimit', $dailyQuotaLimit, 'daikinRCCloud');
+
     $rqDay = config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 0);
     $rqNight = config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 0);
     $rqNightStart = config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 0);
@@ -17,9 +21,9 @@ try {
     $NbRqsNight = ($totalrqnight * 60) / $rqNight;
     $NbRqsTotal = $NbRqsDay + $NbRqsNight;
     } else {
-        $NbRqsTotal = 200;
+        $NbRqsTotal = $dailyQuotaLimit;
     }
-    config::save('daikin_totalRqPerDay', $NbRqsTotal, 'daikinRCCloud');
+    config::save('daikin_totalRqPerDay', round($NbRqsTotal), 'daikinRCCloud');
 } catch (\Exception $e) {
     log::add('daikinRCCloud', 'error', '{{Erreur lors du chargement de la configuration : }} ' . $e->getMessage());
 }
@@ -75,11 +79,19 @@ try {
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">{{Nombre de requètes sur la journée}}
-                <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder et rafraîchir la page pour voir le nouveau total}}"></i></sup>
+            <label class="col-sm-3 control-label">{{Nombre de requètes sur la journée (polling)}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Estimation basée sur les intervalles de polling. Sauvegarder et rafraîchir la page pour recalculer.}}"></i></sup>
             </label>
             <div class="col-sm-4">
                 <input class="configKey roundedLeft form-control" data-l1key="daikin_totalRqPerDay" readonly />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Quota API journalier (mode auth)}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{200 req/jour en Developer Portal, 3000 req/jour en Mobile App. Le WebSocket réduit le besoin de polling en mode Mobile App.}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input class="configKey roundedLeft form-control" data-l1key="daikin_dailyQuotaLimit" readonly />
             </div>
         </div>
 
@@ -110,11 +122,11 @@ try {
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Délai de rafraîchissement (secondes)}}
-                <sup><i class="fas fa-question-circle tooltips" title="{{Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 120 secondes.}}"></i></sup>
+                <sup><i class="fas fa-question-circle tooltips" title="{{Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 60 secondes.}}"></i></sup>
             </label>
             <div class="col-sm-4">
                 <input type="number" class="configKey form-control" data-l1key="daikin_actionRefreshDelaySeconds"
-                    placeholder="{{120}}" min="0" />
+                    placeholder="{{60}}" min="0" />
                 <a href="#help-actionRefreshDelaySeconds" data-toggle="collapse" class="btn btn-xs btn-info" style="margin-top: 5px;">
                     <i class="fas fa-info-circle"></i> {{Aide}}
                 </a>
@@ -125,8 +137,76 @@ try {
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Stratégie refresh post-action}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{timer = GET dédié après délai ; merge_with_poll = fusionne avec le polling si proche ; disabled = pas de GET cloud après action}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <select class="configKey form-control" data-l1key="daikin_actionRefreshStrategy">
+                    <option value="merge_with_poll">{{merge_with_poll - Fusion avec polling (recommandé)}}</option>
+                    <option value="timer">{{timer - GET dédié après délai}}</option>
+                    <option value="disabled">{{disabled - Pas de GET cloud}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Fenêtre fusion polling (minutes)}}</label>
+            <div class="col-sm-4">
+                <input type="number" class="configKey form-control" data-l1key="daikin_mergeWithPollWindowMinutes"
+                    placeholder="{{5}}" min="1" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Coalescence commandes (ms)}}</label>
+            <div class="col-sm-4">
+                <input type="number" class="configKey form-control" data-l1key="daikin_commandCoalesceMs"
+                    placeholder="{{400}}" min="0" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Refresh stats énergie (HH:MM)}}</label>
+            <div class="col-sm-4">
+                <input type="text" class="configKey form-control" data-l1key="daikin_energyStatsRefreshTime"
+                    placeholder="{{23:58}}" />
+            </div>
+        </div>
+
+        <legend><i class="fas fa-microchip"></i> {{DynamicGateway & API}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{DynamicGateway (modèles inconnus)}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Active le mapping automatique des caractéristiques API pour les modèles non listés}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="checkbox" class="configKey" data-l1key="daikin_dynamicFallback" checked="checked" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Publier capteurs lecture seule}}</label>
+            <div class="col-sm-4">
+                <input type="checkbox" class="configKey" data-l1key="daikin_exposeReadOnly" checked="checked" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Publication MQTT si delta}}</label>
+            <div class="col-sm-4">
+                <input type="checkbox" class="configKey" data-l1key="daikin_publishOnDelta" checked="checked" />
+            </div>
+        </div>
 
         <legend><i class="fas fa-wrench"></i> {{Daikin Onecta Client Configuration}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Mode d'authentification}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Mobile App (recommandé) : quota 3000 req/jour + WebSocket temps réel. Developer Portal : OAuth manuel, quota 200 req/jour.}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <select class="configKey form-control" data-l1key="daikin_authMode" id="daikin_authMode">
+                    <option value="developer_portal">{{Developer Portal (OAuth)}}</option>
+                    <option value="mobile_app">{{Mobile App (recommandé)}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="daikin-auth-developer">
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Client ID}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Client ID de votre application Daikin Cloud. Obtenez-le sur developer.cloud.daikineurope.com}}"></i></sup>
@@ -171,10 +251,61 @@ try {
                 </div>
             </div>
         </div>
+        </div>
+
+        <div id="daikin-auth-mobile" style="display:none;">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Email Onecta}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Adresse email de votre compte application Daikin Onecta / Daikin Residential Controller}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="text" class="configKey form-control" data-l1key="daikin_onectaEmail"
+                    placeholder="{{email@exemple.com}}" autocomplete="username" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Mot de passe Onecta}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Mot de passe de votre compte Onecta. Stocké chiffré dans Jeedom.}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="password" class="configKey form-control" data-l1key="daikin_onectaPassword"
+                    placeholder="{{Mot de passe Onecta}}" autocomplete="current-password" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{WebSocket temps réel}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Reçoit les mises à jour en temps réel depuis le cloud Daikin. Réduit fortement le polling nécessaire.}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <input type="checkbox" class="configKey" data-l1key="daikin_enableWebSocket" checked="checked" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Transport HTTP}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Utilisez curl si Node.js est bloqué par le WAF Daikin (erreurs TLS ou 403).}}"></i></sup>
+            </label>
+            <div class="col-sm-4">
+                <select class="configKey form-control" data-l1key="daikin_httpTransport">
+                    <option value="node">{{Node.js (défaut)}}</option>
+                    <option value="curl">{{curl (fallback WAF)}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8">
+                <div class="alert alert-success" style="margin-bottom: 0;">
+                    <small><i class="fas fa-check-circle"></i> {{Le mode Mobile App utilise vos identifiants Onecta (même compte que l'application mobile). Quota API : 3000 requêtes/jour. Aucune configuration OAuth manuelle requise.}}</small>
+                </div>
+            </div>
+        </div>
+        </div>
 
         <legend><i class="fas fa-tools"></i> {{Plugin Configuration}}</legend>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{{Port pour l'authentication}}</label>
+        <div class="form-group daikin-auth-port">
+            <label class="col-sm-3 control-label">{{Port pour l'authentication}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Utilisé uniquement en mode Developer Portal pour le callback OAuth.}}"></i></sup>
+            </label>
             <div class="input-group col-sm-4">
                 <input class="configKey roundedLeft form-control" data-l1key="daikin_clientPort"
                     placeholder="{{Default : 8765}}" />
@@ -241,3 +372,22 @@ try {
         </div>
     </fieldset>
 </form>
+
+<script>
+function daikinRCCloud_toggleAuthMode() {
+    var mode = $('#daikin_authMode').val();
+    if (mode === 'mobile_app') {
+        $('#daikin-auth-mobile').show();
+        $('#daikin-auth-developer').hide();
+        $('.daikin-auth-port').hide();
+    } else {
+        $('#daikin-auth-mobile').hide();
+        $('#daikin-auth-developer').show();
+        $('.daikin-auth-port').show();
+    }
+}
+$(document).ready(function() {
+    daikinRCCloud_toggleAuthMode();
+    $('#daikin_authMode').on('change', daikinRCCloud_toggleAuthMode);
+});
+</script>
