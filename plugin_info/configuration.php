@@ -373,21 +373,4 @@ try {
     </fieldset>
 </form>
 
-<script>
-function daikinRCCloud_toggleAuthMode() {
-    var mode = $('#daikin_authMode').val();
-    if (mode === 'mobile_app') {
-        $('#daikin-auth-mobile').show();
-        $('#daikin-auth-developer').hide();
-        $('.daikin-auth-port').hide();
-    } else {
-        $('#daikin-auth-mobile').hide();
-        $('#daikin-auth-developer').show();
-        $('.daikin-auth-port').show();
-    }
-}
-$(document).ready(function() {
-    daikinRCCloud_toggleAuthMode();
-    $('#daikin_authMode').on('change', daikinRCCloud_toggleAuthMode);
-});
-</script>
+<?php include_file('plugin_info', 'daikinRCCloud.config', 'js', 'daikinRCCloud'); ?>
