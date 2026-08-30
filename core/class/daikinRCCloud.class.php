@@ -50,7 +50,10 @@ class daikinRCCloud extends eqLogic
     {
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Inscription au plugin mqtt2');
         self::deamon_stop();
-        mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
+        if (class_exists('mqtt2')) {
+            mqtt2::removePluginTopicByPlugin('daikinRCCloud');
+            mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
+        }
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception('{{Veuillez vérifier la configuration}}');
@@ -118,6 +121,9 @@ class daikinRCCloud extends eqLogic
                 sleep(1);
                 $i++;
             }
+        }
+        if (class_exists('mqtt2')) {
+            mqtt2::removePluginTopicByPlugin('daikinRCCloud');
         }
     }
 

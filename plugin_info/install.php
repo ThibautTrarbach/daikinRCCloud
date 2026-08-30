@@ -117,5 +117,8 @@ function daikinRCCloud_update()
 // Fonction exécutée automatiquement après la suppression du plugin
 function daikinRCCloud_remove()
 {
+    if (class_exists('mqtt2')) {
+        mqtt2::removePluginTopicByPlugin('daikinRCCloud');
+    }
     daikinRCCloud_removeDaemonFolder();
 }
