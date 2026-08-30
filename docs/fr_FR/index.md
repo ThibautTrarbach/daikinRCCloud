@@ -5,65 +5,75 @@ title: Documentation Daikin ONECTA
 
 # Documentation Daikin ONECTA
 
-## Description
+Le plugin **Daikin ONECTA** permet de piloter et de surveiller vos équipements Daikin compatibles ONECTA directement depuis Jeedom : climatiseurs, pompes à chaleur Altherma, et autres appareils connectés via le cloud Daikin.
 
-Le plugin **Daikin ONECTA** pilote vos équipements Daikin compatibles ONECTA (climatisation, pompes à chaleur Altherma, etc.) via l'API cloud officielle. Il embarque le daemon **daikintomqtt** et communique avec Jeedom via **mqtt2**.
+## À quoi sert ce plugin ?
 
-## Fonctionnalités
+Avec ce plugin, vous pouvez intégrer vos appareils Daikin dans votre installation Jeedom comme n'importe quel autre équipement domotique :
 
-- Synchronisation automatique des équipements Daikin
-- Contrôle complet : mode, consigne, ventilation, eco/powerful/streamer, consommation kWh
-- **DynamicGateway** : prise en charge automatique des modèles non listés
-- Planification : activation/désactivation des schedules Onecta
-- Mode vacances (preset away) via MQTT
-- Mise à jour firmware OTA (si proposée par le cloud)
-- Gestion du quota API : 200 req/jour (Developer Portal) ou 3000 req/jour (Mobile App)
-- **Mode Mobile App** (recommandé) : authentification Onecta + WebSocket temps réel
-- Refresh optimiste, fusion avec polling, coalescence
-- Polling adaptatif jour/nuit
+- Afficher leur état sur votre **dashboard**
+- Les piloter via des **scénarios** ou des **commandes vocales**
+- Automatiser le chauffage, la climatisation ou la ventilation selon vos habitudes
 
-## Modèles gateway supportés (statiques)
+Vos appareils sont **découverts automatiquement** dès que le plugin est correctement configuré. Il n'y a pas de bouton « Ajouter un équipement » : si votre climatiseur apparaît dans l'application Daikin Onecta sur votre téléphone, il peut apparaître dans Jeedom.
 
-- BRP069A4x, BRP069A61, BRP069A62, BRP069A78
-- BRP069B4x, BRP069C4x, BRP069C41, BRP069C8x
+## Ce que vous pouvez faire
 
-Les autres modèles sont gérés via **DynamicGateway** si l'option est activée (défaut : oui).
+| Fonction | Description |
+|----------|-------------|
+| **Marche / arrêt** | Allumer ou éteindre votre appareil |
+| **Modes** | Froid, chaud, automatique, séchage, ventilation seule |
+| **Consigne** | Régler la température souhaitée |
+| **Ventilation** | Choisir la vitesse et l'orientation du flux d'air (selon modèle) |
+| **Modes spéciaux** | Eco, Powerful, Streamer (selon modèle) |
+| **Températures** | Consulter la température ambiante et extérieure |
+| **Humidité** | Consulter l'humidité ambiante (selon modèle) |
+| **Consommation** | Suivre la consommation énergétique en kWh (jour, semaine, mois) |
+| **Plannings** | Activer ou désactiver les plannings configurés dans Onecta |
+| **Mode vacances** | Activer le mode absence (selon modèle) |
+| **Mise à jour** | Lancer une mise à jour firmware si Daikin la propose |
 
-## Quota API Daikin
+> **Note :** les commandes exactes dépendent de votre modèle d'appareil. La plupart des modèles Onecta récents sont pris en charge automatiquement, même s'ils ne figurent pas dans la liste ci-dessous.
 
-| Mode | Quota journalier |
-|------|------------------|
-| Developer Portal (OAuth) | 200 requêtes/jour |
-| Mobile App (recommandé) | 3000 requêtes/jour + WebSocket |
+## Équipements compatibles
 
-| Opération | Coût |
-|-----------|------|
-| Polling / refresh | 1 GET (tous les équipements) |
-| Refresh partiel post-action | 1 GET (un équipement) |
-| Commande | 1 PATCH par propriété |
-| Stats énergie (23:58) | 1 GET prioritaire |
+Le plugin supporte notamment les gammes suivantes :
 
-Le daemon réserve 1 requête/jour pour le refresh énergie et réduit le polling quand le quota est bas.
+| Gamme / type | Exemples |
+|--------------|----------|
+| Climatisation mono-zone | Daikin Perfera (FTXM), Stylish, Emura… |
+| Climatisation étendue | Modèles avec modes eco, streamer, orientation du flux |
+| Pompe à chaleur dual-zone | Daikin Altherma (chauffage + eau chaude) |
+| Climatisation multi-zone | Installations avec plusieurs zones |
 
-## Configuration Jeedom
+Si votre modèle n'est pas listé explicitement, le plugin tente de le prendre en charge automatiquement grâce à la **prise en charge automatique des modèles récents** (option activée par défaut dans la configuration avancée).
 
-- **Mode d'authentification** : Developer Portal (OAuth) ou Mobile App (email/mot de passe Onecta)
-- **WebSocket** : mises à jour temps réel (mode Mobile App uniquement)
-- **Polling** : intervalles jour/nuit, heures de la période nuit
-- **Refresh post-action** : mode 1/2/3, délai, stratégie `merge_with_poll`
-- **DynamicGateway** : fallback automatique pour modèles inconnus
-- **OAuth Developer Portal** : Client ID / Secret depuis [developer.cloud.daikineurope.com](https://developer.cloud.daikineurope.com/)
+## Ce qu'il vous faut
 
-## Topics MQTT (préfixe par défaut `daikinToMQTT`)
+| Prérequis | Détail |
+|-----------|--------|
+| **Jeedom** | Version 4.4 ou supérieure |
+| **Plugin mqtt2** | Obligatoire — installé et actif sur votre Jeedom |
+| **Compte Daikin** | Compte de l'application **Daikin Onecta** sur votre téléphone (recommandé) |
+| **Accès Internet** | Requis pour communiquer avec le cloud Daikin |
 
-| Topic | Rôle |
-|-------|------|
-| `{prefix}/{deviceId}` | État JSON de l'équipement |
-| `{prefix}/{deviceId}/set` | Commandes |
-| `{prefix}/jeedom/{deviceId}` | Définition des commandes Jeedom |
+## Sommaire
 
-## Prérequis
+| Page | Description |
+|------|-------------|
+| [Installation]({{ site.baseurl }}/fr_FR/installation.html) | Installer le plugin et faire apparaître vos appareils |
+| [Configuration]({{ site.baseurl }}/fr_FR/configuration.html) | Réglages du plugin |
+| [Authentification]({{ site.baseurl }}/fr_FR/authentification.html) | Se connecter à votre compte Daikin |
+| [Utilisation]({{ site.baseurl }}/fr_FR/utilisation.html) | Piloter vos appareils au quotidien |
+| [Limites et bonnes pratiques]({{ site.baseurl }}/fr_FR/quota-api.html) | Comprendre les limites du cloud Daikin |
+| [Dépannage]({{ site.baseurl }}/fr_FR/depannage.html) | Résoudre les problèmes courants |
 
-- Jeedom 4.4+
-- Plugin **mqtt2**
-- Node.js 20+ (installé par le plugin)
+## Liens utiles
+
+- [Changelog]({{ site.baseurl }}/fr_FR/changelog.html)
+- [Forum Jeedom](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55)
+- [Dépôt GitHub](https://github.com/ThibautTrarbach/daikinRCCloud)
+
+---
+
+**Suite :** [Installation]({{ site.baseurl }}/fr_FR/installation.html)
