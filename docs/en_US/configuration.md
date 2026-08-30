@@ -21,10 +21,10 @@ Two modes are available:
 
 | Mode | For whom? | Daily quota |
 |------|-----------|-------------|
-| **Mobile App** (recommended) | Users with the Daikin Onecta app | 3000 requests/day |
-| **Developer Portal** | Advanced users who created an app on the Daikin developer portal | 200 requests/day |
+| **Developer Portal** (recommended) | All users | 200 requests/day |
+| **Mobile App** | Advanced users with Onecta credentials | 3000 requests/day |
 
-> **Recommended:** choose **Mobile App** and use the same credentials as on the Daikin Onecta app on your phone.
+> **Recommended:** choose **Developer Portal** and create an app on the [Daikin developer portal](https://developer.cloud.daikineurope.com/).
 
 See the [Authentication]({{ site.baseurl }}/en_US/authentification.html) page for details on each mode.
 

@@ -17,10 +17,8 @@ No es una limitación del plugin, sino una regla impuesta por el servicio en la 
 
 | Modo de conexión | Consultas autorizadas por día |
 |-------------------|-----------------------------------|
-| **Mobile App** (recomendado) | 3000 |
-| **Developer Portal** | 200 |
-
-> **Recomendado:** utilice el modo **Mobile App** para beneficiarse de una cuota mucho más cómoda.
+| **Developer Portal** (recomendado) | 200 |
+| **Mobile App** | 3000 |
 
 ## ¿Qué consume la cuota?
 
@@ -47,17 +45,16 @@ Estas cifras no incluyen sus comandos, los refresh post-acción (según ajustes)
 
 ## Consejos para optimizar
 
-### Para la mayoría de los usuarios
+### Para la mayoría de los usuarios (Developer Portal)
 
-1. **Utilice el modo Mobile App** — cuota 15 veces superior.
-2. **Deje los ajustes predeterminados** — están diseñados para un buen equilibrio.
-3. **Mantenga el WebSocket activado** (modo Mobile App) — los cambios de estado llegan en tiempo real sin consumir cuota.
+1. **Deje los ajustes predeterminados** — están diseñados para un buen equilibrio con la cuota de 200 consultas/día.
+2. **No reduzca los intervalos de sincronización** por debajo de 15 minutos.
+3. **Evite escenarios** que envíen muchos comandos seguidos.
 
-### Si está en modo Developer Portal (200/día)
+### Si utiliza el modo Mobile App (3000/día)
 
-- No reduzca los intervalos de sincronización por debajo de 15 minutos.
-- Evite escenarios que envíen muchos comandos seguidos.
-- Considere pasar al modo Mobile App.
+- **Mantenga el WebSocket activado** — los cambios de estado llegan en tiempo real sin consumir cuota.
+- Puede aumentar ligeramente los intervalos de sincronización manteniendo la reactividad gracias al WebSocket.
 
 ### Si tiene muchos dispositivos y automatizaciones
 

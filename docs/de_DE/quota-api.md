@@ -17,10 +17,8 @@ Dies ist keine Plugin-Beschränkung, sondern eine Regel, die vom Daikin-ONECTA-C
 
 | Verbindungsmodus | Erlaubte Anfragen pro Tag |
 |-----------------|-------------------------|
-| **Mobile App** (empfohlen) | 3000 |
-| **Developer Portal** | 200 |
-
-> **Empfohlen:** Verwenden Sie den Modus **Mobile App** für ein deutlich komfortableres Kontingent.
+| **Developer Portal** (empfohlen) | 200 |
+| **Mobile App** | 3000 |
 
 ## Was verbraucht Kontingent?
 
@@ -47,17 +45,16 @@ Diese Zahlen umfassen nicht Ihre Befehle, die Aktualisierung nach Aktionen (je n
 
 ## Optimierungstipps
 
-### Für die meisten Benutzer
+### Für die meisten Benutzer (Developer Portal)
 
-1. **Mobile-App-Modus verwenden** — 15-mal höheres Kontingent.
-2. **Standardeinstellungen beibehalten** — sie sind für ein gutes Gleichgewicht ausgelegt.
-3. **WebSocket aktiviert lassen** (Mobile-App-Modus) — Zustandsänderungen kommen in Echtzeit an, ohne Kontingent zu verbrauchen.
+1. **Standardeinstellungen beibehalten** — sie sind für ein gutes Gleichgewicht mit dem Kontingent von 200 Anfragen/Tag ausgelegt.
+2. **Synchronisationsintervalle nicht unter 15 Minuten reduzieren**.
+3. **Szenarien vermeiden**, die viele Befehle in schneller Folge senden.
 
-### Wenn Sie den Developer-Portal-Modus verwenden (200/Tag)
+### Wenn Sie den Mobile-App-Modus verwenden (3000/Tag)
 
-- Reduzieren Sie Synchronisationsintervalle nicht unter 15 Minuten.
-- Vermeiden Sie Szenarien, die viele Befehle in schneller Folge senden.
-- Erwägen Sie den Wechsel zum Mobile-App-Modus.
+- **WebSocket aktiviert lassen** — Zustandsänderungen kommen in Echtzeit an, ohne Kontingent zu verbrauchen.
+- Sie können die Synchronisationsintervalle leicht erhöhen und dank WebSocket reaktiv bleiben.
 
 ### Wenn Sie viele Geräte und Automationen haben
 

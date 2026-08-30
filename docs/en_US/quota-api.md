@@ -17,10 +17,8 @@ This is not a plugin limitation, but a rule imposed by the Daikin ONECTA cloud s
 
 | Connection mode | Allowed requests per day |
 |-----------------|-------------------------|
-| **Mobile App** (recommended) | 3000 |
-| **Developer Portal** | 200 |
-
-> **Recommended:** use **Mobile App** mode for a much more comfortable quota.
+| **Developer Portal** (recommended) | 200 |
+| **Mobile App** | 3000 |
 
 ## What consumes quota?
 
@@ -47,17 +45,16 @@ These figures do not include your commands, post-action refresh (depending on se
 
 ## Optimization tips
 
-### For most users
+### For most users (Developer Portal)
 
-1. **Use Mobile App mode** — 15 times higher quota.
-2. **Keep default settings** — they are designed for a good balance.
-3. **Keep WebSocket enabled** (Mobile App mode) — state changes arrive in real time without consuming quota.
+1. **Keep default settings** — they are designed for a good balance with the 200 requests/day quota.
+2. **Do not reduce sync intervals** below 15 minutes.
+3. **Avoid scenarios** that send many commands in quick succession.
 
-### If you use Developer Portal mode (200/day)
+### If you use Mobile App mode (3000/day)
 
-- Do not reduce sync intervals below 15 minutes.
-- Avoid scenarios that send many commands in quick succession.
-- Consider switching to Mobile App mode.
+- **Keep WebSocket enabled** — state changes arrive in real time without consuming quota.
+- You can slightly increase sync intervals while staying responsive thanks to WebSocket.
 
 ### If you have many devices and automations
 
