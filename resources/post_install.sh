@@ -8,8 +8,7 @@ BASEDIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd $BASEDIR
 cd daikintomqtt
 sudo yarn install
+npm run build
 chown -R www-data:www-data ../*
-
-mv main.js daikinToMQTT.js
 
 echo "Everything is successfully installed!"
