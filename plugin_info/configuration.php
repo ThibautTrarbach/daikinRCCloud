@@ -27,6 +27,8 @@ try {
 } catch (\Exception $e) {
     log::add('daikinRCCloud', 'error', '{{Erreur lors du chargement de la configuration : }} ' . $e->getMessage());
 }
+$displayPluginVersion = config::byKey('pluginVersion', 'daikinRCCloud', '—');
+$displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
 ?>
 
 <form class="form-horizontal">
@@ -396,9 +398,9 @@ try {
             </label>
             <div class="col-sm-8">
                 <p class="form-control-static" id="daikin-versions-display">
-                    <span>{{Plugin}} :</span> <strong class="daikin-version-plugin"></strong>
+                    <span>{{Plugin}} :</span> <strong class="daikin-version-plugin"><?php echo htmlspecialchars($displayPluginVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
                     <span class="text-muted"> — </span>
-                    <span>{{Daemon}} :</span> <strong class="daikin-version-daemon"></strong>
+                    <span>{{Daemon}} :</span> <strong class="daikin-version-daemon"><?php echo htmlspecialchars($displayDeamonVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
                 </p>
                 <input class="configKey" data-l1key="pluginVersion" type="hidden" />
                 <input class="configKey" data-l1key="deamonVersion" type="hidden" />
@@ -408,3 +410,18 @@ try {
 </form>
 
 <?php include_file('plugin_info', 'daikinRCCloud.config', 'js', 'daikinRCCloud'); ?>
+<script>
+(function() {
+    var remaining = 12;
+    function run() {
+        if (typeof daikinRCCloud_initConfigUI === 'function') {
+            daikinRCCloud_initConfigUI();
+        }
+        remaining -= 1;
+        if (remaining > 0) {
+            setTimeout(run, 400);
+        }
+    }
+    run();
+})();
+</script>
