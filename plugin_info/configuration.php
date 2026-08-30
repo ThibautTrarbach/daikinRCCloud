@@ -2,7 +2,7 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 include_file('core', 'authentification', 'php');
-include_file('core', 'daikinRCCloud', 'class');
+include_file('core', 'daikinRCCloud', 'class', 'daikinRCCloud');
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
