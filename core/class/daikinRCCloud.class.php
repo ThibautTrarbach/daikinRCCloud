@@ -39,6 +39,8 @@ class daikinRCCloud extends eqLogic
             $return['state'] = 'nok';
         } elseif (!file_exists(__DIR__ . '/../../resources/daikintomqtt/node_modules')) {
             $return['state'] = 'nok';
+        } elseif (!file_exists(__DIR__ . '/../../resources/daikintomqtt/main.js')) {
+            $return['state'] = 'nok';
         } elseif (!self::isDaemonVersionAtLeast('2.0.0')) {
             $return['state'] = 'nok';
         }
@@ -67,9 +69,12 @@ class daikinRCCloud extends eqLogic
         $data_path = realpath(dirname(__FILE__) . '/../../data/deamon');
         self::assertMinDaemonVersion('2.0.0');
         self::configureSettings($data_path);
-        chdir($daikin_path);
+        $mainScript = $daikin_path . '/main.js';
+        if (!file_exists($mainScript)) {
+            throw new Exception('{{Le daemon compilé (main.js) est introuvable. Réinstallez les dépendances du plugin.}}');
+        }
         $cmd = 'STORE_DIR=' . $data_path;
-        $cmd .= ' node --preserve-symlinks daikinToMQTT.js';
+        $cmd .= ' node --preserve-symlinks ' . $mainScript;
         log::add('daikinRCCloud', 'info', '[' . __FUNCTION__ . '] ' . 'Lancement démon Daikin : ' . $cmd);
         exec($cmd . ' >> ' . log::getPathToLog('daikinRCCloudd') . ' 2>&1 &');
         $i = 0;
@@ -97,7 +102,7 @@ class daikinRCCloud extends eqLogic
     public static function deamon_stop()
     {
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Stop démon');
-        $find = 'daikinToMQTT.js';
+        $find = 'daikintomqtt/main.js';
         $findEscaped = escapeshellarg($find);
         $cmd = "(ps ax || ps w) | grep -ie " . $findEscaped . " | grep -v grep | awk '{print $1}' | xargs " . system::getCmdSudo() . "kill -15 > /dev/null 2>&1";
         exec($cmd);
@@ -111,7 +116,7 @@ class daikinRCCloud extends eqLogic
             $i++;
         }
         if ($i >= 5) {
-            system::kill('daikinToMQTT.js', true);
+            system::kill('daikintomqtt/main.js', true);
             $i = 0;
             while ($i < 5) {
                 $deamon_info = self::deamon_info();
@@ -150,7 +155,7 @@ class daikinRCCloud extends eqLogic
 
     public static function isRunning(): bool
     {
-        return !empty(system::ps('daikinToMQTT.js'));
+        return !empty(system::ps('daikintomqtt/main.js'));
     }
 
     public static function configureSettings($_path)
