@@ -33,6 +33,22 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
 
 <form class="form-horizontal">
     <fieldset>
+        <legend><i class="fas fa-info-circle"></i> {{Informations}}</legend>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{Versions}}
+                <sup><i class="fas fa-question-circle tooltips" title="{{Versions du plugin et du daemon à indiquer en cas de demande sur la communauté Jeedom.}}"></i></sup>
+            </label>
+            <div class="col-sm-8">
+                <p class="form-control-static" id="daikin-versions-display">
+                    <span>{{Plugin}} :</span> <strong class="daikin-version-plugin"><?php echo htmlspecialchars($displayPluginVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
+                    <span class="text-muted"> — </span>
+                    <span>{{Daemon}} :</span> <strong class="daikin-version-daemon"><?php echo htmlspecialchars($displayDeamonVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
+                </p>
+                <input class="configKey" data-l1key="pluginVersion" type="hidden" />
+                <input class="configKey" data-l1key="deamonVersion" type="hidden" />
+            </div>
+        </div>
+
         <div class="form-group">
             <label class="col-sm-3 control-label">{{Configuration avancée}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Affiche les réglages de polling, de synchronisation post-action, MQTT et dépendances. Laissez désactivé si la configuration par défaut vous convient.}}"></i></sup>
@@ -244,6 +260,18 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                         <option value="timer">{{timer - GET dédié après délai}}</option>
                         <option value="disabled">{{disabled - Pas de GET cloud}}</option>
                     </select>
+                    <a href="#help-actionRefreshStrategy" data-toggle="collapse" class="btn btn-xs btn-info" style="margin-top: 5px;">
+                        <i class="fas fa-info-circle"></i> {{Aide sur les stratégies}}
+                    </a>
+                    <div id="help-actionRefreshStrategy" class="collapse" style="margin-top: 5px;">
+                        <div class="alert alert-info" style="margin-bottom: 0;">
+                            <small>
+                                <strong>{{merge_with_poll - Fusion avec polling (recommandé) :}}</strong> {{Si le prochain polling est prévu dans la fenêtre définie (Fenêtre fusion polling), le refresh post-action attend ce cycle au lieu de lancer un GET dédié. Réduit la consommation de quota API tout en garantissant une mise à jour cloud.}}<br/><br/>
+                                <strong>{{timer - GET dédié après délai :}}</strong> {{Lance un GET cloud ciblé sur l'équipement concerné après le délai de rafraîchissement, indépendamment du planning de polling. Plus réactif mais consomme une requête API supplémentaire à chaque action.}}<br/><br/>
+                                <strong>{{disabled - Pas de GET cloud :}}</strong> {{Aucune requête GET cloud après une action. Seule la mise à jour locale (selon le mode de rafraîchissement choisi) est appliquée. Utile pour économiser le quota, mais sans vérification cloud.}}
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -391,21 +419,6 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
 
         </div>
 
-        <legend><i class="fas fa-info-circle"></i> {{Informations}}</legend>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{{Versions}}
-                <sup><i class="fas fa-question-circle tooltips" title="{{Versions du plugin et du daemon à indiquer en cas de demande sur la communauté Jeedom.}}"></i></sup>
-            </label>
-            <div class="col-sm-8">
-                <p class="form-control-static" id="daikin-versions-display">
-                    <span>{{Plugin}} :</span> <strong class="daikin-version-plugin"><?php echo htmlspecialchars($displayPluginVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
-                    <span class="text-muted"> — </span>
-                    <span>{{Daemon}} :</span> <strong class="daikin-version-daemon"><?php echo htmlspecialchars($displayDeamonVersion, ENT_QUOTES, 'UTF-8'); ?></strong>
-                </p>
-                <input class="configKey" data-l1key="pluginVersion" type="hidden" />
-                <input class="configKey" data-l1key="deamonVersion" type="hidden" />
-            </div>
-        </div>
     </fieldset>
 </form>
 

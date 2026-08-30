@@ -164,6 +164,13 @@
     "5": "5",
     "400": "400",
     "merge_with_poll - Fusion avec polling (recommandé)": "merge_with_poll - Merge with polling (recommended)",
+    "Aide sur les stratégies": "Help on strategies",
+    "merge_with_poll - Fusion avec polling (recommandé) :": "merge_with_poll - Merge with polling (recommended):",
+    "Si le prochain polling est prévu dans la fenêtre définie (Fenêtre fusion polling), le refresh post-action attend ce cycle au lieu de lancer un GET dédié. Réduit la consommation de quota API tout en garantissant une mise à jour cloud.": "If the next polling is scheduled within the defined window (Polling merge window), the post-action refresh waits for that cycle instead of launching a dedicated GET. Reduces API quota usage while ensuring a cloud update.",
+    "timer - GET dédié après délai :": "timer - Dedicated GET after delay:",
+    "Lance un GET cloud ciblé sur l'équipement concerné après le délai de rafraîchissement, indépendamment du planning de polling. Plus réactif mais consomme une requête API supplémentaire à chaque action.": "Launches a targeted cloud GET on the affected equipment after the refresh delay, regardless of polling schedule. More responsive but consumes an extra API request per action.",
+    "disabled - Pas de GET cloud :": "disabled - No cloud GET:",
+    "Aucune requête GET cloud après une action. Seule la mise à jour locale (selon le mode de rafraîchissement choisi) est appliquée. Utile pour économiser le quota, mais sans vérification cloud.": "No cloud GET request after an action. Only the local update (according to the chosen refresh mode) is applied. Useful to save quota, but without cloud verification.",
     "timer - GET dédié après délai": "timer - Dedicated GET after delay",
     "disabled - Pas de GET cloud": "disabled - No cloud GET",
     "Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 60 secondes.": "Delay in seconds before full cloud refresh after an action. Used in modes 1 and 3. Default: 60 seconds."

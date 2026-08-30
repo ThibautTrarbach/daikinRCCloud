@@ -164,6 +164,13 @@
     "5": "5",
     "400": "400",
     "merge_with_poll - Fusion avec polling (recommandé)": "merge_with_poll - Fusion avec polling (recommandé)",
+    "Aide sur les stratégies": "Aide sur les stratégies",
+    "merge_with_poll - Fusion avec polling (recommandé) :": "merge_with_poll - Fusion avec polling (recommandé) :",
+    "Si le prochain polling est prévu dans la fenêtre définie (Fenêtre fusion polling), le refresh post-action attend ce cycle au lieu de lancer un GET dédié. Réduit la consommation de quota API tout en garantissant une mise à jour cloud.": "Si le prochain polling est prévu dans la fenêtre définie (Fenêtre fusion polling), le refresh post-action attend ce cycle au lieu de lancer un GET dédié. Réduit la consommation de quota API tout en garantissant une mise à jour cloud.",
+    "timer - GET dédié après délai :": "timer - GET dédié après délai :",
+    "Lance un GET cloud ciblé sur l'équipement concerné après le délai de rafraîchissement, indépendamment du planning de polling. Plus réactif mais consomme une requête API supplémentaire à chaque action.": "Lance un GET cloud ciblé sur l'équipement concerné après le délai de rafraîchissement, indépendamment du planning de polling. Plus réactif mais consomme une requête API supplémentaire à chaque action.",
+    "disabled - Pas de GET cloud :": "disabled - Pas de GET cloud :",
+    "Aucune requête GET cloud après une action. Seule la mise à jour locale (selon le mode de rafraîchissement choisi) est appliquée. Utile pour économiser le quota, mais sans vérification cloud.": "Aucune requête GET cloud après une action. Seule la mise à jour locale (selon le mode de rafraîchissement choisi) est appliquée. Utile pour économiser le quota, mais sans vérification cloud.",
     "timer - GET dédié après délai": "timer - GET dédié après délai",
     "disabled - Pas de GET cloud": "disabled - Pas de GET cloud",
     "Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 60 secondes.": "Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 60 secondes."

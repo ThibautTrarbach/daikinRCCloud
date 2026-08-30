@@ -143,6 +143,13 @@
     "5": "5",
     "400": "400",
     "merge_with_poll - Fusion avec polling (recommandé)": "merge_with_poll - Fusione con polling (consigliato)",
+    "Aide sur les stratégies": "Aiuto sulle strategie",
+    "merge_with_poll - Fusion avec polling (recommandé) :": "merge_with_poll - Fusione con polling (consigliato):",
+    "Si le prochain polling est prévu dans la fenêtre définie (Fenêtre fusion polling), le refresh post-action attend ce cycle au lieu de lancer un GET dédié. Réduit la consommation de quota API tout en garantissant une mise à jour cloud.": "Se il prossimo polling è previsto nella finestra definita (Finestra fusione polling), il refresh post-azione attende quel ciclo invece di lanciare un GET dedicato. Riduce il consumo di quota API garantendo un aggiornamento cloud.",
+    "timer - GET dédié après délai :": "timer - GET dedicato dopo ritardo:",
+    "Lance un GET cloud ciblé sur l'équipement concerné après le délai de rafraîchissement, indépendamment du planning de polling. Plus réactif mais consomme une requête API supplémentaire à chaque action.": "Avvia un GET cloud mirato sull'equipaggiamento interessato dopo il ritardo di refresh, indipendentemente dal polling. Più reattivo ma consuma una richiesta API extra per azione.",
+    "disabled - Pas de GET cloud :": "disabled - Nessun GET cloud:",
+    "Aucune requête GET cloud après une action. Seule la mise à jour locale (selon le mode de rafraîchissement choisi) est appliquée. Utile pour économiser le quota, mais sans vérification cloud.": "Nessuna richiesta GET cloud dopo un'azione. Viene applicato solo l'aggiornamento locale (secondo la modalità di refresh scelta). Utile per risparmiare quota, ma senza verifica cloud.",
     "timer - GET dédié après délai": "timer - GET dedicato dopo ritardo",
     "disabled - Pas de GET cloud": "disabled - Nessun GET cloud",
     "Délai en secondes avant le rafraîchissement complet depuis le cloud après une action. Utilisé en mode 1 et 3. Valeur par défaut : 60 secondes.": "Ritardo in secondi prima del refresh completo dal cloud dopo un'azione. Usato nelle modalità 1 e 3. Predefinito: 60 secondi."
