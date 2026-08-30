@@ -17,10 +17,8 @@ Non è una limitazione del plugin, ma una regola imposta dal servizio cloud Daik
 
 | Modalità di connessione | Richieste consentite al giorno |
 |-------------------------|--------------------------------|
-| **Mobile App** (consigliata) | 3000 |
-| **Developer Portal** | 200 |
-
-> **Consigliato:** usa la modalità **Mobile App** per una quota molto più confortevole.
+| **Developer Portal** (consigliato) | 200 |
+| **Mobile App** | 3000 |
 
 ## Cosa consuma la quota?
 
@@ -47,17 +45,16 @@ Queste cifre non includono i comandi, l'aggiornamento post-azione (a seconda del
 
 ## Suggerimenti per l'ottimizzazione
 
-### Per la maggior parte degli utenti
+### Per la maggior parte degli utenti (Developer Portal)
 
-1. **Usa la modalità Mobile App** — quota 15 volte superiore.
-2. **Mantieni le impostazioni predefinite** — sono progettate per un buon equilibrio.
-3. **Mantieni il WebSocket attivato** (modalità Mobile App) — i cambiamenti di stato arrivano in tempo reale senza consumare quota.
+1. **Mantieni le impostazioni predefinite** — sono progettate per un buon equilibrio con la quota di 200 richieste/giorno.
+2. **Non ridurre gli intervalli di sincronizzazione** al di sotto di 15 minuti.
+3. **Evita scenari** che inviano molti comandi in rapida successione.
 
-### Se usi la modalità Developer Portal (200/giorno)
+### Se usi la modalità Mobile App (3000/giorno)
 
-- Non ridurre gli intervalli di sincronizzazione al di sotto di 15 minuti.
-- Evita scenari che inviano molti comandi in rapida successione.
-- Valuta il passaggio alla modalità Mobile App.
+- **Mantieni il WebSocket attivato** — i cambiamenti di stato arrivano in tempo reale senza consumare quota.
+- Puoi aumentare leggermente gli intervalli di sincronizzazione restando reattivo grazie al WebSocket.
 
 ### Se hai molti dispositivi e automazioni
 

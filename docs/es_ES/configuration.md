@@ -21,10 +21,10 @@ Hay dos modos disponibles:
 
 | Modo | ¿Para quién? | Cuota diaria |
 |------|-----------|------------------|
-| **Mobile App** (recomendado) | Usuarios con la aplicación Daikin Onecta | 3000 consultas/día |
-| **Developer Portal** | Usuarios avanzados que han creado una aplicación en el portal de desarrolladores Daikin | 200 consultas/día |
+| **Developer Portal** (recomendado) | Todos los usuarios | 200 consultas/día |
+| **Mobile App** | Usuarios avanzados con credenciales Onecta | 3000 consultas/día |
 
-> **Recomendado:** elija **Mobile App** y utilice las mismas credenciales que en la aplicación Daikin Onecta de su teléfono.
+> **Recomendado:** elija **Developer Portal** y cree una aplicación en el [portal de desarrolladores Daikin](https://developer.cloud.daikineurope.com/).
 
 Consulte la página [Autenticación]({{ site.baseurl }}/es_ES/authentification.html) para el detalle de cada modo.
 

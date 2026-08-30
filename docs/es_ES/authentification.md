@@ -9,27 +9,27 @@ Para que Jeedom pueda controlar sus dispositivos Daikin, el plugin debe conectar
 
 ## ¿Qué modo elegir?
 
-| | Mobile App | Developer Portal |
-|---|-----------|------------------|
-| **Recomendado para** | Todos los usuarios | Desarrolladores, pruebas avanzadas |
-| **Credenciales** | Email + contraseña Onecta | Client ID + Client Secret |
-| **¿Misma cuenta que la app móvil?** | Sí | No (cuenta de desarrollador separada) |
-| **Cuota diaria** | 3000 consultas | 200 consultas |
-| **Actualizaciones en tiempo real** | Sí | No |
-| **Configuración** | Simple (2 campos) | Compleja (procedimiento OAuth) |
+| | Developer Portal | Mobile App |
+|---|-------------------|-----------|
+| **Recomendado para** | Todos los usuarios | Usuarios avanzados (credenciales Onecta) |
+| **Credenciales** | Client ID + Client Secret | Email + contraseña Onecta |
+| **¿Misma cuenta que la app móvil?** | No (cuenta de desarrollador separada) | Sí |
+| **Cuota diaria** | 200 consultas | 3000 consultas |
+| **Actualizaciones en tiempo real** | No | Sí |
+| **Configuración** | Procedimiento OAuth | Simple (2 campos) |
 
-> **Recomendado:** utilice el modo **Mobile App** con las credenciales de su aplicación Daikin Onecta.
+> **Recomendado:** utilice el modo **Developer Portal** con una aplicación creada en el [portal de desarrolladores Daikin](https://developer.cloud.daikineurope.com/).
 
 ---
 
-## Modo Mobile App (recomendado)
+## Modo Mobile App
 
 Es el modo más simple. Utiliza la misma cuenta que la aplicación **Daikin Onecta** o **Daikin Residential Controller** en su teléfono.
 
 ### Configuración
 
 1. Abra **Plugins → Daikin ONECTA → Configuración**.
-2. Seleccione **Mobile App (recomendado)**.
+2. Seleccione **Mobile App**.
 3. Introduzca su **email Onecta**.
 4. Introduzca su **contraseña Onecta**.
 5. Haga clic en **Guardar**.

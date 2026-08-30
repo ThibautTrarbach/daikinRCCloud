@@ -21,10 +21,10 @@ Sono disponibili due modalità:
 
 | Modalità | Per chi? | Quota giornaliera |
 |----------|----------|-------------------|
-| **Mobile App** (consigliata) | Utenti con l'app Daikin Onecta | 3000 richieste/giorno |
-| **Developer Portal** | Utenti avanzati che hanno creato un'app sul portale sviluppatori Daikin | 200 richieste/giorno |
+| **Developer Portal** (consigliato) | Tutti gli utenti | 200 richieste/giorno |
+| **Mobile App** | Utenti avanzati con credenziali Onecta | 3000 richieste/giorno |
 
-> **Consigliato:** scegli **Mobile App** e usa le stesse credenziali dell'app Daikin Onecta sul telefono.
+> **Consigliato:** scegli **Developer Portal** e crea un'applicazione sul [portale sviluppatori Daikin](https://developer.cloud.daikineurope.com/).
 
 Consulta la pagina [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html) per i dettagli su ciascuna modalità.
 

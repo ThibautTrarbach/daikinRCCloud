@@ -21,10 +21,10 @@ Deux modes sont disponibles :
 
 | Mode | Pour qui ? | Quota journalier |
 |------|-----------|------------------|
-| **Mobile App** (recommandé) | Utilisateurs avec l'application Daikin Onecta | 3000 interrogations/jour |
-| **Developer Portal** | Utilisateurs avancés ayant créé une application sur le portail développeur Daikin | 200 interrogations/jour |
+| **Developer Portal** (recommandé) | Tous les utilisateurs | 200 interrogations/jour |
+| **Mobile App** | Utilisateurs avancés avec identifiants Onecta | 3000 interrogations/jour |
 
-> **Recommandé :** choisissez **Mobile App** et utilisez les mêmes identifiants que sur l'application Daikin Onecta de votre téléphone.
+> **Recommandé :** choisissez **Developer Portal** et créez une application sur le [portail développeur Daikin](https://developer.cloud.daikineurope.com/).
 
 Consultez la page [Authentification]({{ site.baseurl }}/fr_FR/authentification.html) pour le détail de chaque mode.
 

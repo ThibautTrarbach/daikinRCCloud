@@ -17,10 +17,8 @@ Ce n'est pas une limitation du plugin, mais une règle imposée par le service c
 
 | Mode de connexion | Interrogations autorisées par jour |
 |-------------------|-----------------------------------|
-| **Mobile App** (recommandé) | 3000 |
-| **Developer Portal** | 200 |
-
-> **Recommandé :** utilisez le mode **Mobile App** pour bénéficier d'un quota bien plus confortable.
+| **Developer Portal** (recommandé) | 200 |
+| **Mobile App** | 3000 |
 
 ## Qu'est-ce qui consomme le quota ?
 
@@ -47,17 +45,16 @@ Ces chiffres n'incluent pas vos commandes, les refresh post-action (selon régla
 
 ## Conseils pour optimiser
 
-### Pour la plupart des utilisateurs
+### Pour la plupart des utilisateurs (Developer Portal)
 
-1. **Utilisez le mode Mobile App** — quota 15 fois plus élevé.
-2. **Laissez les réglages par défaut** — ils sont conçus pour un bon équilibre.
-3. **Gardez le WebSocket activé** (mode Mobile App) — les changements d'état arrivent en temps réel sans consommer de quota.
+1. **Laissez les réglages par défaut** — ils sont conçus pour un bon équilibre avec le quota de 200 interrogations/jour.
+2. **Ne réduisez pas les intervalles de synchronisation** en dessous de 15 minutes.
+3. **Évitez les scénarios** qui envoient beaucoup de commandes rapprochées.
 
-### Si vous êtes en mode Developer Portal (200/jour)
+### Si vous utilisez le mode Mobile App (3000/jour)
 
-- Ne réduisez pas les intervalles de synchronisation en dessous de 15 minutes.
-- Évitez les scénarios qui envoient beaucoup de commandes rapprochées.
-- Envisagez de passer au mode Mobile App.
+- **Gardez le WebSocket activé** — les changements d'état arrivent en temps réel sans consommer de quota.
+- Vous pouvez augmenter légèrement les intervalles de synchronisation tout en restant réactif grâce au WebSocket.
 
 ### Si vous avez beaucoup d'appareils et d'automatisations
 
