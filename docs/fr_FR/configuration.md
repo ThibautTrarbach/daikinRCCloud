@@ -64,7 +64,7 @@ Ces réglages déterminent à quelle fréquence Jeedom interroge le cloud Daikin
 
 > **Conseil :** avec le mode Mobile App et les mises à jour en temps réel activées, vous pouvez augmenter ces intervalles sans perdre en réactivité.
 
-Le champ **Nombre de requêtes sur la journée** estime combien d'interrogations le plugin consommera uniquement pour la synchronisation planifiée.
+Le champ **Nombre de requêtes planifiées/jour** estime combien d'interrogations GET le daemon planifiera chaque jour (polling + stats énergie), en tenant compte du mode d'authentification et du WebSocket. La mise à jour est automatique lorsque vous modifiez les réglages. Les commandes et refresh post-action s'ajoutent à cette estimation.
 
 ### Comportement après une commande
 

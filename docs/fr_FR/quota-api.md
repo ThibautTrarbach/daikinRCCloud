@@ -36,9 +36,14 @@ Ce n'est pas une limitation du plugin, mais une règle imposée par le service c
 
 ## Estimation affichée dans la configuration
 
-Dans la page de configuration (section avancée), le champ **Nombre de requêtes sur la journée** estime combien d'interrogations la synchronisation planifiée consommera chaque jour, en fonction de vos intervalles jour/nuit.
+Dans la page de configuration (section avancée), le champ **Nombre de requêtes planifiées/jour** estime combien d'interrogations GET le daemon planifiera chaque jour, en fonction de vos intervalles jour/nuit, du mode d'authentification et du WebSocket.
 
-Avec les réglages par défaut (15 min le jour, 30 min la nuit), cela représente environ 80 interrogations par jour, auxquelles s'ajoutent vos commandes et la mise à jour des compteurs.
+| Configuration | Détail | Total planifié |
+|---------------|--------|----------------|
+| Developer Portal, défauts (15 min jour, 30 min nuit, nuit 22h→7h) | 60 polls jour + 18 polls nuit + 1 stats énergie | **~79 GET/jour** |
+| Mobile App + WebSocket activé, mêmes intervalles | Filet de sécurité 30/60 min : 30 + 9 + 1 | **~40 GET/jour** |
+
+Ces chiffres n'incluent pas vos commandes, les refresh post-action (selon réglages) ni le GET de démarrage du daemon (+1 à chaque redémarrage).
 
 ## Conseils pour optimiser
 
