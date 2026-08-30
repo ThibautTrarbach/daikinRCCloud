@@ -7,6 +7,53 @@ title: Changelog Daikin ONECTA (Beta)
 
 Toutes les modifications notables de ce plugin seront documentées sur cette page.
 
+## [0.10.0] - 2026-08-30
+
+> Daemon livré par la branche `release-beta` : **2.1.0** (minimum requis : 2.0.0)
+
+### Changement important
+- Le daemon V1 (< 2.0.0) n'est plus supporté — migration obligatoire vers le daemon V2
+- **Réinstallation des dépendances requise** après mise à jour du plugin
+- Branche par défaut des dépendances : `release-beta`
+- Migration automatique des branches V1 (`release-stable`, `dev`, `release-dev`, etc.) vers `release-beta`
+- Prérequis : Jeedom 4.4+, plugin **mqtt2** installé et démarré
+
+### Ajouté — Plugin
+- Refonte complète de la page de configuration (sections repliables, mode « Configuration avancée » mémorisé)
+- Affichage des versions plugin et daemon (utile pour le support communauté)
+- Mode **Mobile App** : connexion avec email/mot de passe Onecta, quota ~3000 req/j
+- Mode **Developer Portal** : OAuth Client ID/Secret, quota ~200 req/j
+- Estimation automatique du quota API et des requêtes/jour selon le mode d'authentification
+- Nouveaux réglages avancés : stratégie refresh post-action, fusion avec polling, coalescence commandes, refresh stats énergie, WebSocket, DynamicGateway, capteurs lecture seule, publication si delta, transport HTTP curl, préfixe MQTT
+- Mot de passe Onecta stocké chiffré
+- Vérifications mqtt2 avec messages d'erreur explicites si absent ou non démarré
+- Première version de la documentation en ligne : installation, configuration, authentification, utilisation, quotas API, dépannage. Contenu généré rapidement par une IA avant publication — **pas encore relu ni validé**
+
+### Ajouté — Daemon (via le plugin)
+- Connexion simplifiée avec le même compte que l'application Onecta (mode Mobile App)
+- Mises à jour temps réel via WebSocket (réactivité sans consommer le quota API)
+- Support automatique des modèles Daikin non listés (DynamicGateway)
+- Compteurs d'énergie kWh rafraîchis quotidiennement à heure configurable
+- Réponse immédiate dans Jeedom après une commande (publication optimiste MQTT)
+- Économie de quota : fusion refresh/polling, polling adaptatif selon budget API, skip si WebSocket confirme le changement
+- Contournement des blocages réseau/WAF Daikin (transport HTTP curl)
+- Statut du budget API visible sur le pont système MQTT
+
+### Modifié
+- Interface d'authentification : bascule dynamique Mobile App / Developer Portal avec quotas affichés
+- Défauts polling : 15 min (jour) / 30 min (nuit) ; délai refresh post-action : 60 s (au lieu de 120 s)
+- Installation daemon plus fiable : exécution via `main.js` compilé, vérifications à l'installation
+- Messages d'erreur explicites (mqtt2 absent, daemon trop ancien, `main.js` introuvable)
+- ~90 nouvelles traductions UI (FR, EN, ES, DE, IT)
+- Branchement versionné conservé avec stubs V3 commentés pour les futures évolutions
+
+### Supprimé
+- Support du daemon V1 (< 2.0.0) et authentification OAuth via MQTT
+- Code V1 du plugin (configuration, messages MQTT legacy)
+- Branches de dépendances obsolètes : `release-stable`, `dev`, `release-dev`
+
+---
+
 ## [0.9.3] - 2025-12-10
 
 ### Amélioration

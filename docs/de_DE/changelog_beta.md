@@ -7,6 +7,53 @@ title: Changelog Daikin ONECTA (Beta)
 
 Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokumentiert.
 
+## [0.10.0] - 2026-08-30
+
+> Mit der Branche `release-beta` gelieferter Daemon: **2.1.0** (Mindestanforderung: 2.0.0)
+
+### Wichtige Änderung
+- Daemon V1 (< 2.0.0) wird nicht mehr unterstützt — obligatorische Migration auf Daemon V2
+- **Neuinstallation der Abhängigkeiten erforderlich** nach dem Plugin-Update
+- Standard-Abhängigkeitsbranch: `release-beta`
+- Automatische Migration von V1-Branches (`release-stable`, `dev`, `release-dev` usw.) zu `release-beta`
+- Voraussetzungen: Jeedom 4.4+, Plugin **mqtt2** installiert und gestartet
+
+### Hinzugefügt — Plugin
+- Vollständige Überarbeitung der Konfigurationsseite (einklappbare Abschnitte, gespeicherter Modus „Erweiterte Konfiguration“)
+- Anzeige der Plugin- und Daemon-Versionen (nützlich für Community-Support)
+- Modus **Mobile App**: Anmeldung mit Onecta-E-Mail/Passwort, Quota ~3000 Anfragen/Tag
+- Modus **Developer Portal**: OAuth Client ID/Secret, Quota ~200 Anfragen/Tag
+- Automatische Schätzung des API-Quotas und der Anfragen/Tag je nach Authentifizierungsmodus
+- Neue erweiterte Einstellungen: Strategie Refresh nach Aktion, Zusammenführung mit Polling, Befehls-Koaleszenz, Refresh Energiestatistiken, WebSocket, DynamicGateway, Nur-Lese-Sensoren, Veröffentlichung bei Delta, HTTP-Transport curl, MQTT-Präfix
+- Onecta-Passwort verschlüsselt gespeichert
+- mqtt2-Prüfungen mit aussagekräftigen Fehlermeldungen, wenn nicht vorhanden oder nicht gestartet
+- Erste Version der Online-Dokumentation: Installation, Konfiguration, Authentifizierung, Nutzung, API-Quotas, Fehlerbehebung. Inhalt vor der Veröffentlichung schnell von einer KI erstellt — **noch nicht geprüft oder validiert**
+
+### Hinzugefügt — Daemon (über das Plugin)
+- Vereinfachte Verbindung mit demselben Konto wie die Onecta-App (Modus Mobile App)
+- Echtzeit-Updates über WebSocket (Reaktionsfähigkeit ohne API-Quota zu verbrauchen)
+- Automatische Unterstützung nicht gelisteter Daikin-Modelle (DynamicGateway)
+- kWh-Energiezähler täglich zu konfigurierbarer Uhrzeit aktualisiert
+- Sofortige Rückmeldung in Jeedom nach einem Befehl (optimistische MQTT-Veröffentlichung)
+- Quota-Einsparung: Zusammenführung Refresh/Polling, adaptives Polling je nach API-Budget, Überspringen wenn WebSocket die Änderung bestätigt
+- Umgehung von Daikin-Netzwerk-/WAF-Blockaden (HTTP-Transport curl)
+- API-Budget-Status auf der MQTT-Systembrücke sichtbar
+
+### Geändert
+- Authentifizierungsoberfläche: dynamisches Umschalten Mobile App / Developer Portal mit angezeigten Quotas
+- Polling-Standardwerte: 15 Min. (Tag) / 30 Min. (Nacht); Refresh-Verzögerung nach Aktion: 60 s (statt 120 s)
+- Zuverlässigere Daemon-Installation: Ausführung über kompiliertes `main.js`, Prüfungen bei der Installation
+- Aussagekräftige Fehlermeldungen (mqtt2 fehlt, Daemon zu alt, `main.js` nicht gefunden)
+- ~90 neue UI-Übersetzungen (FR, EN, ES, DE, IT)
+- Versionsverzweigung beibehalten mit kommentierten V3-Stubs für zukünftige Entwicklungen
+
+### Entfernt
+- Unterstützung für Daemon V1 (< 2.0.0) und OAuth-Authentifizierung über MQTT
+- V1-Plugin-Code (Konfiguration, Legacy-MQTT-Nachrichten)
+- Veraltete Abhängigkeitsbranches: `release-stable`, `dev`, `release-dev`
+
+---
+
 ## [0.9.3] - 2025-12-10
 
 ### Verbessert
@@ -30,7 +77,7 @@ Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokume
 ## [0.9.1] - 2025-12-05
 
 ### Informationen
-- Daemon 2.0.0 ist noch nicht ordnungsgemäß verfügbar. In den kommenden Tagen werden wir Ihnen anbieten, es im Alpha-Modus zu testen, um Ihre Produktion während der Heizperiode nicht zu beeinträchtigen
+- Daemon 2.0.x ist noch nicht ordnungsgemäß verfügbar. In den kommenden Tagen werden wir Ihnen anbieten, ihn im Alpha-Modus zu testen, um Ihre Produktion während der Heizperiode nicht zu beeinträchtigen
 
 ### Hinzugefügt
 - Abhängigkeitskonfiguration: Möglichkeit, Branch oder Commit zur Installation auszuwählen
@@ -53,4 +100,3 @@ Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokume
 
 ### Hinzugefügt
 - Erste Plugin-Version
-

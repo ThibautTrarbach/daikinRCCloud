@@ -6,18 +6,28 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 class daikinRCCloud extends eqLogic
 {
     /**
-     * Vérifie si le daemon est en version 2.0.0 ou supérieure
+     * Vérifie si le daemon atteint une version minimale
      * @return bool
      */
-    public static function isDaemonVersion2Plus()
+    public static function isDaemonVersionAtLeast($minVersion)
     {
         $deamonVersion = self::getDeamonVersion();
-        if ($deamonVersion == '0.0.0') {
-            // Si la version n'est pas disponible, on suppose qu'on est en version 2.0.0+
-            // pour utiliser les nouvelles fonctionnalités
-            return true;
+        if ($deamonVersion === '0.0.0') {
+            return false;
         }
-        return version_compare($deamonVersion, '2.0.0', '>=');
+        return version_compare($deamonVersion, $minVersion, '>=');
+    }
+
+    /**
+     * Vérifie que le daemon installé respecte la version minimale requise
+     * @throws Exception
+     */
+    public static function assertMinDaemonVersion($minVersion = '2.0.0')
+    {
+        $version = self::getDeamonVersion();
+        if ($version === '0.0.0' || version_compare($version, $minVersion, '<')) {
+            throw new Exception('{{Le daemon daikintomqtt >= 2.0.0 est requis. Réinstallez les dépendances du plugin.}}');
+        }
     }
 
     public static function additionnalDependancyCheck()
@@ -29,6 +39,10 @@ class daikinRCCloud extends eqLogic
             $return['state'] = 'nok';
         } elseif (!file_exists(__DIR__ . '/../../resources/daikintomqtt/node_modules')) {
             $return['state'] = 'nok';
+        } elseif (!file_exists(__DIR__ . '/../../resources/daikintomqtt/main.js')) {
+            $return['state'] = 'nok';
+        } elseif (!self::isDaemonVersionAtLeast('2.0.0')) {
+            $return['state'] = 'nok';
         }
 
         return $return;
@@ -38,7 +52,10 @@ class daikinRCCloud extends eqLogic
     {
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Inscription au plugin mqtt2');
         self::deamon_stop();
-        mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
+        if (class_exists('mqtt2')) {
+            mqtt2::removePluginTopicByPlugin('daikinRCCloud');
+            mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
+        }
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception('{{Veuillez vérifier la configuration}}');
@@ -50,10 +67,14 @@ class daikinRCCloud extends eqLogic
             mkdir($data_path, 0755, true);
         }
         $data_path = realpath(dirname(__FILE__) . '/../../data/deamon');
+        self::assertMinDaemonVersion('2.0.0');
         self::configureSettings($data_path);
-        chdir($daikin_path);
+        $mainScript = $daikin_path . '/main.js';
+        if (!file_exists($mainScript)) {
+            throw new Exception('{{Le daemon compilé (main.js) est introuvable. Réinstallez les dépendances du plugin.}}');
+        }
         $cmd = 'STORE_DIR=' . $data_path;
-        $cmd .= ' node --preserve-symlinks daikinToMQTT.js';
+        $cmd .= ' node --preserve-symlinks ' . $mainScript;
         log::add('daikinRCCloud', 'info', '[' . __FUNCTION__ . '] ' . 'Lancement démon Daikin : ' . $cmd);
         exec($cmd . ' >> ' . log::getPathToLog('daikinRCCloudd') . ' 2>&1 &');
         $i = 0;
@@ -81,7 +102,7 @@ class daikinRCCloud extends eqLogic
     public static function deamon_stop()
     {
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Stop démon');
-        $find = 'daikinToMQTT.js';
+        $find = 'daikintomqtt/main.js';
         $findEscaped = escapeshellarg($find);
         $cmd = "(ps ax || ps w) | grep -ie " . $findEscaped . " | grep -v grep | awk '{print $1}' | xargs " . system::getCmdSudo() . "kill -15 > /dev/null 2>&1";
         exec($cmd);
@@ -95,7 +116,7 @@ class daikinRCCloud extends eqLogic
             $i++;
         }
         if ($i >= 5) {
-            system::kill('daikinToMQTT.js', true);
+            system::kill('daikintomqtt/main.js', true);
             $i = 0;
             while ($i < 5) {
                 $deamon_info = self::deamon_info();
@@ -105,6 +126,9 @@ class daikinRCCloud extends eqLogic
                 sleep(1);
                 $i++;
             }
+        }
+        if (class_exists('mqtt2')) {
+            mqtt2::removePluginTopicByPlugin('daikinRCCloud');
         }
     }
 
@@ -131,16 +155,18 @@ class daikinRCCloud extends eqLogic
 
     public static function isRunning(): bool
     {
-        return !empty(system::ps('daikinToMQTT.js'));
+        return !empty(system::ps('daikintomqtt/main.js'));
     }
 
     public static function configureSettings($_path)
     {
-        if (self::isDaemonVersion2Plus()) {
-            self::configureSettingsV2($_path);
-        } else {
-            self::configureSettingsV1($_path);
-        }
+        self::assertMinDaemonVersion('2.0.0');
+        // V3 — décommenter quand le daemon >= 3.0.0 sera disponible
+        // if (self::isDaemonVersionAtLeast('3.0.0')) {
+        //     self::configureSettingsV3($_path);
+        //     return;
+        // }
+        self::configureSettingsV2($_path);
     }
 
     /**
@@ -179,10 +205,22 @@ class daikinRCCloud extends eqLogic
         $mqttInfos = mqtt2::getFormatedInfos();
         log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
 
+        $authMode = config::byKey('daikin_authMode', 'daikinRCCloud', 'developer_portal');
+        $settings['daikin']['authMode'] = $authMode;
         $settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud', null);
         $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
         $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
         $settings['daikin']['clientPort'] = intval(config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765);
+        $settings['daikin']['email'] = config::byKey('daikin_onectaEmail', 'daikinRCCloud', null);
+        $onectaPassword = config::byKey('daikin_onectaPassword', 'daikinRCCloud', null);
+        if ($onectaPassword !== null && $onectaPassword !== '') {
+            $decryptedPassword = utils::decrypt($onectaPassword);
+            $settings['daikin']['password'] = ($decryptedPassword !== false && $decryptedPassword !== '') ? $decryptedPassword : $onectaPassword;
+        } else {
+            $settings['daikin']['password'] = null;
+        }
+        $settings['daikin']['enableWebSocket'] = (bool) config::byKey('daikin_enableWebSocket', 'daikinRCCloud', 1);
+        $settings['daikin']['httpTransport'] = config::byKey('daikin_httpTransport', 'daikinRCCloud', 'node');
 
         $settings['mqtt']['host'] = $mqttInfos['ip'];
         $settings['mqtt']['port'] = intval($mqttInfos['port']);
@@ -194,61 +232,22 @@ class daikinRCCloud extends eqLogic
         $settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
 
         $settings['system']['logLevel'] = $logLevel;
-        $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 10));
-        $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 20));
+        $settings['system']['polling']['dayInterval'] = intval(config::byKey('daikin_polling_dayInterval', 'daikinRCCloud', 15));
+        $settings['system']['polling']['nightInterval'] = intval(config::byKey('daikin_polling_nightInterval', 'daikinRCCloud', 30));
         $settings['system']['polling']['nightStart'] = intval(config::byKey('daikin_polling_nightStart', 'daikinRCCloud', 22));
         $settings['system']['polling']['nightEnd'] = intval(config::byKey('daikin_polling_nightEnd', 'daikinRCCloud', 7));
         $settings['system']['actionRefreshMode'] = intval(config::byKey('daikin_actionRefreshMode', 'daikinRCCloud', 3));
-        $settings['system']['actionRefreshDelaySeconds'] = intval(config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 120));
+        $settings['system']['actionRefreshDelaySeconds'] = intval(config::byKey('daikin_actionRefreshDelaySeconds', 'daikinRCCloud', 60));
+        $settings['system']['actionRefreshStrategy'] = config::byKey('daikin_actionRefreshStrategy', 'daikinRCCloud', 'merge_with_poll');
+        $settings['system']['mergeWithPollWindowMinutes'] = intval(config::byKey('daikin_mergeWithPollWindowMinutes', 'daikinRCCloud', 5));
+        $settings['system']['commandCoalesceMs'] = intval(config::byKey('daikin_commandCoalesceMs', 'daikinRCCloud', 400));
+        $settings['system']['energyStatsRefreshTime'] = config::byKey('daikin_energyStatsRefreshTime', 'daikinRCCloud', '23:58');
+        $settings['system']['dynamicFallback'] = (bool) config::byKey('daikin_dynamicFallback', 'daikinRCCloud', 1);
+        $settings['system']['exposeReadOnly'] = (bool) config::byKey('daikin_exposeReadOnly', 'daikinRCCloud', 1);
+        $settings['system']['publishOnDelta'] = (bool) config::byKey('daikin_publishOnDelta', 'daikinRCCloud', 1);
 
         $settings['integration']['jeedom'] = true;
         $settings['integration']['homeassistant']['enabled'] = false;
-
-        @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
-    }
-
-    /**
-     * Configuration pour daemon version < 2.0.0 (ancienne version)
-     */
-    private static function configureSettingsV1($_path)
-    {
-        $file = $_path . '/settings.yml';
-        $settings = array();
-        if (file_exists($file)) {
-            unlink($file);
-        }
-
-        $lvlConfig = config::byKey('log::level::daikinRCCloud', 'core', '{"100":"0","200":"0","300":"0","400":"0","1000":"0","default":"1"}');
-        $logLevel = "info";
-        if ($lvlConfig['100'] == "1") $logLevel = "debug";
-        elseif ($lvlConfig['200'] == "1") $logLevel = "info";
-        elseif ($lvlConfig['300'] == "1") $logLevel = "warn";
-        elseif ($lvlConfig['400'] == "1") $logLevel = "danger";
-        elseif ($lvlConfig['1000'] == "1") $logLevel = "error";
-
-        $settings['system'] = array();
-        $settings['daikin'] = array();
-        $settings['mqtt'] = array();
-
-        $mqttInfos = mqtt2::getFormatedInfos();
-        log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . 'Informations reçues de mqtt2 : ' . json_encode($mqttInfos));
-
-        $settings['daikin']['clientID'] = config::byKey('daikin_clientID', 'daikinRCCloud', null);
-        $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
-        $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
-        $settings['daikin']['clientPort'] = config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765;
-
-        $settings['mqtt']['host'] = $mqttInfos['ip'];
-        $settings['mqtt']['port'] = $mqttInfos['port'];
-        $settings['mqtt']['auth'] = true;
-        $settings['mqtt']['username'] = $mqttInfos['user'];
-        $settings['mqtt']['password'] = $mqttInfos['password'];
-        $settings['mqtt']['connectTimeout'] = 4000;
-        $settings['mqtt']['reconnectPeriod'] = 1000;
-        $settings['mqtt']['topic'] = config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT');
-
-        $settings['system']['logLevel'] = $logLevel;
-        $settings['system']['jeedom'] = TRUE;
 
         @yaml_emit_file($file, $settings, YAML_UTF8_ENCODING, YAML_CRLN_BREAK);
     }
@@ -258,13 +257,28 @@ class daikinRCCloud extends eqLogic
         return utils::encrypt($value);
     }
 
+    public static function preConfig_daikin_onectaPassword($value)
+    {
+        if ($value === '' || $value === null) {
+            $values = array(
+                'plugin' => 'daikinRCCloud',
+                'key' => 'daikin_onectaPassword',
+            );
+            $sql = 'SELECT `value` FROM config WHERE `key`=:key AND plugin=:plugin';
+            $result = DB::Prepare($sql, $values, DB::FETCH_TYPE_ROW);
+            return (is_array($result) && isset($result['value'])) ? $result['value'] : '';
+        }
+        return utils::encrypt($value);
+    }
+
     public static function handleMqttMessage($_message)
     {
-        if (self::isDaemonVersion2Plus()) {
-            self::handleMqttMessageV2($_message);
-        } else {
-            self::handleMqttMessageV1($_message);
-        }
+        // V3 — décommenter quand le daemon >= 3.0.0 sera disponible
+        // if (self::isDaemonVersionAtLeast('3.0.0')) {
+        //     self::handleMqttMessageV3($_message);
+        //     return;
+        // }
+        self::handleMqttMessageV2($_message);
     }
 
     /**
@@ -324,48 +338,6 @@ class daikinRCCloud extends eqLogic
     }
 
     /**
-     * Gestion des messages MQTT pour daemon version < 2.0.0 (ancienne version)
-     */
-    private static function handleMqttMessageV1($_message)
-    {
-        log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . 'Message Mqtt reçu');
-        log::add('daikinRCCloud_mqtt', 'debug', json_encode($_message));
-        $events = $_message[config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT')];
-
-        foreach ($events as $key => $event) {
-            if ($key == 'system') {
-                self::handleSystemEventV1($event);
-                continue;
-            }
-
-            log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "ID : " . $key . " | Value : " . json_encode($event));
-
-            $eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
-            if (!is_object($eqLogic) || $eqLogic->getName() == $key) {
-                $eqLogic = self::createEqlogic($key, $event);
-            }
-
-            $cmds = $eqLogic->getCmd('info');
-            foreach ($cmds as $cmd) {
-                $logicalID = $cmd->getLogicalId();
-                if (!isset($event[$logicalID])) continue;
-                $value = is_bool($event[$logicalID]) ? ($event[$logicalID] ? 1 : 0) : jeedom::evaluateExpression($event[$logicalID]);
-                log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "Data Debug => logicalID : " . $logicalID . " | Value : " . json_encode($value));
-                $cmd->event($value);
-            }
-        }
-    }
-
-    /**
-     * Gestion des événements système pour daemon version < 2.0.0 (ancienne version)
-     */
-    private static function handleSystemEventV1($event)
-    {
-        if (isset($event['jeedom'])) self::handleSystemJeedomEventV1($event['jeedom']);
-        if (isset($event['bridge'])) self::handleSystemBridgeEventV1($event['bridge']);
-    }
-
-    /**
      * Gestion des événements système Jeedom pour daemon version 2.0.0+
      */
     private static function handleSystemJeedomEventV2($event)
@@ -387,64 +359,6 @@ class daikinRCCloud extends eqLogic
         }
 
     }
-
-    private static function handleSystemJeedomEventV1($event)
-    {
-        foreach ($event as $uid => $module) {
-            $eqLogic = eqLogic::byLogicalId($uid, 'daikinRCCloud');
-            if (!is_object($eqLogic)) {
-                $eqLogic = new eqLogic();
-                $eqLogic->setEqType_name('daikinRCCloud');
-                $eqLogic->setName($uid);
-                $eqLogic->setLogicalId($uid);
-                $eqLogic->setIsEnable(0);
-                $eqLogic->save();
-            }
-            if (is_object($eqLogic)) {
-                log::add('daikinRCCloud', 'debug', '[' . __FUNCTION__ . '] ' . "uid : " . $uid . " | Value : " . json_encode($module));
-                self::generateCMD($eqLogic, $module);
-            }
-        }
-
-    }
-
-    private static function handleSystemBridgeEventV1($event)
-    {
-        if (isset($event['error'])) {
-            $error = $event['error'];
-            if ($error !== "No Error") {
-                log::add('daikinRCCloud', 'error', '[DAEMON] ' . "{{Erreur : }} " . $error);
-                plugin::byId('daikinRCCloud')->deamon_changeAutoMode(0);
-            }
-        }
-
-        if (isset($event['authorization_request']) && $event['authorization_request']) {
-            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
-            config::save('rate_remainingDay', 0, 'daikinRCCloud');
-            log::add('daikinRCCloud', 'info', __('Une authentication est necesaire, voici l\'url : ' . $event['url'], __FILE__));
-            message::add('daikinRCCloud', __('Une authentication est necesaire, voici l\'url : <a href="' . $event['url'] . '" target="_blank"> Authentication </a>', __FILE__), null, null);
-        }
-
-        if (isset($event['authorization_timeout']) && $event['authorization_timeout']) {
-            config::save('rate_remainingMinute', 0, 'daikinRCCloud');
-            config::save('rate_remainingDay', 0, 'daikinRCCloud');
-            log::add('daikinRCCloud', 'info', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__));
-            message::add('daikinRCCloud', __('L\'authentification c\'est coupée au bout de 120 secondes. Merci de relancer le deamon pour essayer à nouveau', __FILE__), null, null);
-        }
-
-        if (isset($event['rate']) && $event['rate']) {
-            if (isset($event['rate']['remainingMinute'])) {
-                config::save('rate_remainingMinute', $event['rate']['remainingMinute'], 'daikinRCCloud');
-            }
-            if (isset($event['rate']['remainingDay'])) {
-                config::save('rate_remainingDay', $event['rate']['remainingDay'], 'daikinRCCloud');
-            }
-
-            config::save('rate_lastupdate', date('d-m-Y H:i:s', time()), 'daikinRCCloud');
-            log::add('daikinRCCloud', 'debug', __('Rate limite : ' . json_encode($event['rate']), __FILE__));
-        }
-    }
-
 
     public static function generateCMD($eqLogics, $data)
     {
@@ -607,11 +521,11 @@ class daikinRCCloud extends eqLogic
         }
         
         $dependencyType = config::byKey('daikin_dependency_type', 'daikinRCCloud', 'branch');
-        $dependencyRef = config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-stable');
+        $dependencyRef = config::byKey('daikin_dependency_ref', 'daikinRCCloud', 'release-beta');
         
         // Si aucune référence n'est définie, utiliser la valeur par défaut
         if (empty($dependencyRef)) {
-            $dependencyRef = 'release-stable';
+            $dependencyRef = 'release-beta';
             config::save('daikin_dependency_ref', $dependencyRef, 'daikinRCCloud');
         }
         
@@ -640,6 +554,107 @@ class daikinRCCloud extends eqLogic
     {
         self::saveDependencyConfig();
     }
+
+    /**
+     * Estime le nombre de requêtes GET planifiées par jour (miroir daikintomqtt cron.ts).
+     *
+     * @param array $params dayInterval, nightInterval, nightStart, nightEnd, authMode, enableWebSocket, dailyQuotaLimit
+     * @return array
+     */
+    public static function computePollingEstimate(array $params = array())
+    {
+        $dayInterval = isset($params['dayInterval']) ? intval($params['dayInterval']) : 15;
+        $nightInterval = isset($params['nightInterval']) ? intval($params['nightInterval']) : 30;
+        $nightStart = isset($params['nightStart']) ? intval($params['nightStart']) : 22;
+        $nightEnd = isset($params['nightEnd']) ? intval($params['nightEnd']) : 7;
+        $authMode = isset($params['authMode']) ? $params['authMode'] : 'developer_portal';
+        $enableWebSocket = array_key_exists('enableWebSocket', $params) ? (bool) $params['enableWebSocket'] : true;
+        $dailyQuotaLimit = isset($params['dailyQuotaLimit']) ? intval($params['dailyQuotaLimit']) : 200;
+
+        $invalid = ($dayInterval <= 0 || $nightInterval <= 0 || $nightStart < 0 || $nightStart > 23 || $nightEnd < 0 || $nightEnd > 23);
+        if ($invalid) {
+            return array(
+                'valid' => false,
+                'pollsDay' => 0,
+                'pollsNight' => 0,
+                'pollsCron' => 0,
+                'energyStats' => 1,
+                'total' => $dailyQuotaLimit,
+                'effectiveDayInterval' => $dayInterval,
+                'effectiveNightInterval' => $nightInterval,
+                'wsSafetyNetApplied' => false,
+                'dayHours' => 0,
+                'nightHours' => 0,
+            );
+        }
+
+        if ($nightStart > $nightEnd) {
+            $nightHours = (24 - $nightStart) + $nightEnd;
+        } else {
+            $nightHours = max(0, $nightEnd - $nightStart);
+        }
+        $dayHours = 24 - $nightHours;
+
+        $effectiveDayInterval = $dayInterval;
+        $effectiveNightInterval = $nightInterval;
+        $wsSafetyNetApplied = false;
+        if ($authMode === 'mobile_app' && $enableWebSocket) {
+            $newDayInterval = max($dayInterval, 30);
+            $newNightInterval = max($nightInterval, 60);
+            $wsSafetyNetApplied = ($newDayInterval !== $dayInterval || $newNightInterval !== $nightInterval);
+            $effectiveDayInterval = $newDayInterval;
+            $effectiveNightInterval = $newNightInterval;
+        }
+
+        $pollsDay = (int) ceil($dayHours * 60 / $effectiveDayInterval);
+        $pollsNight = (int) ceil($nightHours * 60 / $effectiveNightInterval);
+        $pollsCron = $pollsDay + $pollsNight;
+        $energyStats = 1;
+
+        return array(
+            'valid' => true,
+            'pollsDay' => $pollsDay,
+            'pollsNight' => $pollsNight,
+            'pollsCron' => $pollsCron,
+            'energyStats' => $energyStats,
+            'total' => $pollsCron + $energyStats,
+            'effectiveDayInterval' => $effectiveDayInterval,
+            'effectiveNightInterval' => $effectiveNightInterval,
+            'wsSafetyNetApplied' => $wsSafetyNetApplied,
+            'dayHours' => $dayHours,
+            'nightHours' => $nightHours,
+        );
+    }
+
+    /**
+     * Texte descriptif de l'estimation polling pour l'UI de configuration.
+     *
+     * @param array $estimate Résultat de computePollingEstimate()
+     * @return string
+     */
+    public static function formatPollingEstimateDetail(array $estimate)
+    {
+        if (empty($estimate['valid'])) {
+            return '{{Intervalles invalides — estimation indisponible}}';
+        }
+
+        $detail = $estimate['pollsDay'] . ' {{polls jour (intervalle}} ' . $estimate['effectiveDayInterval'] . ' {{min)}} + '
+            . $estimate['pollsNight'] . ' {{polls nuit (intervalle}} ' . $estimate['effectiveNightInterval'] . ' {{min)}} + '
+            . $estimate['energyStats'] . ' {{stats énergie =}} ' . $estimate['total'] . ' {{GET planifiés/jour}}';
+
+        if (!empty($estimate['wsSafetyNetApplied'])) {
+            $detail .= ' — {{Filet WebSocket actif (Mobile App)}}';
+        }
+
+        $detail .= '. {{Hors commandes, refresh post-action et redémarrage du daemon (+1 GET).}}';
+
+        return $detail;
+    }
+
+    // --- Daemon V3 (à implémenter quand daikintomqtt >= 3.0.0) ---
+    // private static function configureSettingsV3($_path) { ... }
+    // private static function handleMqttMessageV3($_message) { ... }
+    // private static function handleSystemJeedomEventV3($event) { ... }
 
 }
 

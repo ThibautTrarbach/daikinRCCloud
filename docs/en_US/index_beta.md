@@ -5,22 +5,22 @@ title: Daikin ONECTA Documentation (Beta)
 
 # Daikin ONECTA Documentation
 
-## 📋 Description
+User documentation for the Daikin ONECTA plugin for Jeedom.
 
-The **Daikin ONECTA** plugin allows you to control and monitor your ONECTA-compatible Daikin devices (air conditioners, heat pumps, etc.) directly from Jeedom. It uses the official Daikin ONECTA API to communicate with your devices via the cloud.
+## Table of contents
 
-## ✨ Features
+| Page | Description |
+|------|-------------|
+| [Home]({{ site.baseurl }}/en_US/) | Overview, features, compatibility |
+| [Installation]({{ site.baseurl }}/en_US/installation.html) | First steps to make your devices appear |
+| [Configuration]({{ site.baseurl }}/en_US/configuration.html) | Plugin settings |
+| [Authentication]({{ site.baseurl }}/en_US/authentification.html) | Connect to your Daikin account |
+| [Usage]({{ site.baseurl }}/en_US/utilisation.html) | Control your devices day to day |
+| [Limits and best practices]({{ site.baseurl }}/en_US/quota-api.html) | Understand Daikin cloud limits |
+| [Troubleshooting]({{ site.baseurl }}/en_US/depannage.html) | Solve common problems |
 
-- 🔄 Automatic synchronization of Daikin equipment
-- 🎛️ Full control of equipment (mode, temperature, ventilation, etc.)
-- ⏰ Refresh interval configuration (day/night) - *Available from daemon 2.0.0*
-- 🔧 Configurable refresh modes after action - *Available from daemon 2.0.0*
-- 📡 Communication via MQTT
-- 🌍 Multilingual support (FR, EN, ES, DE, IT)
+## Useful links
 
-## 📦 Prerequisites
-
-- Jeedom version 4.3 or higher
-
-# Documentation in progress
-
+- [Beta changelog]({{ site.baseurl }}/en_US/changelog_beta.html)
+- [Jeedom Community](https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55)
+- [GitHub repository](https://github.com/ThibautTrarbach/daikinRCCloud)

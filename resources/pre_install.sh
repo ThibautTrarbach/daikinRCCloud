@@ -19,7 +19,7 @@ cd $BASEDIR
 # Lecture de la configuration des dépendances
 CONFIG_FILE="$BASEDIR/dependency_config.json"
 DEPENDENCY_TYPE="branch"
-DEPENDENCY_REF="release-stable"
+DEPENDENCY_REF="release-beta"
 REPOSITORY_URL="https://github.com/ThibautTrarbach/daikintomqtt.git"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -27,12 +27,12 @@ if [ -f "$CONFIG_FILE" ]; then
   # Utilisation de jq si disponible, sinon parsing basique avec grep/sed
   if command -v jq &> /dev/null; then
     DEPENDENCY_TYPE=$(jq -r '.type // "branch"' "$CONFIG_FILE")
-    DEPENDENCY_REF=$(jq -r '.ref // "release-stable"' "$CONFIG_FILE")
+    DEPENDENCY_REF=$(jq -r '.ref // "release-beta"' "$CONFIG_FILE")
     REPOSITORY_URL=$(jq -r '.repository // "https://github.com/ThibautTrarbach/daikintomqtt.git"' "$CONFIG_FILE")
   else
     # Parsing basique sans jq
     DEPENDENCY_TYPE=$(grep -o '"type"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"type"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "branch")
-    DEPENDENCY_REF=$(grep -o '"ref"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "release-stable")
+    DEPENDENCY_REF=$(grep -o '"ref"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"ref"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "release-beta")
     REPOSITORY_URL=$(grep -o '"repository"[[:space:]]*:[[:space:]]*"[^"]*"' "$CONFIG_FILE" | sed 's/.*"repository"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' || echo "https://github.com/ThibautTrarbach/daikintomqtt.git")
   fi
   echo "Configuration lue - Type: $DEPENDENCY_TYPE, Référence: $DEPENDENCY_REF"
