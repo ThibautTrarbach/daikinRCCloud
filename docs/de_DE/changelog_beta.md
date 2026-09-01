@@ -7,6 +7,31 @@ title: Changelog Daikin ONECTA (Beta)
 
 Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokumentiert.
 
+## [0.10.2] - 2026-09-01
+
+> Mit der Branche `release-beta` gelieferter Daemon: **2.1.3** (Mindestanforderung: 2.0.0)
+
+### Hinzugefügt — Plugin
+- Erweitertes Support-Diagnosepanel: Support-Nachricht, Management Points, erkannte Einheiten, nicht zugeordnete Datapoints, Debug-Bericht mit Kopier-Button
+- GitHub-Link zum Melden nicht unterstützter Geräte (`githubIssueUrl`)
+- Synchronisation der Support-Metadaten vom Daemon zur Gerätekonfiguration
+- Automatische Bereinigung veralteter Support-Befehle (Logical IDs `_supportStatus`, `_configCoverage`, etc.)
+
+### Hinzugefügt — Daemon
+- `gatewayDiagnosticsPack` und `auxiliaryUnitPack`: Gateway-Netzwerk-/Diagnosesensoren und Indoor-/Outdoor-Einheitensensoren (BRP069C4x)
+- Read-only-Mapping `isPowerfulModeActive` (Firmware 2.6.x API)
+- Support-Metadaten-Modul: Debug-Bericht, GitHub-Issue-URL, synchronisierte Support-Befehle
+
+### Behoben — Daemon
+- API-Abdeckungsaudit: Normalisierung der Datapoint-Pfade, Berücksichtigung von `_device`-Metadaten
+- Home Assistant Preset Mode: Fallback auf `_isPowerfulModeActive` wenn `_powerfulMode` fehlt
+
+### Geändert — Daemon
+- `_device`-Anreicherung: `ipAddress`, `macAddress`, `ssid`-Alias
+- Debug-Bericht: Support-Nachricht, Trunkierungsanzeige für nicht zugeordnete Datapoints
+
+---
+
 ## [0.10.1] - 2026-09-01
 
 > Mit der Branche `release-beta` gelieferter Daemon: **2.1.2** (Mindestanforderung: 2.0.0)
