@@ -11,20 +11,17 @@ Damit Jeedom Ihre Daikin-Geräte steuern kann, muss das Plugin eine Verbindung z
 
 | | Developer Portal | Mobile App |
 |---|-------------------|-----------|
-| **Empfohlen für** | Alle Benutzer | Fortgeschrittene Benutzer (Onecta-Zugangsdaten) |
 | **Zugangsdaten** | Client ID + Client Secret | Onecta-E-Mail + Passwort |
 | **Gleiches Konto wie Mobile App?** | Nein (separates Developer-Konto) | Ja |
 | **Tageskontingent** | 200 Anfragen | 3000 Anfragen |
 | **Echtzeit-Updates** | Nein | Ja |
 | **Einrichtung** | OAuth-Verfahren | Einfach (2 Felder) |
 
-> **Empfohlen:** Verwenden Sie den Modus **Developer Portal** mit einer auf dem [Daikin-Entwicklerportal](https://developer.cloud.daikineurope.com/) erstellten Anwendung.
-
 ---
 
 ## Mobile-App-Modus
 
-Dies ist der einfachste Modus. Er verwendet dasselbe Konto wie die **Daikin Onecta**- oder **Daikin Residential Controller**-App auf Ihrem Smartphone.
+Dieser Modus verwendet dasselbe Konto wie die **Daikin Onecta**- oder **Daikin Residential Controller**-App auf Ihrem Smartphone.
 
 ### Konfiguration
 
@@ -51,7 +48,7 @@ Dies ist der einfachste Modus. Er verwendet dasselbe Konto wie die **Daikin Onec
 
 ## Developer-Portal-Modus
 
-Dieser Modus ist für Benutzer, die eine Anwendung im [Daikin Developer Portal](https://developer.cloud.daikineurope.com/) erstellt haben. Er bietet ein begrenzteres Kontingent (200 Anfragen/Tag) und erfordert ein längeres Verbindungsverfahren.
+Dieser Modus verwendet eine auf dem [Daikin Developer Portal](https://developer.cloud.daikineurope.com/) erstellte Anwendung. Kontingent: 200 Anfragen/Tag. Für die erste Verbindung ist ein OAuth-Verfahren erforderlich.
 
 ### Erstkonfiguration
 

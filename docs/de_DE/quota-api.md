@@ -17,7 +17,7 @@ Dies ist keine Plugin-Beschränkung, sondern eine Regel, die vom Daikin-ONECTA-C
 
 | Verbindungsmodus | Erlaubte Anfragen pro Tag |
 |-----------------|-------------------------|
-| **Developer Portal** (empfohlen) | 200 |
+| **Developer Portal** | 200 |
 | **Mobile App** | 3000 |
 
 ## Was verbraucht Kontingent?
@@ -45,7 +45,7 @@ Diese Zahlen umfassen nicht Ihre Befehle, die Aktualisierung nach Aktionen (je n
 
 ## Optimierungstipps
 
-### Für die meisten Benutzer (Developer Portal)
+### Developer-Portal-Modus (200/Tag)
 
 1. **Standardeinstellungen beibehalten** — sie sind für ein gutes Gleichgewicht mit dem Kontingent von 200 Anfragen/Tag ausgelegt.
 2. **Synchronisationsintervalle nicht unter 15 Minuten reduzieren**.

@@ -12,7 +12,7 @@ Diese Anleitung führt Sie durch die Installation des Plugins und das Sichtbarma
 Stellen Sie sicher, dass Sie Folgendes haben:
 
 - Jeedom **4.4** oder neuer
-- Eine **Daikin-Developer-Anwendung** (Client ID / Client Secret) — siehe [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html)
+- Zugang zur Daikin-Cloud: **Developer Portal** (Client ID / Client Secret) oder **Mobile App** (Onecta-E-Mail / Passwort) — siehe [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html)
 - Ihre Daikin-Geräte bereits konfiguriert und in der Onecta-App sichtbar
 
 ## Schritt 1: Plugin installieren
@@ -42,12 +42,10 @@ Das Plugin benötigt zusätzliche Komponenten, um zu funktionieren. Jeedom insta
 ## Schritt 4: Daikin-Verbindung konfigurieren
 
 1. Öffnen Sie **Plugins → Daikin ONECTA → Konfiguration**.
-2. Wählen Sie den Modus **Developer Portal (OAuth, empfohlen)**.
-3. Geben Sie die **Client ID** und das **Client Secret** Ihrer Daikin-Developer-Anwendung ein.
+2. Wählen Sie den Authentifizierungsmodus: **Developer Portal (OAuth)** oder **Mobile App**.
+3. Geben Sie die entsprechenden Zugangsdaten ein (Client ID / Client Secret oder Onecta-E-Mail / Passwort).
 4. Klicken Sie auf **Speichern**.
-5. Starten Sie den Plugin-Dienst und folgen Sie dem OAuth-Verfahren in [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html).
-
-Für den Mobile-App-Modus (Onecta-Zugangsdaten) siehe auch [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html).
+5. Starten Sie den Plugin-Dienst. Für den Developer-Portal-Modus folgen Sie dem OAuth-Verfahren in [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html).
 
 ## Schritt 5: Plugin-Dienst starten
 

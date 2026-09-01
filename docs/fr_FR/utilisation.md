@@ -14,6 +14,18 @@ Cette page explique comment utiliser vos appareils Daikin au quotidien dans Jeed
 
 Ils sont ajoutés **automatiquement** lors de la première synchronisation. Il n'y a pas de bouton « Ajouter un équipement ».
 
+### Pont système Daikin2MQTT Bridge
+
+Vous verrez toujours un équipement nommé **Daikin - Daikin2MQTT Bridge**. C'est normal : il s'agit du **pont système** du plugin, pas d'un appareil Daikin physique.
+
+| Rôle | Exemples de commandes |
+|------|----------------------|
+| Authentification cloud | Authorization URL, Authorization Request |
+| Supervision | Rate Limit, Modules List, WebSocket Connected |
+| Actions globales | Refresh All Devices |
+
+Vos **vrais appareils Daikin** (climatiseur, pompe à chaleur, etc.) apparaissent séparément sous le nom **Daikin - {nom}**, tel que défini dans l'application Onecta.
+
 ### Personnaliser un équipement
 
 Cliquez sur la carte de l'équipement pour accéder à sa configuration :

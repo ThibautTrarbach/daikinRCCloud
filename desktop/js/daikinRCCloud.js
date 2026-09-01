@@ -100,3 +100,74 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
     }
   })
 })
+
+function readEqConfig(key) {
+  const el = document.querySelector('.eqLogicAttr[data-l1key="configuration"][data-l2key="' + key + '"]')
+  if (!el) return ''
+  if (typeof el.jeeValue === 'function') {
+    return el.jeeValue() || ''
+  }
+  return el.value !== undefined ? el.value : (el.textContent || '')
+}
+
+function updateDaikinSupportUi() {
+  const supportStatus = readEqConfig('supportStatus') || 'full'
+  const configCoverage = readEqConfig('configCoverage') || 'complete'
+  const needsReporting = (supportStatus !== 'full') || (configCoverage === 'incomplete')
+  const alertBox = document.getElementById('daikin_support_alert')
+  const alertInner = document.getElementById('daikin_support_alert_box')
+  const alertTitle = document.getElementById('daikin_support_alert_title')
+  const alertMessage = document.getElementById('daikin_support_alert_message')
+  const debugPanel = document.getElementById('daikin_support_debug')
+  const unitModelsDisplay = document.getElementById('daikin_unit_models_display')
+
+  if (!alertBox || !debugPanel) return
+
+  if (!needsReporting) {
+    alertBox.style.display = 'none'
+    debugPanel.style.display = 'none'
+    return
+  }
+
+  alertBox.style.display = 'block'
+  debugPanel.style.display = 'block'
+  alertInner.className = 'alert'
+
+  if (supportStatus === 'unsupported') {
+    alertInner.classList.add('alert-danger')
+    alertTitle.textContent = 'Appareil non supporté'
+    alertMessage.textContent = 'Cet appareil n\'est pas pilotable. Créez un post sur la communauté Jeedom avec le rapport de debug ci-dessous.'
+  } else if (supportStatus === 'partial') {
+    alertInner.classList.add('alert-warning')
+    alertTitle.textContent = 'Support partiel'
+    alertMessage.textContent = 'Cet appareil utilise un mapping automatique. Créez un post sur la communauté Jeedom pour améliorer la prise en charge.'
+  } else {
+    alertInner.classList.add('alert-warning')
+    alertTitle.textContent = 'Configuration incomplète'
+    alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
+  }
+
+  if (unitModelsDisplay) {
+    const raw = readEqConfig('unitModels')
+    try {
+      unitModelsDisplay.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : ''
+    } catch (e) {
+      unitModelsDisplay.textContent = raw
+    }
+  }
+}
+
+document.getElementById('div_pageContainer').addEventListener('click', function(event) {
+  if (event.target.closest('.eqLogicDisplayCard')) {
+    setTimeout(updateDaikinSupportUi, 400)
+  }
+})
+
+if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.print === 'function') {
+  const originalPrint = jeedom.eqLogic.print
+  jeedom.eqLogic.print = function() {
+    const result = originalPrint.apply(this, arguments)
+    setTimeout(updateDaikinSupportUi, 400)
+    return result
+  }
+}

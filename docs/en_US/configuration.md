@@ -19,12 +19,12 @@ This is the most important section. It links Jeedom to your Daikin account.
 
 Two modes are available:
 
-| Mode | For whom? | Daily quota |
-|------|-----------|-------------|
-| **Developer Portal** (recommended) | All users | 200 requests/day |
-| **Mobile App** | Advanced users with Onecta credentials | 3000 requests/day |
+| Mode | Description | Daily quota |
+|------|-------------|-------------|
+| **Developer Portal** | App on the [Daikin developer portal](https://developer.cloud.daikineurope.com/) | 200 requests/day |
+| **Mobile App** | Onecta account credentials (mobile app) | 3000 requests/day |
 
-> **Recommended:** choose **Developer Portal** and create an app on the [Daikin developer portal](https://developer.cloud.daikineurope.com/).
+See the [Authentication]({{ site.baseurl }}/en_US/authentification.html) page for details on each mode.
 
 See the [Authentication]({{ site.baseurl }}/en_US/authentification.html) page for details on each mode.
 

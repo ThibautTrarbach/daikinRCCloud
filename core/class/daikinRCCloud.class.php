@@ -5,6 +5,9 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 class daikinRCCloud extends eqLogic
 {
+    const INSTANCE_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581';
+    const PHANTOM_LOGICAL_IDS = array('system');
+
     /**
      * Vérifie si le daemon atteint une version minimale
      * @return bool
@@ -56,6 +59,7 @@ class daikinRCCloud extends eqLogic
             mqtt2::removePluginTopicByPlugin('daikinRCCloud');
             mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
         }
+        self::cleanupPhantomEqLogics();
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception('{{Veuillez vérifier la configuration}}');
@@ -211,6 +215,7 @@ class daikinRCCloud extends eqLogic
         $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
         $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
         $settings['daikin']['clientPort'] = intval(config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765);
+        $settings['daikin']['authorizationTimeoutSeconds'] = intval(config::byKey('daikin_authorizationTimeoutSeconds', 'daikinRCCloud', 600) ?? 600);
         $settings['daikin']['email'] = config::byKey('daikin_onectaEmail', 'daikinRCCloud', null);
         $onectaPassword = config::byKey('daikin_onectaPassword', 'daikinRCCloud', null);
         if ($onectaPassword !== null && $onectaPassword !== '') {
@@ -303,6 +308,17 @@ class daikinRCCloud extends eqLogic
                 continue;
             }
 
+            if ($key == 'system') {
+                continue;
+            }
+
+            if ($key === self::INSTANCE_ID) {
+                if (is_array($event)) {
+                    self::handleSystemBridgeEventV2($event);
+                }
+                continue;
+            }
+
             if (!is_array($event)) {
                 log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . "{{Événement invalide pour la clé : }} " . $key);
                 continue;
@@ -320,6 +336,16 @@ class daikinRCCloud extends eqLogic
                 continue;
             }
 
+            if (isset($event['_device']) && is_array($event['_device'])) {
+                foreach (array('supportStatus', 'configCoverage', 'configCoverageDetail', 'gatewayModelRaw', 'gatewayModelResolved', 'unitModels', 'unmappedDatapoints', 'debugReport') as $configKey) {
+                    if (isset($event['_device'][$configKey])) {
+                        $eqLogic->setConfiguration($configKey, $event['_device'][$configKey]);
+                    }
+                }
+                self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
+                $eqLogic->save();
+            }
+
             $cmds = $eqLogic->getCmd('info');
             foreach ($cmds as $cmd) {
                 $logicalID = $cmd->getLogicalId();
@@ -334,6 +360,82 @@ class daikinRCCloud extends eqLogic
                     log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Erreur lors de l'évaluation de la valeur pour }} " . $logicalID . " : " . $e->getMessage());
                 }
             }
+        }
+    }
+
+    /**
+     * Supprime les équipements fantômes créés par erreur à partir de topics MQTT internes.
+     */
+    public static function cleanupPhantomEqLogics()
+    {
+        foreach (self::PHANTOM_LOGICAL_IDS as $logicalId) {
+            if ($logicalId === self::INSTANCE_ID) {
+                continue;
+            }
+            $eqLogic = eqLogic::byLogicalId($logicalId, 'daikinRCCloud');
+            if (!is_object($eqLogic)) {
+                continue;
+            }
+            $name = $eqLogic->getName();
+            $eqLogic->remove();
+            log::add('daikinRCCloud', 'info', '[' . __FUNCTION__ . '] ' . '{{Équipement fantôme supprimé : }}' . $name . ' (' . $logicalId . ')');
+        }
+    }
+
+    /**
+     * Gestion du pont système Daikin2MQTT (INSTANCE_ID) : commandes et notifications d'auth.
+     */
+    private static function handleSystemBridgeEventV2($event)
+    {
+        $eqLogic = self::createEqlogic(self::INSTANCE_ID, $event);
+
+        $cmds = $eqLogic->getCmd('info');
+        foreach ($cmds as $cmd) {
+            $logicalID = $cmd->getLogicalId();
+            if (!isset($event[$logicalID])) {
+                continue;
+            }
+            try {
+                $value = is_bool($event[$logicalID]) ? ($event[$logicalID] ? 1 : 0) : jeedom::evaluateExpression($event[$logicalID]);
+                log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "System bridge => logicalID : " . $logicalID . " | Value : " . json_encode($value));
+                $cmd->event($value);
+            } catch (Exception $e) {
+                log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Erreur lors de l'évaluation de la valeur pour }} " . $logicalID . " : " . $e->getMessage());
+            }
+        }
+
+        self::notifyAuthorizationIfNeeded($eqLogic, $event);
+    }
+
+    private static function notifyAuthorizationIfNeeded($eqLogic, $event)
+    {
+        if (!is_array($event)) {
+            return;
+        }
+
+        $authRequest = !empty($event['_authorizationRequest']);
+        $authUrl = isset($event['_authorizationUrl']) ? trim($event['_authorizationUrl']) : '';
+        $authTimeout = !empty($event['_authorizationTimeout']);
+
+        if ($authRequest && $authUrl !== '') {
+            if ($eqLogic->getConfiguration('authNotified', 0) != 1 || $eqLogic->getConfiguration('authNotifiedUrl', '') !== $authUrl) {
+                message::add('daikinRCCloud', '{{Authentification Daikin requise : }}' . $authUrl, '', 'warning');
+                $eqLogic->setConfiguration('authNotified', 1);
+                $eqLogic->setConfiguration('authNotifiedUrl', $authUrl);
+                $eqLogic->setConfiguration('authTimeoutNotified', 0);
+                $eqLogic->save();
+            }
+        } elseif (!$authRequest && $eqLogic->getConfiguration('authNotified', 0) == 1) {
+            $eqLogic->setConfiguration('authNotified', 0);
+            $eqLogic->setConfiguration('authNotifiedUrl', '');
+            $eqLogic->setConfiguration('authTimeoutNotified', 0);
+            $eqLogic->save();
+        }
+
+        if ($authTimeout && $eqLogic->getConfiguration('authTimeoutNotified', 0) != 1) {
+            message::add('daikinRCCloud', '{{Authentification Daikin expirée. Le délai est dépassé. Redémarrez le daemon et réessayez.}}', '', 'danger');
+            $eqLogic->setConfiguration('authTimeoutNotified', 1);
+            $eqLogic->save();
         }
     }
 
@@ -392,6 +494,45 @@ class daikinRCCloud extends eqLogic
         }
     }
 
+    private static function needsSupportReporting($deviceInfo)
+    {
+        if (!is_array($deviceInfo)) {
+            return false;
+        }
+        $supportStatus = isset($deviceInfo['supportStatus']) ? $deviceInfo['supportStatus'] : 'full';
+        $configCoverage = isset($deviceInfo['configCoverage']) ? $deviceInfo['configCoverage'] : 'complete';
+        return ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
+    }
+
+    private static function notifySupportStatusIfNeeded($eqLogic, $deviceInfo)
+    {
+        if (!self::needsSupportReporting($deviceInfo)) {
+            return;
+        }
+        if ($eqLogic->getConfiguration('supportNotified', 0) == 1) {
+            return;
+        }
+
+        $supportStatus = $deviceInfo['supportStatus'];
+        $configCoverage = isset($deviceInfo['configCoverage']) ? $deviceInfo['configCoverage'] : 'complete';
+        $deviceName = $eqLogic->getName();
+
+        if ($supportStatus === 'unsupported') {
+            $message = '{{Appareil non supporté détecté : }}' . $deviceName . '. {{Créez un post sur la communauté Jeedom avec les informations de debug de l\'équipement.}}';
+            $level = 'danger';
+        } elseif ($supportStatus === 'partial') {
+            $message = '{{Support partiel détecté : }}' . $deviceName . '. {{Créez un post sur la communauté Jeedom pour améliorer la prise en charge.}}';
+            $level = 'warning';
+        } else {
+            $message = '{{Configuration incomplète détectée : }}' . $deviceName . '. {{Signalez-le sur la communauté Jeedom avec le rapport de debug.}}';
+            $level = 'warning';
+        }
+
+        message::add('daikinRCCloud', $message, '', $level);
+        $eqLogic->setConfiguration('supportNotified', 1);
+        $eqLogic->save();
+    }
+
     private static function createEqlogic($key, $event)
     {
         $eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
@@ -411,16 +552,23 @@ class daikinRCCloud extends eqLogic
         }
 
         $deviceConfigKeys = array(
-            'timeZone', 'errorCode', 'modelInfo', 'serialNumber', 
-            'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength'
+            'timeZone', 'errorCode', 'modelInfo', 'serialNumber',
+            'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength',
+            'supportStatus', 'configCoverage', 'configCoverageDetail',
+            'gatewayModelRaw', 'gatewayModelResolved', 'unitModels',
+            'unmappedDatapoints', 'debugReport'
         );
-        
+
         foreach ($deviceConfigKeys as $configKey) {
             if (isset($event['_device'][$configKey])) {
                 $eqLogic->setConfiguration($configKey, $event['_device'][$configKey]);
             }
         }
-        
+
+        if (isset($event['_device']) && is_array($event['_device'])) {
+            self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
+        }
+
         $eqLogic->save();
         return $eqLogic;
     }

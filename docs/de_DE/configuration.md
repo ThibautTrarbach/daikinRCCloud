@@ -19,12 +19,12 @@ Dies ist der wichtigste Abschnitt. Er verknüpft Jeedom mit Ihrem Daikin-Konto.
 
 Zwei Modi sind verfügbar:
 
-| Modus | Für wen? | Tageskontingent |
-|------|-----------|-------------|
-| **Developer Portal** (empfohlen) | Alle Benutzer | 200 Anfragen/Tag |
-| **Mobile App** | Fortgeschrittene Benutzer mit Onecta-Zugangsdaten | 3000 Anfragen/Tag |
+| Modus | Beschreibung | Tageskontingent |
+|------|-------------|-----------------|
+| **Developer Portal** | Anwendung auf dem [Daikin-Entwicklerportal](https://developer.cloud.daikineurope.com/) | 200 Anfragen/Tag |
+| **Mobile App** | Onecta-Kontozugangsdaten (Mobile App) | 3000 Anfragen/Tag |
 
-> **Empfohlen:** Wählen Sie **Developer Portal** und erstellen Sie eine Anwendung auf dem [Daikin-Entwicklerportal](https://developer.cloud.daikineurope.com/).
+Details zu jedem Modus finden Sie auf der Seite [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html).
 
 Details zu jedem Modus finden Sie auf der Seite [Authentifizierung]({{ site.baseurl }}/de_DE/authentification.html).
 

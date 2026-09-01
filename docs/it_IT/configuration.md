@@ -19,12 +19,12 @@ La maggior parte degli utenti deve modificare solo la sezione **Connessione Daik
 
 Sono disponibili due modalità:
 
-| Modalità | Per chi? | Quota giornaliera |
-|----------|----------|-------------------|
-| **Developer Portal** (consigliato) | Tutti gli utenti | 200 richieste/giorno |
-| **Mobile App** | Utenti avanzati con credenziali Onecta | 3000 richieste/giorno |
+| Modalità | Descrizione | Quota giornaliera |
+|----------|-------------|-------------------|
+| **Developer Portal** | Applicazione sul [portale sviluppatori Daikin](https://developer.cloud.daikineurope.com/) | 200 richieste/giorno |
+| **Mobile App** | Credenziali account Onecta (app mobile) | 3000 richieste/giorno |
 
-> **Consigliato:** scegli **Developer Portal** e crea un'applicazione sul [portale sviluppatori Daikin](https://developer.cloud.daikineurope.com/).
+Consulta la pagina [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html) per i dettagli su ciascuna modalità.
 
 Consulta la pagina [Autenticazione]({{ site.baseurl }}/it_IT/authentification.html) per i dettagli su ciascuna modalità.
 

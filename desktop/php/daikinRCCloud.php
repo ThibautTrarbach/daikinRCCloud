@@ -50,8 +50,14 @@
 				echo '<div class="eqLogicThumbnailContainer">';
 				foreach ($eqLogics as $eqLogic) {
 					$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+					$supportStatus = $eqLogic->getConfiguration('supportStatus', 'full');
+					$configCoverage = $eqLogic->getConfiguration('configCoverage', 'complete');
+					$needsSupportBadge = ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
 					echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
 					echo '<img src="' . $plugin->getPathImgIcon() . '">';
+					if ($needsSupportBadge && $eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
+						echo '<span class="label label-warning pull-right" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
+					}
 					echo '<br>';
 					echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
 					echo '<span class="hiddenAsCard displayTableRight hidden">';
@@ -69,8 +75,8 @@
         <!-- barre de gestion de l'équipement -->
         <div class="input-group pull-right" style="display:inline-flex;">
 			<span class="input-group-btn">
-				<!-- Les balises <a></a> sont volontairement fermées à la ligne suivante pour éviter les espaces entre les boutons. Ne pas modifier -->
 				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
+				</a><a class="btn btn-sm btn-info eqLogicAction" data-action="createCommunityPost"><i class="fas fa-ambulance"></i><span class="hidden-xs"> {{Créer un post Community}}</span>
 				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
 				</a><a class="btn btn-sm btn-danger eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}
 				</a>
@@ -134,6 +140,13 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12" id="daikin_support_alert" style="display:none;">
+                            <div class="alert" id="daikin_support_alert_box">
+                                <strong id="daikin_support_alert_title"></strong>
+                                <p id="daikin_support_alert_message"></p>
+                            </div>
+                        </div>
+
                         <!-- Partie droite de l'onglet "Équipement" -->
                         <div class="col-xs-4 alert alert-info eqDefault">
                             <form class="form-horizontal">
@@ -168,6 +181,57 @@
                                     </div>
                                 </fieldset>
                             </form>
+                        </div>
+
+                        <div class="col-xs-12" id="daikin_support_debug" style="display:none;">
+                            <div class="alert alert-warning">
+                                <legend><i class="fas fa-bug"></i> {{Informations de diagnostic}}</legend>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Statut support}}</label>
+                                    <div class="col-sm-9">
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportStatus"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Couverture config}}</label>
+                                    <div class="col-sm-9">
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverage"></span>
+                                        (<span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverageDetail"></span>)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Modèle gateway (API)}}</label>
+                                    <div class="col-sm-9">
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelRaw"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Modèle gateway (résolu)}}</label>
+                                    <div class="col-sm-9">
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelResolved"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Unités détectées}}</label>
+                                    <div class="col-sm-9">
+                                        <pre id="daikin_unit_models_display" style="white-space:pre-wrap;"></pre>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unitModels" style="display:none;"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Datapoints non mappés}}</label>
+                                    <div class="col-sm-9">
+                                        <pre class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapoints" style="white-space:pre-wrap;max-height:150px;overflow:auto;"></pre>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Rapport de debug}}</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="debugReport" rows="8" readonly="readonly"></textarea>
+                                        <small>{{Copiez ce rapport dans votre post Community pour aider au support.}}</small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                 </form>

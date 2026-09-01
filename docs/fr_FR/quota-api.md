@@ -17,7 +17,7 @@ Ce n'est pas une limitation du plugin, mais une règle imposée par le service c
 
 | Mode de connexion | Interrogations autorisées par jour |
 |-------------------|-----------------------------------|
-| **Developer Portal** (recommandé) | 200 |
+| **Developer Portal** | 200 |
 | **Mobile App** | 3000 |
 
 ## Qu'est-ce qui consomme le quota ?
@@ -45,7 +45,7 @@ Ces chiffres n'incluent pas vos commandes, les refresh post-action (selon régla
 
 ## Conseils pour optimiser
 
-### Pour la plupart des utilisateurs (Developer Portal)
+### Mode Developer Portal (200/jour)
 
 1. **Laissez les réglages par défaut** — ils sont conçus pour un bon équilibre avec le quota de 200 interrogations/jour.
 2. **Ne réduisez pas les intervalles de synchronisation** en dessous de 15 minutes.

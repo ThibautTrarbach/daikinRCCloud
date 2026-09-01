@@ -53,7 +53,7 @@
     "Délai en secondes avant le rafraîchissement complet depuis le cloud Daikin après une action. Utilisé uniquement en mode 1 (Rafraîchissement complet différé) et mode 3 (Hybride). Plus la valeur est élevée, plus cela laissera le temps au cloud et à votre device de traiter l'information et de se mettre à jour": "Delay in seconds before full refresh from Daikin cloud after an action. Used only in mode 1 (Delayed full refresh) and mode 3 (Hybrid). The higher the value, the more time it will give the cloud and your device to process the information and update",
     "Daikin Onecta Client Configuration": "Daikin Onecta Client Configuration",
     "Mode d'authentification": "Authentication mode",
-    "Developer Portal (OAuth, recommandé)": "Developer Portal (OAuth, recommended)",
+    "Developer Portal (OAuth)": "Developer Portal (OAuth)",
     "Mobile App": "Mobile App",
     "Email Onecta": "Onecta email",
     "Adresse email de votre compte application Daikin Onecta / Daikin Residential Controller": "Email address of your Daikin Onecta / Daikin Residential Controller app account",
@@ -216,7 +216,17 @@
     "Nom": "Name",
     "Type": "Type",
     "Etat": "State",
-    "Actions": "Actions"
+    "Actions": "Actions",
+    "Support partiel ou configuration incomplète": "Partial support or incomplete configuration",
+    "Informations de diagnostic": "Diagnostic information",
+    "Statut support": "Support status",
+    "Couverture config": "Config coverage",
+    "Modèle gateway (API)": "Gateway model (API)",
+    "Modèle gateway (résolu)": "Gateway model (resolved)",
+    "Unités détectées": "Detected units",
+    "Datapoints non mappés": "Unmapped datapoints",
+    "Rapport de debug": "Debug report",
+    "Copiez ce rapport dans votre post Community pour aider au support.": "Copy this report into your Community post to help support."
   },
   "plugins/daikinRCCloud/desktop/js/daikinRCCloud.js": {
     "Nom de la commande": "Command name",
@@ -252,7 +262,15 @@
     "Options invalides pour select : ": "Invalid options for select: ",
     "Sous-type non géré : ": "Unhandled subtype: ",
     "Impossible de déterminer la valeur de l'action": "Unable to determine action value",
-    "Le daemon daikintomqtt >= 2.0.0 est requis. Réinstallez les dépendances du plugin.": "daikintomqtt daemon >= 2.0.0 is required. Reinstall the plugin dependencies."
+    "Le daemon daikintomqtt >= 2.0.0 est requis. Réinstallez les dépendances du plugin.": "daikintomqtt daemon >= 2.0.0 is required. Reinstall the plugin dependencies.",
+    "Appareil non supporté détecté : ": "Unsupported device detected: ",
+    "Créez un post sur la communauté Jeedom avec les informations de debug de l'équipement.": "Create a post on the Jeedom community with the equipment debug information.",
+    "Support partiel détecté : ": "Partial support detected: ",
+    "Créez un post sur la communauté Jeedom pour améliorer la prise en charge.": "Create a post on the Jeedom community to improve support.",
+    "Configuration incomplète détectée : ": "Incomplete configuration detected: ",
+    "Signalez-le sur la communauté Jeedom avec le rapport de debug.": "Report it on the Jeedom community with the debug report.",
+    "Authentification Daikin requise : ": "Daikin authentication required: ",
+    "Authentification Daikin expirée. Le délai est dépassé. Redémarrez le daemon et réessayez.": "Daikin authentication expired. The timeout was reached. Restart the daemon and try again."
   },
   "plugins/daikinRCCloud/plugin_info/install.php": {
     "Une mise à jour des dépendances sera nécessaire": "A dependency update will be necessary",

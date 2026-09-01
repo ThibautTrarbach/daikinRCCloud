@@ -1,7 +1,7 @@
 {
 	"id" : "daikinRCCloud",
 	"name" : "Daikin ONECTA",
-	"pluginVersion": "0.10.0",
+	"pluginVersion": "0.10.1",
 	"description" : {
 		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA",
 		"en_US": "Plugin to manage Daikin devices via ONECTA cloud",

@@ -17,7 +17,7 @@ No es una limitación del plugin, sino una regla impuesta por el servicio en la 
 
 | Modo de conexión | Consultas autorizadas por día |
 |-------------------|-----------------------------------|
-| **Developer Portal** (recomendado) | 200 |
+| **Developer Portal** | 200 |
 | **Mobile App** | 3000 |
 
 ## ¿Qué consume la cuota?
@@ -45,7 +45,7 @@ Estas cifras no incluyen sus comandos, los refresh post-acción (según ajustes)
 
 ## Consejos para optimizar
 
-### Para la mayoría de los usuarios (Developer Portal)
+### Modo Developer Portal (200/día)
 
 1. **Deje los ajustes predeterminados** — están diseñados para un buen equilibrio con la cuota de 200 consultas/día.
 2. **No reduzca los intervalos de sincronización** por debajo de 15 minutos.
