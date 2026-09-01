@@ -268,7 +268,9 @@
     "Support partiel détecté : ": "Support partiel détecté : ",
     "Créez un post sur la communauté Jeedom pour améliorer la prise en charge.": "Créez un post sur la communauté Jeedom pour améliorer la prise en charge.",
     "Configuration incomplète détectée : ": "Configuration incomplète détectée : ",
-    "Signalez-le sur la communauté Jeedom avec le rapport de debug.": "Signalez-le sur la communauté Jeedom avec le rapport de debug."
+    "Signalez-le sur la communauté Jeedom avec le rapport de debug.": "Signalez-le sur la communauté Jeedom avec le rapport de debug.",
+    "Authentification Daikin requise : ": "Authentification Daikin requise : ",
+    "Authentification Daikin expirée. Le délai est dépassé. Redémarrez le daemon et réessayez.": "Authentification Daikin expirée. Le délai est dépassé. Redémarrez le daemon et réessayez."
   },
   "plugins/daikinRCCloud/plugin_info/install.php": {
     "Une mise à jour des dépendances sera nécessaire": "Une mise à jour des dépendances sera nécessaire",

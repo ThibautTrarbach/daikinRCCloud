@@ -215,6 +215,7 @@ class daikinRCCloud extends eqLogic
         $settings['daikin']['clientSecret'] = config::byKey('daikin_clientSecret', 'daikinRCCloud', null);
         $settings['daikin']['clientURL'] = network::getNetworkAccess('internal', 'ip');
         $settings['daikin']['clientPort'] = intval(config::byKey('daikin_clientPort', 'daikinRCCloud', 8765) ?? 8765);
+        $settings['daikin']['authorizationTimeoutSeconds'] = intval(config::byKey('daikin_authorizationTimeoutSeconds', 'daikinRCCloud', 600) ?? 600);
         $settings['daikin']['email'] = config::byKey('daikin_onectaEmail', 'daikinRCCloud', null);
         $onectaPassword = config::byKey('daikin_onectaPassword', 'daikinRCCloud', null);
         if ($onectaPassword !== null && $onectaPassword !== '') {
@@ -312,6 +313,9 @@ class daikinRCCloud extends eqLogic
             }
 
             if ($key === self::INSTANCE_ID) {
+                if (is_array($event)) {
+                    self::handleSystemBridgeEventV2($event);
+                }
                 continue;
             }
 
@@ -375,6 +379,63 @@ class daikinRCCloud extends eqLogic
             $name = $eqLogic->getName();
             $eqLogic->remove();
             log::add('daikinRCCloud', 'info', '[' . __FUNCTION__ . '] ' . '{{Équipement fantôme supprimé : }}' . $name . ' (' . $logicalId . ')');
+        }
+    }
+
+    /**
+     * Gestion du pont système Daikin2MQTT (INSTANCE_ID) : commandes et notifications d'auth.
+     */
+    private static function handleSystemBridgeEventV2($event)
+    {
+        $eqLogic = self::createEqlogic(self::INSTANCE_ID, $event);
+
+        $cmds = $eqLogic->getCmd('info');
+        foreach ($cmds as $cmd) {
+            $logicalID = $cmd->getLogicalId();
+            if (!isset($event[$logicalID])) {
+                continue;
+            }
+            try {
+                $value = is_bool($event[$logicalID]) ? ($event[$logicalID] ? 1 : 0) : jeedom::evaluateExpression($event[$logicalID]);
+                log::add('daikinRCCloud_mqtt', 'debug', '[' . __FUNCTION__ . '] ' . "System bridge => logicalID : " . $logicalID . " | Value : " . json_encode($value));
+                $cmd->event($value);
+            } catch (Exception $e) {
+                log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Erreur lors de l'évaluation de la valeur pour }} " . $logicalID . " : " . $e->getMessage());
+            }
+        }
+
+        self::notifyAuthorizationIfNeeded($eqLogic, $event);
+    }
+
+    private static function notifyAuthorizationIfNeeded($eqLogic, $event)
+    {
+        if (!is_array($event)) {
+            return;
+        }
+
+        $authRequest = !empty($event['_authorizationRequest']);
+        $authUrl = isset($event['_authorizationUrl']) ? trim($event['_authorizationUrl']) : '';
+        $authTimeout = !empty($event['_authorizationTimeout']);
+
+        if ($authRequest && $authUrl !== '') {
+            if ($eqLogic->getConfiguration('authNotified', 0) != 1 || $eqLogic->getConfiguration('authNotifiedUrl', '') !== $authUrl) {
+                message::add('daikinRCCloud', '{{Authentification Daikin requise : }}' . $authUrl, '', 'warning');
+                $eqLogic->setConfiguration('authNotified', 1);
+                $eqLogic->setConfiguration('authNotifiedUrl', $authUrl);
+                $eqLogic->setConfiguration('authTimeoutNotified', 0);
+                $eqLogic->save();
+            }
+        } elseif (!$authRequest && $eqLogic->getConfiguration('authNotified', 0) == 1) {
+            $eqLogic->setConfiguration('authNotified', 0);
+            $eqLogic->setConfiguration('authNotifiedUrl', '');
+            $eqLogic->setConfiguration('authTimeoutNotified', 0);
+            $eqLogic->save();
+        }
+
+        if ($authTimeout && $eqLogic->getConfiguration('authTimeoutNotified', 0) != 1) {
+            message::add('daikinRCCloud', '{{Authentification Daikin expirée. Le délai est dépassé. Redémarrez le daemon et réessayez.}}', '', 'danger');
+            $eqLogic->setConfiguration('authTimeoutNotified', 1);
+            $eqLogic->save();
         }
     }
 
