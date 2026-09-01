@@ -7,6 +7,27 @@ title: Changelog Daikin ONECTA (Beta)
 
 Todas las modificaciones notables de este plugin se documentarán en esta página.
 
+## [0.10.1] - 2026-09-01
+
+> Daemon incluido en la rama `release-beta`: **2.1.2** (mínimo requerido: 2.0.0)
+
+### Añadido — Plugin
+- Alertas de estado de soporte: notificación en caso de soporte parcial o configuración incompleta de un dispositivo Daikin (banner UI + información de diagnóstico)
+- Limpieza de equipos fantasma: eliminación automática de IDs lógicos creados desde topics MQTT internos (puente del sistema)
+- Notificaciones de autenticación: solicitud de validación OAuth con mensaje al usuario y gestión de la expiración del tiempo de espera
+
+### Añadido — Daemon
+- Timeout de autorización OAuth configurable (`authorizationTimeoutSeconds`, 60–3600 s)
+- Limpieza al inicio de topics MQTT retenidos obsoletos
+- WebSocket: soporte de características anidadas y referencias en actualizaciones push
+
+### Modificado
+- Aclaración de la documentación: distinción entre el puente Daikin2MQTT y los dispositivos Daikin reales
+- Apagado controlado del daemon reforzado (omitir operaciones durante el apagado)
+- Gestión de rate-limit mejorada: fusión de actualizaciones parciales, conservación de valores anteriores
+
+---
+
 ## [0.10.0] - 2026-08-30
 
 > Daemon incluido en la rama `release-beta`: **2.1.0** (mínimo requerido: 2.0.0)
