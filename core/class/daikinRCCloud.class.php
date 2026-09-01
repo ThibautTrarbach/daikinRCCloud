@@ -7,6 +7,17 @@ class daikinRCCloud extends eqLogic
 {
     const INSTANCE_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581';
     const PHANTOM_LOGICAL_IDS = array('system');
+    const SUPPORT_CMD_LOGICAL_IDS = array(
+        '_supportStatus',
+        '_configCoverage',
+        '_configCoverageDetail',
+        '_supportMessage',
+        '_debugReport',
+        '_unmappedDatapoints',
+        '_unitModels',
+        '_managementPointsList',
+        '_githubIssueUrl',
+    );
 
     /**
      * Vérifie si le daemon atteint une version minimale
@@ -465,8 +476,12 @@ class daikinRCCloud extends eqLogic
     public static function generateCMD($eqLogics, $data)
     {
         //$cmdDatas = json_decode($data, TRUE);
+        $incomingLogicalIds = array();
 
         foreach ($data as $cmdData) {
+            if (isset($cmdData['logicalID'])) {
+                $incomingLogicalIds[$cmdData['logicalID']] = true;
+            }
             $cmd = $eqLogics->getCmd($cmdData['type'], $cmdData['logicalID']);
             if (!is_object($cmd)) {
                 $cmd = new cmd();
@@ -491,6 +506,13 @@ class daikinRCCloud extends eqLogic
                 }
             }
             $cmd->save();
+        }
+
+        foreach ($eqLogics->getCmd('info') as $existingCmd) {
+            $logicalId = $existingCmd->getLogicalId();
+            if (in_array($logicalId, self::SUPPORT_CMD_LOGICAL_IDS, true) && !isset($incomingLogicalIds[$logicalId])) {
+                $existingCmd->remove();
+            }
         }
     }
 
