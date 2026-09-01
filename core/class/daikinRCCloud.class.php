@@ -311,6 +311,10 @@ class daikinRCCloud extends eqLogic
                 continue;
             }
 
+            if ($key === self::INSTANCE_ID) {
+                continue;
+            }
+
             if (!is_array($event)) {
                 log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . "{{Événement invalide pour la clé : }} " . $key);
                 continue;
@@ -326,6 +330,16 @@ class daikinRCCloud extends eqLogic
             if (!is_object($eqLogic)) {
                 log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Impossible de créer ou récupérer l'équipement pour : }} " . $key);
                 continue;
+            }
+
+            if (isset($event['_device']) && is_array($event['_device'])) {
+                foreach (array('supportStatus', 'configCoverage', 'configCoverageDetail', 'gatewayModelRaw', 'gatewayModelResolved', 'unitModels', 'unmappedDatapoints', 'debugReport') as $configKey) {
+                    if (isset($event['_device'][$configKey])) {
+                        $eqLogic->setConfiguration($configKey, $event['_device'][$configKey]);
+                    }
+                }
+                self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
+                $eqLogic->save();
             }
 
             $cmds = $eqLogic->getCmd('info');
@@ -419,6 +433,45 @@ class daikinRCCloud extends eqLogic
         }
     }
 
+    private static function needsSupportReporting($deviceInfo)
+    {
+        if (!is_array($deviceInfo)) {
+            return false;
+        }
+        $supportStatus = isset($deviceInfo['supportStatus']) ? $deviceInfo['supportStatus'] : 'full';
+        $configCoverage = isset($deviceInfo['configCoverage']) ? $deviceInfo['configCoverage'] : 'complete';
+        return ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
+    }
+
+    private static function notifySupportStatusIfNeeded($eqLogic, $deviceInfo)
+    {
+        if (!self::needsSupportReporting($deviceInfo)) {
+            return;
+        }
+        if ($eqLogic->getConfiguration('supportNotified', 0) == 1) {
+            return;
+        }
+
+        $supportStatus = $deviceInfo['supportStatus'];
+        $configCoverage = isset($deviceInfo['configCoverage']) ? $deviceInfo['configCoverage'] : 'complete';
+        $deviceName = $eqLogic->getName();
+
+        if ($supportStatus === 'unsupported') {
+            $message = '{{Appareil non supporté détecté : }}' . $deviceName . '. {{Créez un post sur la communauté Jeedom avec les informations de debug de l\'équipement.}}';
+            $level = 'danger';
+        } elseif ($supportStatus === 'partial') {
+            $message = '{{Support partiel détecté : }}' . $deviceName . '. {{Créez un post sur la communauté Jeedom pour améliorer la prise en charge.}}';
+            $level = 'warning';
+        } else {
+            $message = '{{Configuration incomplète détectée : }}' . $deviceName . '. {{Signalez-le sur la communauté Jeedom avec le rapport de debug.}}';
+            $level = 'warning';
+        }
+
+        message::add('daikinRCCloud', $message, '', $level);
+        $eqLogic->setConfiguration('supportNotified', 1);
+        $eqLogic->save();
+    }
+
     private static function createEqlogic($key, $event)
     {
         $eqLogic = eqLogic::byLogicalId($key, 'daikinRCCloud');
@@ -438,16 +491,23 @@ class daikinRCCloud extends eqLogic
         }
 
         $deviceConfigKeys = array(
-            'timeZone', 'errorCode', 'modelInfo', 'serialNumber', 
-            'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength'
+            'timeZone', 'errorCode', 'modelInfo', 'serialNumber',
+            'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength',
+            'supportStatus', 'configCoverage', 'configCoverageDetail',
+            'gatewayModelRaw', 'gatewayModelResolved', 'unitModels',
+            'unmappedDatapoints', 'debugReport'
         );
-        
+
         foreach ($deviceConfigKeys as $configKey) {
             if (isset($event['_device'][$configKey])) {
                 $eqLogic->setConfiguration($configKey, $event['_device'][$configKey]);
             }
         }
-        
+
+        if (isset($event['_device']) && is_array($event['_device'])) {
+            self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
+        }
+
         $eqLogic->save();
         return $eqLogic;
     }
