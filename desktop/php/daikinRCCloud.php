@@ -186,6 +186,13 @@
                         <div class="col-xs-12" id="daikin_support_debug" style="display:none;">
                             <div class="alert alert-warning">
                                 <legend><i class="fas fa-bug"></i> {{Informations de diagnostic}}</legend>
+                                <div class="form-group" id="daikin_support_message_group" style="display:none;">
+                                    <label class="col-sm-3 control-label">{{Message support}}</label>
+                                    <div class="col-sm-9">
+                                        <p id="daikin_support_message_display" class="form-control-static"></p>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportMessage" style="display:none;"></span>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{Statut support}}</label>
                                     <div class="col-sm-9">
@@ -212,6 +219,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{Points de gestion}}</label>
+                                    <div class="col-sm-9">
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="managementPointsList"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-sm-3 control-label">{{Unités détectées}}</label>
                                     <div class="col-sm-9">
                                         <pre id="daikin_unit_models_display" style="white-space:pre-wrap;"></pre>
@@ -227,8 +240,19 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{Rapport de debug}}</label>
                                     <div class="col-sm-9">
-                                        <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="debugReport" rows="8" readonly="readonly"></textarea>
-                                        <small>{{Copiez ce rapport dans votre post Community pour aider au support.}}</small>
+                                        <pre id="daikin_debug_report_display" style="white-space:pre-wrap;max-height:310px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;"></pre>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="debugReport" style="display:none;"></span>
+                                        <button type="button" class="btn btn-default btn-sm" id="daikin_copy_debug_report" style="margin-top:8px;">
+                                            <i class="fas fa-copy"></i> {{Copier le rapport}}
+                                        </button>
+                                        <small class="help-block">{{Copiez ce rapport dans votre post Community pour aider au support.}}</small>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="daikin_github_issue_group" style="display:none;">
+                                    <label class="col-sm-3 control-label">{{Signaler sur GitHub}}</label>
+                                    <div class="col-sm-9">
+                                        <a id="daikin_github_issue_link" href="#" target="_blank" rel="noopener noreferrer"></a>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="githubIssueUrl" style="display:none;"></span>
                                     </div>
                                 </div>
                             </div>

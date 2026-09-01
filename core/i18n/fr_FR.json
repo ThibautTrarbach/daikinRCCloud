@@ -226,6 +226,10 @@
     "Unités détectées": "Unités détectées",
     "Datapoints non mappés": "Datapoints non mappés",
     "Rapport de debug": "Rapport de debug",
+    "Message support": "Message support",
+    "Points de gestion": "Points de gestion",
+    "Copier le rapport": "Copier le rapport",
+    "Signaler sur GitHub": "Signaler sur GitHub",
     "Copiez ce rapport dans votre post Community pour aider au support.": "Copiez ce rapport dans votre post Community pour aider au support."
   },
   "plugins/daikinRCCloud/desktop/js/daikinRCCloud.js": {

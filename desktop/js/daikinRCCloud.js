@@ -120,6 +120,11 @@ function updateDaikinSupportUi() {
   const alertMessage = document.getElementById('daikin_support_alert_message')
   const debugPanel = document.getElementById('daikin_support_debug')
   const unitModelsDisplay = document.getElementById('daikin_unit_models_display')
+  const supportMessageGroup = document.getElementById('daikin_support_message_group')
+  const supportMessageDisplay = document.getElementById('daikin_support_message_display')
+  const debugReportDisplay = document.getElementById('daikin_debug_report_display')
+  const githubIssueGroup = document.getElementById('daikin_github_issue_group')
+  const githubIssueLink = document.getElementById('daikin_github_issue_link')
 
   if (!alertBox || !debugPanel) return
 
@@ -147,12 +152,40 @@ function updateDaikinSupportUi() {
     alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
   }
 
+  const supportMessage = readEqConfig('supportMessage')
+  if (supportMessageGroup && supportMessageDisplay) {
+    if (supportMessage) {
+      supportMessageGroup.style.display = 'block'
+      supportMessageDisplay.textContent = supportMessage
+    } else {
+      supportMessageGroup.style.display = 'none'
+      supportMessageDisplay.textContent = ''
+    }
+  }
+
   if (unitModelsDisplay) {
     const raw = readEqConfig('unitModels')
     try {
       unitModelsDisplay.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : ''
     } catch (e) {
       unitModelsDisplay.textContent = raw
+    }
+  }
+
+  if (debugReportDisplay) {
+    debugReportDisplay.textContent = readEqConfig('debugReport') || ''
+  }
+
+  const githubIssueUrl = readEqConfig('githubIssueUrl')
+  if (githubIssueGroup && githubIssueLink) {
+    if (githubIssueUrl) {
+      githubIssueGroup.style.display = 'block'
+      githubIssueLink.href = githubIssueUrl
+      githubIssueLink.textContent = githubIssueUrl
+    } else {
+      githubIssueGroup.style.display = 'none'
+      githubIssueLink.href = '#'
+      githubIssueLink.textContent = ''
     }
   }
 }
@@ -171,3 +204,37 @@ if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.pri
     return result
   }
 }
+
+document.getElementById('div_pageContainer').addEventListener('click', function(event) {
+  const copyButton = event.target.closest('#daikin_copy_debug_report')
+  if (!copyButton) return
+
+  const report = readEqConfig('debugReport')
+  if (!report) {
+    jeedomUtils.showAlert({ message: 'Aucun rapport de debug disponible.', level: 'warning' })
+    return
+  }
+
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+    navigator.clipboard.writeText(report).then(function() {
+      jeedomUtils.showAlert({ message: 'Rapport de debug copié dans le presse-papiers.', level: 'success' })
+    }).catch(function() {
+      jeedomUtils.showAlert({ message: 'Impossible de copier le rapport de debug.', level: 'danger' })
+    })
+    return
+  }
+
+  const textarea = document.createElement('textarea')
+  textarea.value = report
+  textarea.style.position = 'fixed'
+  textarea.style.left = '-9999px'
+  document.body.appendChild(textarea)
+  textarea.select()
+  try {
+    document.execCommand('copy')
+    jeedomUtils.showAlert({ message: 'Rapport de debug copié dans le presse-papiers.', level: 'success' })
+  } catch (e) {
+    jeedomUtils.showAlert({ message: 'Impossible de copier le rapport de debug.', level: 'danger' })
+  }
+  document.body.removeChild(textarea)
+})
