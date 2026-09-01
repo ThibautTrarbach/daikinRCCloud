@@ -18,6 +18,19 @@ class daikinRCCloud extends eqLogic
         '_managementPointsList',
         '_githubIssueUrl',
     );
+    const SUPPORT_DEVICE_CONFIG_KEYS = array(
+        'supportStatus',
+        'configCoverage',
+        'configCoverageDetail',
+        'gatewayModelRaw',
+        'gatewayModelResolved',
+        'unitModels',
+        'unmappedDatapoints',
+        'debugReport',
+        'supportMessage',
+        'managementPointsList',
+        'githubIssueUrl',
+    );
 
     /**
      * Vérifie si le daemon atteint une version minimale
@@ -348,11 +361,7 @@ class daikinRCCloud extends eqLogic
             }
 
             if (isset($event['_device']) && is_array($event['_device'])) {
-                foreach (array('supportStatus', 'configCoverage', 'configCoverageDetail', 'gatewayModelRaw', 'gatewayModelResolved', 'unitModels', 'unmappedDatapoints', 'debugReport') as $configKey) {
-                    if (isset($event['_device'][$configKey])) {
-                        $eqLogic->setConfiguration($configKey, $event['_device'][$configKey]);
-                    }
-                }
+                self::syncSupportDeviceConfiguration($eqLogic, $event['_device'], $event);
                 self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
                 $eqLogic->save();
             }
@@ -526,6 +535,24 @@ class daikinRCCloud extends eqLogic
         return ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
     }
 
+    private static function syncSupportDeviceConfiguration($eqLogic, $deviceInfo, $event)
+    {
+        if (!is_array($deviceInfo)) {
+            return;
+        }
+
+        foreach (self::SUPPORT_DEVICE_CONFIG_KEYS as $configKey) {
+            if (isset($deviceInfo[$configKey])) {
+                $eqLogic->setConfiguration($configKey, $deviceInfo[$configKey]);
+            }
+        }
+
+        $debugReport = isset($deviceInfo['debugReport']) ? trim($deviceInfo['debugReport']) : '';
+        if ($debugReport === '' && isset($event['_debugReport']) && trim($event['_debugReport']) !== '') {
+            $eqLogic->setConfiguration('debugReport', $event['_debugReport']);
+        }
+    }
+
     private static function notifySupportStatusIfNeeded($eqLogic, $deviceInfo)
     {
         if (!self::needsSupportReporting($deviceInfo)) {
@@ -576,9 +603,6 @@ class daikinRCCloud extends eqLogic
         $deviceConfigKeys = array(
             'timeZone', 'errorCode', 'modelInfo', 'serialNumber',
             'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength',
-            'supportStatus', 'configCoverage', 'configCoverageDetail',
-            'gatewayModelRaw', 'gatewayModelResolved', 'unitModels',
-            'unmappedDatapoints', 'debugReport'
         );
 
         foreach ($deviceConfigKeys as $configKey) {
@@ -588,6 +612,7 @@ class daikinRCCloud extends eqLogic
         }
 
         if (isset($event['_device']) && is_array($event['_device'])) {
+            self::syncSupportDeviceConfiguration($eqLogic, $event['_device'], $event);
             self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
         }
 
