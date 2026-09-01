@@ -5,6 +5,9 @@ require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 class daikinRCCloud extends eqLogic
 {
+    const INSTANCE_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581';
+    const PHANTOM_LOGICAL_IDS = array('system');
+
     /**
      * Vérifie si le daemon atteint une version minimale
      * @return bool
@@ -56,6 +59,7 @@ class daikinRCCloud extends eqLogic
             mqtt2::removePluginTopicByPlugin('daikinRCCloud');
             mqtt2::addPluginTopic('daikinRCCloud', config::byKey('prefix', 'daikinRCCloud', 'daikinToMQTT'));
         }
+        self::cleanupPhantomEqLogics();
         $deamon_info = self::deamon_info();
         if ($deamon_info['launchable'] != 'ok') {
             throw new Exception('{{Veuillez vérifier la configuration}}');
@@ -303,6 +307,10 @@ class daikinRCCloud extends eqLogic
                 continue;
             }
 
+            if ($key == 'system') {
+                continue;
+            }
+
             if (!is_array($event)) {
                 log::add('daikinRCCloud_mqtt', 'warning', '[' . __FUNCTION__ . '] ' . "{{Événement invalide pour la clé : }} " . $key);
                 continue;
@@ -334,6 +342,25 @@ class daikinRCCloud extends eqLogic
                     log::add('daikinRCCloud_mqtt', 'error', '[' . __FUNCTION__ . '] ' . "{{Erreur lors de l'évaluation de la valeur pour }} " . $logicalID . " : " . $e->getMessage());
                 }
             }
+        }
+    }
+
+    /**
+     * Supprime les équipements fantômes créés par erreur à partir de topics MQTT internes.
+     */
+    public static function cleanupPhantomEqLogics()
+    {
+        foreach (self::PHANTOM_LOGICAL_IDS as $logicalId) {
+            if ($logicalId === self::INSTANCE_ID) {
+                continue;
+            }
+            $eqLogic = eqLogic::byLogicalId($logicalId, 'daikinRCCloud');
+            if (!is_object($eqLogic)) {
+                continue;
+            }
+            $name = $eqLogic->getName();
+            $eqLogic->remove();
+            log::add('daikinRCCloud', 'info', '[' . __FUNCTION__ . '] ' . '{{Équipement fantôme supprimé : }}' . $name . ' (' . $logicalId . ')');
         }
     }
 
