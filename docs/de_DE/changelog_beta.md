@@ -7,6 +7,17 @@ title: Changelog Daikin ONECTA (Beta)
 
 Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokumentiert.
 
+## [0.10.3] - 2026-09-01
+
+> Mit der Branche `release-beta` gelieferter Daemon: **2.1.5** (Mindestanforderung: 2.0.0)
+
+### Behoben — Daemon
+- BRP069B4x / BRP069A4x: vollständige statische Abdeckung (`gatewayDiagnosticsPack`, `auxiliaryUnitPack`) — [#42](https://github.com/ThibautTrarbach/daikinRCCloud/issues/42)
+- BRP069A78: Gateway-Diagnose, Vorlauf-Offset, Warmwasserspeicher, Hydro/Outdoor/UI-Einheiten — [#41](https://github.com/ThibautTrarbach/daikinRCCloud/issues/41)
+- Debug-Bericht: Seriennummer (`serialNumber`) maskiert
+
+---
+
 ## [0.10.2] - 2026-09-01
 
 > Mit der Branche `release-beta` gelieferter Daemon: **2.1.3** (Mindestanforderung: 2.0.0)

@@ -35,6 +35,36 @@ Cette page répond aux problèmes les plus fréquents rencontrés avec le plugin
 
 Après correction, redémarrez le service du plugin.
 
+## Échec de l'installation des dépendances
+
+**Symptômes courants dans le log `daikinRCCloud_packages` :**
+
+- `could not read Username for 'https://github.com'`
+- `main.js is missing`
+- `daikintomqtt: No such file or directory`
+
+**Points importants :**
+
+- Le problème peut concerner **toutes les branches** (`release-beta`, `release-alpha`, etc.) — ce n'est en général pas un mauvais choix de branche.
+- Branche recommandée : **`release-beta`** (sauf instruction contraire du support).
+
+**Vérifications :**
+
+1. Consultez **Analyse → Logs → daikinRCCloud_packages** pour voir si le clone git ou le fallback tarball a réussi.
+2. Vérifiez que le fichier existe : `/var/www/html/plugins/daikinRCCloud/resources/daikintomqtt/main.js`
+3. Mettez à jour le plugin vers la dernière version (scripts d'installation corrigés), puis relancez « Réinstaller les dépendances ».
+
+**Test réseau depuis la box Jeedom (SSH) :**
+
+```bash
+cd /var/www/html/plugins/daikinRCCloud/resources
+sudo env GIT_TERMINAL_PROMPT=0 git -c credential.helper= -c http.version=HTTP/1.1 clone --depth 1 -b release-beta https://github.com/ThibautTrarbach/daikintomqtt.git daikintomqtt-test
+ls daikintomqtt-test/main.js
+sudo rm -rf daikintomqtt-test
+```
+
+Si ce test passe mais l'UI échoue encore, mettez à jour le plugin : les scripts `pre_install.sh` / `post_install.sh` récents intègrent ces garde-fous automatiquement.
+
 ## Erreur de connexion à Daikin
 
 ### Mode Mobile App
