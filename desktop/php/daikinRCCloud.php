@@ -183,9 +183,9 @@
                             </form>
                         </div>
 
-                        <div class="col-xs-12" id="daikin_support_debug" style="display:none;">
-                            <div class="alert alert-warning">
-                                <legend><i class="fas fa-bug"></i> {{Informations de diagnostic}}</legend>
+                        <div class="col-xs-12" id="daikin_support_debug">
+                            <div class="alert alert-info" style="margin-bottom:15px;">
+                                <legend><i class="fas fa-info-circle"></i> {{Informations API / diagnostic}}</legend>
                                 <div class="form-group" id="daikin_support_message_group" style="display:none;">
                                     <label class="col-sm-3 control-label">{{Message support}}</label>
                                     <div class="col-sm-9">
@@ -232,12 +232,36 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Datapoints non mappés}}</label>
+                                    <label class="col-sm-3 control-label">{{Inventaire API (settable / min-max)}}</label>
                                     <div class="col-sm-9">
-                                        <pre class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapoints" style="white-space:pre-wrap;max-height:150px;overflow:auto;"></pre>
+                                        <pre id="daikin_api_datapoints_display" style="white-space:pre-wrap;max-height:260px;overflow:auto;"></pre>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="apiDatapointsDetail" style="display:none;"></span>
+                                        <small class="help-block">{{Liste des leaves API découvertes avec settable, valueType, values, min/max.}}</small>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="daikin_settable_mismatch_group" style="display:none;">
+                                    <label class="col-sm-3 control-label">{{Écarts settable}}</label>
+                                    <div class="col-sm-9">
+                                        <pre id="daikin_settable_mismatches_display" style="white-space:pre-wrap;max-height:180px;overflow:auto;"></pre>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatches" style="display:none;"></span>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatchesDetail" style="display:none;"></span>
+                                        <small class="help-block">{{Datapoints settable côté API mais mappés en lecture seule par le daemon.}}</small>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="daikin_unmapped_group" style="display:none;">
+                                    <label class="col-sm-3 control-label">{{Datapoints non mappés}}</label>
+                                    <div class="col-sm-9">
+                                        <pre class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapoints" style="white-space:pre-wrap;max-height:120px;overflow:auto;"></pre>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="daikin_unmapped_detail_group" style="display:none;">
+                                    <label class="col-sm-3 control-label">{{Détail datapoints non mappés}}</label>
+                                    <div class="col-sm-9">
+                                        <pre id="daikin_unmapped_detail_display" style="white-space:pre-wrap;max-height:220px;overflow:auto;"></pre>
+                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapointsDetail" style="display:none;"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="daikin_debug_report_group" style="display:none;">
                                     <label class="col-sm-3 control-label">{{Rapport de debug}}</label>
                                     <div class="col-sm-9">
                                         <pre id="daikin_debug_report_display" style="white-space:pre-wrap;max-height:310px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;"></pre>

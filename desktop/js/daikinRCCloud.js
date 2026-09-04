@@ -110,46 +110,67 @@ function readEqConfig(key) {
   return el.value !== undefined ? el.value : (el.textContent || '')
 }
 
+function formatJsonConfig(raw) {
+  if (!raw) return ''
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2)
+  } catch (e) {
+    return raw
+  }
+}
+
 function updateDaikinSupportUi() {
   const supportStatus = readEqConfig('supportStatus') || 'full'
   const configCoverage = readEqConfig('configCoverage') || 'complete'
-  const needsReporting = (supportStatus !== 'full') || (configCoverage === 'incomplete')
+  const settableMismatches = readEqConfig('settableMismatches') || ''
+  const unmappedDatapoints = readEqConfig('unmappedDatapoints') || ''
+  const needsReporting = (supportStatus !== 'full') || (configCoverage === 'incomplete') || !!settableMismatches || !!unmappedDatapoints
   const alertBox = document.getElementById('daikin_support_alert')
   const alertInner = document.getElementById('daikin_support_alert_box')
   const alertTitle = document.getElementById('daikin_support_alert_title')
   const alertMessage = document.getElementById('daikin_support_alert_message')
   const debugPanel = document.getElementById('daikin_support_debug')
   const unitModelsDisplay = document.getElementById('daikin_unit_models_display')
+  const apiDatapointsDisplay = document.getElementById('daikin_api_datapoints_display')
+  const settableMismatchGroup = document.getElementById('daikin_settable_mismatch_group')
+  const settableMismatchesDisplay = document.getElementById('daikin_settable_mismatches_display')
+  const unmappedGroup = document.getElementById('daikin_unmapped_group')
+  const unmappedDetailGroup = document.getElementById('daikin_unmapped_detail_group')
+  const unmappedDetailDisplay = document.getElementById('daikin_unmapped_detail_display')
   const supportMessageGroup = document.getElementById('daikin_support_message_group')
   const supportMessageDisplay = document.getElementById('daikin_support_message_display')
+  const debugReportGroup = document.getElementById('daikin_debug_report_group')
   const debugReportDisplay = document.getElementById('daikin_debug_report_display')
   const githubIssueGroup = document.getElementById('daikin_github_issue_group')
   const githubIssueLink = document.getElementById('daikin_github_issue_link')
 
   if (!alertBox || !debugPanel) return
 
+  debugPanel.style.display = 'block'
+
   if (!needsReporting) {
     alertBox.style.display = 'none'
-    debugPanel.style.display = 'none'
-    return
-  }
-
-  alertBox.style.display = 'block'
-  debugPanel.style.display = 'block'
-  alertInner.className = 'alert'
-
-  if (supportStatus === 'unsupported') {
-    alertInner.classList.add('alert-danger')
-    alertTitle.textContent = 'Appareil non supporté'
-    alertMessage.textContent = 'Cet appareil n\'est pas pilotable. Créez un post sur la communauté Jeedom avec le rapport de debug ci-dessous.'
-  } else if (supportStatus === 'partial') {
-    alertInner.classList.add('alert-warning')
-    alertTitle.textContent = 'Support partiel'
-    alertMessage.textContent = 'Cet appareil utilise un mapping automatique. Créez un post sur la communauté Jeedom pour améliorer la prise en charge.'
   } else {
-    alertInner.classList.add('alert-warning')
-    alertTitle.textContent = 'Configuration incomplète'
-    alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
+    alertBox.style.display = 'block'
+    alertInner.className = 'alert'
+
+    if (supportStatus === 'unsupported') {
+      alertInner.classList.add('alert-danger')
+      alertTitle.textContent = 'Appareil non supporté'
+      alertMessage.textContent = 'Cet appareil n\'est pas pilotable. Créez un post sur la communauté Jeedom avec le rapport de debug ci-dessous.'
+    } else if (supportStatus === 'partial') {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Support partiel'
+      alertMessage.textContent = 'Cet appareil utilise un mapping automatique. Créez un post sur la communauté Jeedom pour améliorer la prise en charge.'
+    } else if (settableMismatches && !unmappedDatapoints) {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Écarts settable détectés'
+      alertMessage.textContent = 'Certains datapoints sont settable côté API mais mappés en lecture seule. Consultez le détail ci-dessous.'
+    } else {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Configuration incomplète'
+      alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
+    }
   }
 
   const supportMessage = readEqConfig('supportMessage')
@@ -164,21 +185,52 @@ function updateDaikinSupportUi() {
   }
 
   if (unitModelsDisplay) {
-    const raw = readEqConfig('unitModels')
-    try {
-      unitModelsDisplay.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : ''
-    } catch (e) {
-      unitModelsDisplay.textContent = raw
+    unitModelsDisplay.textContent = formatJsonConfig(readEqConfig('unitModels'))
+  }
+
+  if (apiDatapointsDisplay) {
+    apiDatapointsDisplay.textContent = formatJsonConfig(readEqConfig('apiDatapointsDetail'))
+  }
+
+  if (settableMismatchGroup && settableMismatchesDisplay) {
+    const detail = readEqConfig('settableMismatchesDetail') || settableMismatches
+    if (detail) {
+      settableMismatchGroup.style.display = 'block'
+      settableMismatchesDisplay.textContent = formatJsonConfig(detail) || detail
+    } else {
+      settableMismatchGroup.style.display = 'none'
+      settableMismatchesDisplay.textContent = ''
     }
   }
 
-  if (debugReportDisplay) {
-    debugReportDisplay.textContent = readEqConfig('debugReport') || ''
+  if (unmappedGroup) {
+    unmappedGroup.style.display = unmappedDatapoints ? 'block' : 'none'
+  }
+  if (unmappedDetailGroup && unmappedDetailDisplay) {
+    const detail = readEqConfig('unmappedDatapointsDetail')
+    if (detail) {
+      unmappedDetailGroup.style.display = 'block'
+      unmappedDetailDisplay.textContent = formatJsonConfig(detail)
+    } else {
+      unmappedDetailGroup.style.display = 'none'
+      unmappedDetailDisplay.textContent = ''
+    }
+  }
+
+  const debugReport = readEqConfig('debugReport')
+  if (debugReportGroup && debugReportDisplay) {
+    if (debugReport) {
+      debugReportGroup.style.display = 'block'
+      debugReportDisplay.textContent = debugReport
+    } else {
+      debugReportGroup.style.display = 'none'
+      debugReportDisplay.textContent = ''
+    }
   }
 
   const githubIssueUrl = readEqConfig('githubIssueUrl')
   if (githubIssueGroup && githubIssueLink) {
-    if (githubIssueUrl) {
+    if (needsReporting && githubIssueUrl) {
       githubIssueGroup.style.display = 'block'
       githubIssueLink.href = githubIssueUrl
       githubIssueLink.textContent = githubIssueUrl
