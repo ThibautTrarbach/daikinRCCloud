@@ -278,7 +278,6 @@ function updateDaikinSupportUi() {
     }
   }
 
-  const debugReport = readEqConfig('debugReport')
   if (debugReportGroup && debugReportDisplay) {
     if (debugReport) {
       debugReportGroup.style.display = 'block'
