@@ -141,8 +141,6 @@ function updateDaikinSupportUi() {
   const supportMessageDisplay = document.getElementById('daikin_support_message_display')
   const debugReportGroup = document.getElementById('daikin_debug_report_group')
   const debugReportDisplay = document.getElementById('daikin_debug_report_display')
-  const githubIssueGroup = document.getElementById('daikin_github_issue_group')
-  const githubIssueLink = document.getElementById('daikin_github_issue_link')
 
   if (!debugPanel || !alertBox || !alertInner || !alertTitle || !alertMessage) return
 
@@ -226,19 +224,6 @@ function updateDaikinSupportUi() {
     } else {
       debugReportGroup.style.display = 'none'
       debugReportDisplay.textContent = ''
-    }
-  }
-
-  const githubIssueUrl = readEqConfig('githubIssueUrl')
-  if (githubIssueGroup && githubIssueLink) {
-    if (needsReporting && githubIssueUrl) {
-      githubIssueGroup.style.display = 'block'
-      githubIssueLink.href = githubIssueUrl
-      githubIssueLink.textContent = githubIssueUrl
-    } else {
-      githubIssueGroup.style.display = 'none'
-      githubIssueLink.href = '#'
-      githubIssueLink.textContent = ''
     }
   }
 }

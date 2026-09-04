@@ -1,0 +1,30 @@
+/* Diagnostic panel — readable pre blocks across Jeedom themes */
+#daikin_support_debug pre.daikin-pre {
+	background-color: var(--form-widget-bg-color, #1e1e1e) !important;
+	color: var(--txt-color, #e8e8e8) !important;
+	border: 1px solid var(--form-widget-border-color, #555) !important;
+	padding: 8px !important;
+	white-space: pre-wrap;
+	font-size: 12px;
+	line-height: 1.4;
+	margin-bottom: 6px;
+}
+
+#daikin_support_debug .daikin-details {
+	margin-bottom: 10px;
+}
+
+#daikin_support_debug .daikin-details > summary {
+	cursor: pointer;
+	font-weight: 600;
+	margin-bottom: 8px;
+	user-select: none;
+}
+
+#daikin_support_debug .daikin-details > summary:hover {
+	opacity: 0.85;
+}
+
+#daikin_support_debug .daikin-details[open] > summary {
+	margin-bottom: 10px;
+}
