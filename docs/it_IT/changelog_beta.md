@@ -7,6 +7,28 @@ title: Changelog Daikin ONECTA (Beta)
 
 Tutte le modifiche notevoli di questo plugin saranno documentate su questa pagina.
 
+## [0.10.4] - 2026-09-04
+
+> Daemon fornito dal branch `release-beta`: **2.1.7** (minimo richiesto: 2.0.0)
+
+### Modificato — Plugin
+- Pannello «Informazioni API / diagnostica» nascosto quando il supporto è completo; pulizia automatica della configurazione diagnostica memorizzata
+- Allineamento con il daemon: metadati di supporto MQTT solo in caso di lacune
+
+### Modificato — Daemon
+- IP/MAC/SSID gateway e versione software unità interna: pubblicazione in `_device` (niente comandi MQTT dedicati)
+- Diagnostica di supporto MQTT pubblicata solo in caso di lacune
+
+### Aggiunto — Daemon
+- Inventario API / mismatch settable nel rapporto di debug
+- BRP069C4x: `intelligentEyeMode`, `frontPanelSetting`, `installationPosition`
+
+### Corretto — Daemon
+- BRP069A78: `operationMode` e setpoint ACS impostati come settable come l’API
+- `climateControl/name`: sola lettura intenzionale (identità attrezzatura)
+
+---
+
 ## [0.10.3] - 2026-09-01
 
 > Daemon fornito dal branch `release-beta`: **2.1.5** (minimo richiesto: 2.0.0)

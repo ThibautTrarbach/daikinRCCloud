@@ -81,7 +81,48 @@ function addCmdToTable(_cmd) {
   })
 }
 
+function openUrlInNewTab(url) {
+  const link = document.createElement('a')
+  link.href = url
+  link.target = '_blank'
+  link.style.display = 'none'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+function buildDebugCommunityPostUrl(debugReport, gatewayModelResolved) {
+  const title = '[Daikin ONECTA] Endpoint Incomplet ou manquant — ' + gatewayModelResolved
+  const body = 'Bonjour,\n\nVoici un rapport de debug emis par le plugin :\n\n```\n' + debugReport + '\n```'
+  const params = new URLSearchParams({
+    title: title,
+    body: body,
+    category: 'plugins/wellness',
+    tags: 'plugin-daikinRCCloud'
+  })
+  return 'https://community.jeedom.com/new-topic?' + params.toString()
+}
+
 document.getElementById('div_pageContainer').addEventListener('click', function(event) {
+  const debugTarget = event.target.closest('.eqLogicAction[data-action="createDebugCommunityPost"]')
+  if (debugTarget) {
+    const report = readEqConfig('debugReport')
+    if (!report) {
+      jeedomUtils.showAlert({ message: '{{Aucun rapport de debug disponible.}}', level: 'warning' })
+      return
+    }
+    const gatewayModelResolved = readEqConfig('gatewayModelResolved') || 'none'
+    const url = buildDebugCommunityPostUrl(report, gatewayModelResolved)
+    if (url.length > 8000) {
+      jeedomUtils.showAlert({
+        message: '{{L\'URL du post Community est très longue ; l\'ouverture peut échouer selon le navigateur.}}',
+        level: 'warning'
+      })
+    }
+    openUrlInNewTab(url)
+    return
+  }
+
   const target = event.target.closest('.eqLogicAction[data-action="createCommunityPost"]')
   if (!target) return
   jeedom.plugin.createCommunityPost({
@@ -90,16 +131,22 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
       jeedomUtils.showAlert({ message: error.message, level: 'danger' })
     },
     success: function(data) {
-      const link = document.createElement('a')
-      link.href = data.url
-      link.target = '_blank'
-      link.style.display = 'none'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      openUrlInNewTab(data.url)
     }
   })
 })
+
+// var: Jeedom réinjecte ce script sans reload (getResource.php) — const top-level casse
+var DAIKIN_BRIDGE_LOGICAL_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581'
+
+function readEqAttr(l1key) {
+  const el = document.querySelector('.eqLogicAttr[data-l1key="' + l1key + '"]')
+  if (!el) return ''
+  if (typeof el.jeeValue === 'function') {
+    return el.jeeValue() || ''
+  }
+  return el.value !== undefined ? el.value : (el.textContent || '')
+}
 
 function readEqConfig(key) {
   const el = document.querySelector('.eqLogicAttr[data-l1key="configuration"][data-l2key="' + key + '"]')
@@ -110,46 +157,81 @@ function readEqConfig(key) {
   return el.value !== undefined ? el.value : (el.textContent || '')
 }
 
+function updateDaikinDeviceInfoPanel() {
+  const panel = document.querySelector('.eqDefault')
+  if (!panel) return
+  const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
+  panel.style.display = isBridge ? 'none' : ''
+}
+
+function formatJsonConfig(raw) {
+  if (!raw) return ''
+  try {
+    return JSON.stringify(JSON.parse(raw), null, 2)
+  } catch (e) {
+    return raw
+  }
+}
+
 function updateDaikinSupportUi() {
+  updateDaikinDeviceInfoPanel()
+
   const supportStatus = readEqConfig('supportStatus') || 'full'
   const configCoverage = readEqConfig('configCoverage') || 'complete'
-  const needsReporting = (supportStatus !== 'full') || (configCoverage === 'incomplete')
+  const settableMismatches = readEqConfig('settableMismatches') || ''
+  const unmappedDatapoints = readEqConfig('unmappedDatapoints') || ''
+  const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
+  const needsReporting = !isBridge && ((supportStatus !== 'full') || (configCoverage === 'incomplete') || !!settableMismatches || !!unmappedDatapoints)
   const alertBox = document.getElementById('daikin_support_alert')
   const alertInner = document.getElementById('daikin_support_alert_box')
   const alertTitle = document.getElementById('daikin_support_alert_title')
   const alertMessage = document.getElementById('daikin_support_alert_message')
   const debugPanel = document.getElementById('daikin_support_debug')
   const unitModelsDisplay = document.getElementById('daikin_unit_models_display')
+  const apiDatapointsDisplay = document.getElementById('daikin_api_datapoints_display')
+  const settableMismatchGroup = document.getElementById('daikin_settable_mismatch_group')
+  const settableMismatchesDisplay = document.getElementById('daikin_settable_mismatches_display')
+  const unmappedGroup = document.getElementById('daikin_unmapped_group')
+  const unmappedDetailGroup = document.getElementById('daikin_unmapped_detail_group')
+  const unmappedDetailDisplay = document.getElementById('daikin_unmapped_detail_display')
   const supportMessageGroup = document.getElementById('daikin_support_message_group')
   const supportMessageDisplay = document.getElementById('daikin_support_message_display')
+  const debugReportGroup = document.getElementById('daikin_debug_report_group')
   const debugReportDisplay = document.getElementById('daikin_debug_report_display')
-  const githubIssueGroup = document.getElementById('daikin_github_issue_group')
-  const githubIssueLink = document.getElementById('daikin_github_issue_link')
+  const debugReport = readEqConfig('debugReport')
+  const debugCommunityBtn = document.getElementById('daikin_create_debug_community_post')
+  if (debugCommunityBtn) {
+    debugCommunityBtn.style.display = (!isBridge && debugReport) ? '' : 'none'
+  }
 
-  if (!alertBox || !debugPanel) return
+  if (!debugPanel || !alertBox || !alertInner || !alertTitle || !alertMessage) return
+
+  debugPanel.style.display = needsReporting ? 'block' : 'none'
 
   if (!needsReporting) {
     alertBox.style.display = 'none'
-    debugPanel.style.display = 'none'
-    return
-  }
-
-  alertBox.style.display = 'block'
-  debugPanel.style.display = 'block'
-  alertInner.className = 'alert'
-
-  if (supportStatus === 'unsupported') {
-    alertInner.classList.add('alert-danger')
-    alertTitle.textContent = 'Appareil non supporté'
-    alertMessage.textContent = 'Cet appareil n\'est pas pilotable. Créez un post sur la communauté Jeedom avec le rapport de debug ci-dessous.'
-  } else if (supportStatus === 'partial') {
-    alertInner.classList.add('alert-warning')
-    alertTitle.textContent = 'Support partiel'
-    alertMessage.textContent = 'Cet appareil utilise un mapping automatique. Créez un post sur la communauté Jeedom pour améliorer la prise en charge.'
   } else {
-    alertInner.classList.add('alert-warning')
-    alertTitle.textContent = 'Configuration incomplète'
-    alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
+    alertBox.style.display = 'block'
+    alertInner.className = 'alert'
+    alertInner.style.marginBottom = '0'
+
+    if (supportStatus === 'unsupported') {
+      alertInner.classList.add('alert-danger')
+      alertTitle.textContent = 'Appareil non supporté'
+      alertMessage.textContent = 'Cet appareil n\'est pas pilotable. Créez un post sur la communauté Jeedom avec le rapport de debug ci-dessous.'
+    } else if (supportStatus === 'partial') {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Support partiel'
+      alertMessage.textContent = 'Cet appareil utilise un mapping automatique. Créez un post sur la communauté Jeedom pour améliorer la prise en charge.'
+    } else if (settableMismatches && !unmappedDatapoints) {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Écarts settable détectés'
+      alertMessage.textContent = 'Certains datapoints sont settable côté API mais mappés en lecture seule. Consultez le détail ci-dessous.'
+    } else {
+      alertInner.classList.add('alert-warning')
+      alertTitle.textContent = 'Configuration incomplète'
+      alertMessage.textContent = 'La configuration statique ne couvre pas tous les datapoints API. Signalez-le sur la communauté Jeedom avec le rapport de debug.'
+    }
   }
 
   const supportMessage = readEqConfig('supportMessage')
@@ -164,28 +246,45 @@ function updateDaikinSupportUi() {
   }
 
   if (unitModelsDisplay) {
-    const raw = readEqConfig('unitModels')
-    try {
-      unitModelsDisplay.textContent = raw ? JSON.stringify(JSON.parse(raw), null, 2) : ''
-    } catch (e) {
-      unitModelsDisplay.textContent = raw
+    unitModelsDisplay.textContent = formatJsonConfig(readEqConfig('unitModels'))
+  }
+
+  if (apiDatapointsDisplay) {
+    apiDatapointsDisplay.textContent = formatJsonConfig(readEqConfig('apiDatapointsDetail'))
+  }
+
+  if (settableMismatchGroup && settableMismatchesDisplay) {
+    const detail = readEqConfig('settableMismatchesDetail') || settableMismatches
+    if (detail) {
+      settableMismatchGroup.style.display = 'block'
+      settableMismatchesDisplay.textContent = formatJsonConfig(detail) || detail
+    } else {
+      settableMismatchGroup.style.display = 'none'
+      settableMismatchesDisplay.textContent = ''
     }
   }
 
-  if (debugReportDisplay) {
-    debugReportDisplay.textContent = readEqConfig('debugReport') || ''
+  if (unmappedGroup) {
+    unmappedGroup.style.display = unmappedDatapoints ? 'block' : 'none'
+  }
+  if (unmappedDetailGroup && unmappedDetailDisplay) {
+    const detail = readEqConfig('unmappedDatapointsDetail')
+    if (detail) {
+      unmappedDetailGroup.style.display = 'block'
+      unmappedDetailDisplay.textContent = formatJsonConfig(detail)
+    } else {
+      unmappedDetailGroup.style.display = 'none'
+      unmappedDetailDisplay.textContent = ''
+    }
   }
 
-  const githubIssueUrl = readEqConfig('githubIssueUrl')
-  if (githubIssueGroup && githubIssueLink) {
-    if (githubIssueUrl) {
-      githubIssueGroup.style.display = 'block'
-      githubIssueLink.href = githubIssueUrl
-      githubIssueLink.textContent = githubIssueUrl
+  if (debugReportGroup && debugReportDisplay) {
+    if (debugReport) {
+      debugReportGroup.style.display = 'block'
+      debugReportDisplay.textContent = debugReport
     } else {
-      githubIssueGroup.style.display = 'none'
-      githubIssueLink.href = '#'
-      githubIssueLink.textContent = ''
+      debugReportGroup.style.display = 'none'
+      debugReportDisplay.textContent = ''
     }
   }
 }
@@ -196,13 +295,14 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
   }
 })
 
-if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.print === 'function') {
+if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.print === 'function' && !jeedom.eqLogic.__daikinSupportUiWrapped) {
   const originalPrint = jeedom.eqLogic.print
   jeedom.eqLogic.print = function() {
     const result = originalPrint.apply(this, arguments)
     setTimeout(updateDaikinSupportUi, 400)
     return result
   }
+  jeedom.eqLogic.__daikinSupportUiWrapped = true
 }
 
 document.getElementById('div_pageContainer').addEventListener('click', function(event) {

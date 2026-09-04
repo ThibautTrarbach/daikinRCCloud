@@ -435,7 +435,7 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
     </fieldset>
 </form>
 
-<?php include_file('plugin_info', 'daikinRCCloud.config', 'js', 'daikinRCCloud'); ?>
+<?php include_file('desktop', 'daikinRCCloud.config', 'js', 'daikinRCCloud'); ?>
 <script>
 (function() {
     var remaining = 12;

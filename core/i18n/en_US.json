@@ -189,6 +189,7 @@
     "Gestion": "Management",
     "Configuration": "Configuration",
     "Créer un post Community": "Create a Community post",
+    "Créer un post debug Community": "Create a debug Community post",
     "Mes Equipments": "My Equipment",
     "Aucun équipement trouvé, relancer le daemon ou contacter le developer ": "No equipment found, restart the daemon or contact the developer",
     "Rechercher": "Search",
@@ -243,7 +244,9 @@
     "Min": "Min",
     "Max": "Max",
     "Unité": "Unit",
-    "Supprimer la commande": "Delete command"
+    "Supprimer la commande": "Delete command",
+    "Aucun rapport de debug disponible.": "No debug report available.",
+    "L'URL du post Community est très longue ; l'ouverture peut échouer selon le navigateur.": "The Community post URL is very long; opening it may fail depending on the browser."
   },
   "plugins/daikinRCCloud/core/ajax/daikinRCCloud.ajax.php": {
     "401 - Accès non autorisé": "401 - Unauthorized access",
