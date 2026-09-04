@@ -91,9 +91,9 @@ function openUrlInNewTab(url) {
   document.body.removeChild(link)
 }
 
-function buildDebugCommunityPostUrl(debugReport, supportStatus, gatewayModelResolved) {
-  const title = '[Daikin ONECTA] Support ' + supportStatus + ' — ' + gatewayModelResolved
-  const body = 'Rapport de debug Daikin ONECTA (à compléter si besoin) :\n\n```\n' + debugReport + '\n```'
+function buildDebugCommunityPostUrl(debugReport, gatewayModelResolved) {
+  const title = '[Daikin ONECTA] Endpoint Incomplet ou manquant — ' + gatewayModelResolved
+  const body = 'Bonjour,\n\nVoici un rapport de debug emis par le plugin :\n\n```\n' + debugReport + '\n```'
   const params = new URLSearchParams({
     title: title,
     body: body,
@@ -111,9 +111,8 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
       jeedomUtils.showAlert({ message: '{{Aucun rapport de debug disponible.}}', level: 'warning' })
       return
     }
-    const supportStatus = readEqConfig('supportStatus') || 'unknown'
     const gatewayModelResolved = readEqConfig('gatewayModelResolved') || 'none'
-    const url = buildDebugCommunityPostUrl(report, supportStatus, gatewayModelResolved)
+    const url = buildDebugCommunityPostUrl(report, gatewayModelResolved)
     if (url.length > 8000) {
       jeedomUtils.showAlert({
         message: '{{L\'URL du post Community est très longue ; l\'ouverture peut échouer selon le navigateur.}}',
