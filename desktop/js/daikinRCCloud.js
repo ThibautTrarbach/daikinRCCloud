@@ -81,7 +81,49 @@ function addCmdToTable(_cmd) {
   })
 }
 
+function openUrlInNewTab(url) {
+  const link = document.createElement('a')
+  link.href = url
+  link.target = '_blank'
+  link.style.display = 'none'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+function buildDebugCommunityPostUrl(debugReport, supportStatus, gatewayModelResolved) {
+  const title = '[Daikin ONECTA] Support ' + supportStatus + ' — ' + gatewayModelResolved
+  const body = 'Rapport de debug Daikin ONECTA (à compléter si besoin) :\n\n```\n' + debugReport + '\n```'
+  const params = new URLSearchParams({
+    title: title,
+    body: body,
+    category: 'plugins/wellness',
+    tags: 'plugin-daikinRCCloud'
+  })
+  return 'https://community.jeedom.com/new-topic?' + params.toString()
+}
+
 document.getElementById('div_pageContainer').addEventListener('click', function(event) {
+  const debugTarget = event.target.closest('.eqLogicAction[data-action="createDebugCommunityPost"]')
+  if (debugTarget) {
+    const report = readEqConfig('debugReport')
+    if (!report) {
+      jeedomUtils.showAlert({ message: '{{Aucun rapport de debug disponible.}}', level: 'warning' })
+      return
+    }
+    const supportStatus = readEqConfig('supportStatus') || 'unknown'
+    const gatewayModelResolved = readEqConfig('gatewayModelResolved') || 'none'
+    const url = buildDebugCommunityPostUrl(report, supportStatus, gatewayModelResolved)
+    if (url.length > 8000) {
+      jeedomUtils.showAlert({
+        message: '{{L\'URL du post Community est très longue ; l\'ouverture peut échouer selon le navigateur.}}',
+        level: 'warning'
+      })
+    }
+    openUrlInNewTab(url)
+    return
+  }
+
   const target = event.target.closest('.eqLogicAction[data-action="createCommunityPost"]')
   if (!target) return
   jeedom.plugin.createCommunityPost({
@@ -90,13 +132,7 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
       jeedomUtils.showAlert({ message: error.message, level: 'danger' })
     },
     success: function(data) {
-      const link = document.createElement('a')
-      link.href = data.url
-      link.target = '_blank'
-      link.style.display = 'none'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      openUrlInNewTab(data.url)
     }
   })
 })
@@ -162,6 +198,11 @@ function updateDaikinSupportUi() {
   const supportMessageDisplay = document.getElementById('daikin_support_message_display')
   const debugReportGroup = document.getElementById('daikin_debug_report_group')
   const debugReportDisplay = document.getElementById('daikin_debug_report_display')
+  const debugReport = readEqConfig('debugReport')
+  const debugCommunityBtn = document.getElementById('daikin_create_debug_community_post')
+  if (debugCommunityBtn) {
+    debugCommunityBtn.style.display = (!isBridge && debugReport) ? '' : 'none'
+  }
 
   if (!debugPanel || !alertBox || !alertInner || !alertTitle || !alertMessage) return
 

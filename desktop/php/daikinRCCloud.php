@@ -77,6 +77,7 @@
 			<span class="input-group-btn">
 				<a class="btn btn-sm btn-default eqLogicAction roundedLeft" data-action="configure"><i class="fas fa-cogs"></i><span class="hidden-xs"> {{Configuration avancée}}</span>
 				</a><a class="btn btn-sm btn-info eqLogicAction" data-action="createCommunityPost"><i class="fas fa-ambulance"></i><span class="hidden-xs"> {{Créer un post Community}}</span>
+				</a><a class="btn btn-sm btn-warning eqLogicAction" data-action="createDebugCommunityPost" id="daikin_create_debug_community_post" style="display:none;"><i class="fas fa-bug"></i><span class="hidden-xs"> {{Créer un post debug Community}}</span>
 				</a><a class="btn btn-sm btn-success eqLogicAction" data-action="save"><i class="fas fa-check-circle"></i> {{Sauvegarder}}
 				</a><a class="btn btn-sm btn-danger eqLogicAction roundedRight" data-action="remove"><i class="fas fa-minus-circle"></i> {{Supprimer}}
 				</a>
