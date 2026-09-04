@@ -16,15 +16,44 @@
 
 #daikin_support_debug .daikin-details > summary {
 	cursor: pointer;
-	font-weight: 600;
-	margin-bottom: 8px;
 	user-select: none;
+	list-style: none;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 12px;
+	margin: 0 0 8px 0;
+	font-weight: 600;
+	color: var(--txt-color, #e8e8e8);
+	background-color: var(--form-widget-bg-color, #2a2a2a);
+	border: 1px solid var(--form-widget-border-color, #666);
+	border-radius: 4px;
+}
+
+#daikin_support_debug .daikin-details > summary::-webkit-details-marker {
+	display: none;
+}
+
+#daikin_support_debug .daikin-details > summary::before {
+	content: '\25B8'; /* ▸ */
+	font-size: 14px;
+	width: 14px;
+	flex-shrink: 0;
+	line-height: 1;
+	opacity: 0.9;
+	transition: transform 0.15s ease;
+}
+
+#daikin_support_debug .daikin-details[open] > summary::before {
+	transform: rotate(90deg);
 }
 
 #daikin_support_debug .daikin-details > summary:hover {
-	opacity: 0.85;
+	border-color: var(--al-warning-color, #f0ad4e);
+	background-color: var(--btn-default-color, #333);
 }
 
 #daikin_support_debug .daikin-details[open] > summary {
 	margin-bottom: 10px;
+	border-color: var(--al-warning-color, #f0ad4e);
 }
