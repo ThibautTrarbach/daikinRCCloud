@@ -101,6 +101,17 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
   })
 })
 
+const DAIKIN_BRIDGE_LOGICAL_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581'
+
+function readEqAttr(l1key) {
+  const el = document.querySelector('.eqLogicAttr[data-l1key="' + l1key + '"]')
+  if (!el) return ''
+  if (typeof el.jeeValue === 'function') {
+    return el.jeeValue() || ''
+  }
+  return el.value !== undefined ? el.value : (el.textContent || '')
+}
+
 function readEqConfig(key) {
   const el = document.querySelector('.eqLogicAttr[data-l1key="configuration"][data-l2key="' + key + '"]')
   if (!el) return ''
@@ -108,6 +119,13 @@ function readEqConfig(key) {
     return el.jeeValue() || ''
   }
   return el.value !== undefined ? el.value : (el.textContent || '')
+}
+
+function updateDaikinDeviceInfoPanel() {
+  const panel = document.querySelector('.eqDefault')
+  if (!panel) return
+  const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
+  panel.style.display = isBridge ? 'none' : ''
 }
 
 function formatJsonConfig(raw) {
@@ -120,11 +138,14 @@ function formatJsonConfig(raw) {
 }
 
 function updateDaikinSupportUi() {
+  updateDaikinDeviceInfoPanel()
+
   const supportStatus = readEqConfig('supportStatus') || 'full'
   const configCoverage = readEqConfig('configCoverage') || 'complete'
   const settableMismatches = readEqConfig('settableMismatches') || ''
   const unmappedDatapoints = readEqConfig('unmappedDatapoints') || ''
-  const needsReporting = (supportStatus !== 'full') || (configCoverage === 'incomplete') || !!settableMismatches || !!unmappedDatapoints
+  const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
+  const needsReporting = !isBridge && ((supportStatus !== 'full') || (configCoverage === 'incomplete') || !!settableMismatches || !!unmappedDatapoints)
   const alertBox = document.getElementById('daikin_support_alert')
   const alertInner = document.getElementById('daikin_support_alert_box')
   const alertTitle = document.getElementById('daikin_support_alert_title')

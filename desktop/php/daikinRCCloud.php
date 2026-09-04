@@ -101,6 +101,7 @@
                                 <label class="col-sm-4 control-label">{{Nom de l'équipement}}</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display:none;">
+                                    <input type="text" class="eqLogicAttr form-control" data-l1key="logicalId" style="display:none;">
                                     <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}">
                                 </div>
                             </div>
