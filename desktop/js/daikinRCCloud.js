@@ -136,7 +136,8 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
   })
 })
 
-const DAIKIN_BRIDGE_LOGICAL_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581'
+// var: Jeedom réinjecte ce script sans reload (getResource.php) — const top-level casse
+var DAIKIN_BRIDGE_LOGICAL_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581'
 
 function readEqAttr(l1key) {
   const el = document.querySelector('.eqLogicAttr[data-l1key="' + l1key + '"]')
@@ -294,13 +295,14 @@ document.getElementById('div_pageContainer').addEventListener('click', function(
   }
 })
 
-if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.print === 'function') {
+if (typeof jeedom !== 'undefined' && jeedom.eqLogic && typeof jeedom.eqLogic.print === 'function' && !jeedom.eqLogic.__daikinSupportUiWrapped) {
   const originalPrint = jeedom.eqLogic.print
   jeedom.eqLogic.print = function() {
     const result = originalPrint.apply(this, arguments)
     setTimeout(updateDaikinSupportUi, 400)
     return result
   }
+  jeedom.eqLogic.__daikinSupportUiWrapped = true
 }
 
 document.getElementById('div_pageContainer').addEventListener('click', function(event) {
