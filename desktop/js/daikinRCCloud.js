@@ -146,7 +146,7 @@ function updateDaikinSupportUi() {
 
   if (!alertBox || !debugPanel) return
 
-  debugPanel.style.display = 'block'
+  debugPanel.style.display = needsReporting ? 'block' : 'none'
 
   if (!needsReporting) {
     alertBox.style.display = 'none'

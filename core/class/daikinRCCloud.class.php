@@ -549,6 +549,26 @@ class daikinRCCloud extends eqLogic
             return;
         }
 
+        if (!self::needsSupportReporting($deviceInfo)) {
+            foreach (self::SUPPORT_DEVICE_CONFIG_KEYS as $configKey) {
+                $eqLogic->setConfiguration($configKey, '');
+            }
+            $eqLogic->setConfiguration('supportNotified', 0);
+            $lightweightKeys = array(
+                'supportStatus',
+                'configCoverage',
+                'configCoverageDetail',
+                'gatewayModelRaw',
+                'gatewayModelResolved',
+            );
+            foreach ($lightweightKeys as $configKey) {
+                if (isset($deviceInfo[$configKey])) {
+                    $eqLogic->setConfiguration($configKey, $deviceInfo[$configKey]);
+                }
+            }
+            return;
+        }
+
         foreach (self::SUPPORT_DEVICE_CONFIG_KEYS as $configKey) {
             if (isset($deviceInfo[$configKey])) {
                 $eqLogic->setConfiguration($configKey, $deviceInfo[$configKey]);
