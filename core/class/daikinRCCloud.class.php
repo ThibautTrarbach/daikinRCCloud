@@ -39,6 +39,24 @@ class daikinRCCloud extends eqLogic
         'managementPointsList',
         'githubIssueUrl',
     );
+    const DEVICE_INFO_CONFIG_KEYS = array(
+        'timeZone',
+        'errorCode',
+        'modelInfo',
+        'serialNumber',
+        'firmwareVersion',
+        'wifiConnectionSSID',
+        'wifiConnectionStrength',
+        'ipAddress',
+        'macAddress',
+        'indoorUnitSoftwareVersion',
+    );
+    const DEVICE_INFO_CMD_LOGICAL_IDS = array(
+        '_gatewayIpAddress',
+        '_gatewayMacAddress',
+        '_gatewaySsid',
+        '_indoorUnitSoftwareVersion',
+    );
 
     /**
      * Vérifie si le daemon atteint une version minimale
@@ -369,6 +387,7 @@ class daikinRCCloud extends eqLogic
             }
 
             if (isset($event['_device']) && is_array($event['_device'])) {
+                self::syncDeviceInfoConfiguration($eqLogic, $event['_device']);
                 self::syncSupportDeviceConfiguration($eqLogic, $event['_device'], $event);
                 self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
                 $eqLogic->save();
@@ -522,12 +541,19 @@ class daikinRCCloud extends eqLogic
                     $cmd->setValue($valueCmd->getId());
                 }
             }
+            if (isset($cmdData['logicalID']) && in_array($cmdData['logicalID'], self::SUPPORT_CMD_LOGICAL_IDS, true)) {
+                $cmd->setIsVisible(0);
+            }
             $cmd->save();
         }
 
         foreach ($eqLogics->getCmd('info') as $existingCmd) {
             $logicalId = $existingCmd->getLogicalId();
             if (in_array($logicalId, self::SUPPORT_CMD_LOGICAL_IDS, true) && !isset($incomingLogicalIds[$logicalId])) {
+                $existingCmd->remove();
+                continue;
+            }
+            if (in_array($logicalId, self::DEVICE_INFO_CMD_LOGICAL_IDS, true)) {
                 $existingCmd->remove();
             }
         }
@@ -541,6 +567,19 @@ class daikinRCCloud extends eqLogic
         $supportStatus = isset($deviceInfo['supportStatus']) ? $deviceInfo['supportStatus'] : 'full';
         $configCoverage = isset($deviceInfo['configCoverage']) ? $deviceInfo['configCoverage'] : 'complete';
         return ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
+    }
+
+    private static function syncDeviceInfoConfiguration($eqLogic, $deviceInfo)
+    {
+        if (!is_array($deviceInfo)) {
+            return;
+        }
+
+        foreach (self::DEVICE_INFO_CONFIG_KEYS as $configKey) {
+            if (isset($deviceInfo[$configKey]) && $deviceInfo[$configKey] !== '' && $deviceInfo[$configKey] !== null) {
+                $eqLogic->setConfiguration($configKey, $deviceInfo[$configKey]);
+            }
+        }
     }
 
     private static function syncSupportDeviceConfiguration($eqLogic, $deviceInfo, $event)
@@ -628,10 +667,7 @@ class daikinRCCloud extends eqLogic
             $eqLogic->setIsEnable(1);
         }
 
-        $deviceConfigKeys = array(
-            'timeZone', 'errorCode', 'modelInfo', 'serialNumber',
-            'firmwareVersion', 'wifiConnectionSSID', 'wifiConnectionStrength',
-        );
+        $deviceConfigKeys = self::DEVICE_INFO_CONFIG_KEYS;
 
         foreach ($deviceConfigKeys as $configKey) {
             if (isset($event['_device'][$configKey])) {
@@ -640,6 +676,7 @@ class daikinRCCloud extends eqLogic
         }
 
         if (isset($event['_device']) && is_array($event['_device'])) {
+            self::syncDeviceInfoConfiguration($eqLogic, $event['_device']);
             self::syncSupportDeviceConfiguration($eqLogic, $event['_device'], $event);
             self::notifySupportStatusIfNeeded($eqLogic, $event['_device']);
         }

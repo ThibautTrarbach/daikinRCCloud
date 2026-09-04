@@ -140,13 +140,6 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-12" id="daikin_support_alert" style="display:none;">
-                            <div class="alert" id="daikin_support_alert_box">
-                                <strong id="daikin_support_alert_title"></strong>
-                                <p id="daikin_support_alert_message"></p>
-                            </div>
-                        </div>
-
                         <!-- Partie droite de l'onglet "Équipement" -->
                         <div class="col-xs-4 alert alert-info eqDefault">
                             <form class="form-horizontal">
@@ -174,6 +167,36 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{Indoor Unit Software Version : }}</label>
+                                        <div class="col-sm-6">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="indoorUnitSoftwareVersion"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{Gateway IP Address : }}</label>
+                                        <div class="col-sm-6">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="ipAddress"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{Gateway MAC Address : }}</label>
+                                        <div class="col-sm-6">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="macAddress"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{Gateway SSID : }}</label>
+                                        <div class="col-sm-6">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="wifiConnectionSSID"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{Support Status : }}</label>
+                                        <div class="col-sm-6">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportStatus"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-sm-6 control-label">{{Code Erreur : }}</label>
                                         <div class="col-sm-6">
                                             <span class="eqLogicAttr" data-l1key="configuration" data-l2key="errorCode"></span>
@@ -183,100 +206,110 @@
                             </form>
                         </div>
 
-                        <div class="col-xs-12" id="daikin_support_debug">
-                            <div class="alert alert-info" style="margin-bottom:15px;">
-                                <legend><i class="fas fa-info-circle"></i> {{Informations API / diagnostic}}</legend>
-                                <div class="form-group" id="daikin_support_message_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Message support}}</label>
-                                    <div class="col-sm-9">
-                                        <p id="daikin_support_message_display" class="form-control-static"></p>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportMessage" style="display:none;"></span>
-                                    </div>
+                        <div class="col-xs-12" id="daikin_support_debug" style="display:none;">
+                            <div class="panel panel-default" style="margin-bottom:15px;">
+                                <div class="panel-heading">
+                                    <legend style="margin-bottom:0;border:0;"><i class="fas fa-info-circle"></i> {{Informations API / diagnostic}}</legend>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Statut support}}</label>
-                                    <div class="col-sm-9">
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportStatus"></span>
+                                <div class="panel-body form-horizontal">
+                                    <div id="daikin_support_alert" style="display:none;margin-bottom:15px;">
+                                        <div class="alert" id="daikin_support_alert_box" style="margin-bottom:0;">
+                                            <strong id="daikin_support_alert_title"></strong>
+                                            <p id="daikin_support_alert_message" style="margin-bottom:0;"></p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Couverture config}}</label>
-                                    <div class="col-sm-9">
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverage"></span>
-                                        (<span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverageDetail"></span>)
+                                    <div class="form-group" id="daikin_settable_mismatch_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Écarts settable}}</label>
+                                        <div class="col-sm-9">
+                                            <pre id="daikin_settable_mismatches_display" style="white-space:pre-wrap;max-height:180px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatches" style="display:none;"></span>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatchesDetail" style="display:none;"></span>
+                                            <small class="text-muted">{{Datapoints settable côté API mais mappés en lecture seule par le daemon.}}</small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Modèle gateway (API)}}</label>
-                                    <div class="col-sm-9">
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelRaw"></span>
+                                    <div class="form-group" id="daikin_support_message_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Message support}}</label>
+                                        <div class="col-sm-9">
+                                            <p id="daikin_support_message_display" class="form-control-static"></p>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportMessage" style="display:none;"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Modèle gateway (résolu)}}</label>
-                                    <div class="col-sm-9">
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelResolved"></span>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Statut support}}</label>
+                                        <div class="col-sm-9">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="supportStatus"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Points de gestion}}</label>
-                                    <div class="col-sm-9">
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="managementPointsList"></span>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Couverture config}}</label>
+                                        <div class="col-sm-9">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverage"></span>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="configCoverageDetail"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Unités détectées}}</label>
-                                    <div class="col-sm-9">
-                                        <pre id="daikin_unit_models_display" style="white-space:pre-wrap;"></pre>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unitModels" style="display:none;"></span>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Modèle gateway (API)}}</label>
+                                        <div class="col-sm-9">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelRaw"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{{Inventaire API (settable / min-max)}}</label>
-                                    <div class="col-sm-9">
-                                        <pre id="daikin_api_datapoints_display" style="white-space:pre-wrap;max-height:260px;overflow:auto;"></pre>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="apiDatapointsDetail" style="display:none;"></span>
-                                        <small class="help-block">{{Liste des leaves API découvertes avec settable, valueType, values, min/max.}}</small>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Modèle gateway (résolu)}}</label>
+                                        <div class="col-sm-9">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="gatewayModelResolved"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="daikin_settable_mismatch_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Écarts settable}}</label>
-                                    <div class="col-sm-9">
-                                        <pre id="daikin_settable_mismatches_display" style="white-space:pre-wrap;max-height:180px;overflow:auto;"></pre>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatches" style="display:none;"></span>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="settableMismatchesDetail" style="display:none;"></span>
-                                        <small class="help-block">{{Datapoints settable côté API mais mappés en lecture seule par le daemon.}}</small>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Points de gestion}}</label>
+                                        <div class="col-sm-9">
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="managementPointsList"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="daikin_unmapped_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Datapoints non mappés}}</label>
-                                    <div class="col-sm-9">
-                                        <pre class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapoints" style="white-space:pre-wrap;max-height:120px;overflow:auto;"></pre>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Unités détectées}}</label>
+                                        <div class="col-sm-9">
+                                            <pre id="daikin_unit_models_display" style="white-space:pre-wrap;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unitModels" style="display:none;"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="daikin_unmapped_detail_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Détail datapoints non mappés}}</label>
-                                    <div class="col-sm-9">
-                                        <pre id="daikin_unmapped_detail_display" style="white-space:pre-wrap;max-height:220px;overflow:auto;"></pre>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapointsDetail" style="display:none;"></span>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">{{Inventaire API (settable / min-max)}}</label>
+                                        <div class="col-sm-9">
+                                            <pre id="daikin_api_datapoints_display" style="white-space:pre-wrap;max-height:260px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="apiDatapointsDetail" style="display:none;"></span>
+                                            <small class="text-muted">{{Liste des leaves API découvertes avec settable, valueType, values, min/max.}}</small>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="daikin_debug_report_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Rapport de debug}}</label>
-                                    <div class="col-sm-9">
-                                        <pre id="daikin_debug_report_display" style="white-space:pre-wrap;max-height:310px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;"></pre>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="debugReport" style="display:none;"></span>
-                                        <button type="button" class="btn btn-default btn-sm" id="daikin_copy_debug_report" style="margin-top:8px;">
-                                            <i class="fas fa-copy"></i> {{Copier le rapport}}
-                                        </button>
-                                        <small class="help-block">{{Copiez ce rapport dans votre post Community pour aider au support.}}</small>
+                                    <div class="form-group" id="daikin_unmapped_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Datapoints non mappés}}</label>
+                                        <div class="col-sm-9">
+                                            <pre class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapoints" style="white-space:pre-wrap;max-height:120px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group" id="daikin_github_issue_group" style="display:none;">
-                                    <label class="col-sm-3 control-label">{{Signaler sur GitHub}}</label>
-                                    <div class="col-sm-9">
-                                        <a id="daikin_github_issue_link" href="#" target="_blank" rel="noopener noreferrer"></a>
-                                        <span class="eqLogicAttr" data-l1key="configuration" data-l2key="githubIssueUrl" style="display:none;"></span>
+                                    <div class="form-group" id="daikin_unmapped_detail_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Détail datapoints non mappés}}</label>
+                                        <div class="col-sm-9">
+                                            <pre id="daikin_unmapped_detail_display" style="white-space:pre-wrap;max-height:220px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="unmappedDatapointsDetail" style="display:none;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="daikin_debug_report_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Rapport de debug}}</label>
+                                        <div class="col-sm-9">
+                                            <pre id="daikin_debug_report_display" style="white-space:pre-wrap;max-height:310px;overflow:auto;border:1px solid #ccc;padding:8px;background:#fff;color:#333;"></pre>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="debugReport" style="display:none;"></span>
+                                            <button type="button" class="btn btn-default btn-sm" id="daikin_copy_debug_report" style="margin-top:8px;">
+                                                <i class="fas fa-copy"></i> {{Copier le rapport}}
+                                            </button>
+                                            <small class="text-muted">{{Copiez ce rapport dans votre post Community pour aider au support.}}</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="daikin_github_issue_group" style="display:none;">
+                                        <label class="col-sm-3 control-label">{{Signaler sur GitHub}}</label>
+                                        <div class="col-sm-9">
+                                            <a id="daikin_github_issue_link" href="#" target="_blank" rel="noopener noreferrer"></a>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="githubIssueUrl" style="display:none;"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

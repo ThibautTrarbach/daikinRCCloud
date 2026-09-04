@@ -144,7 +144,7 @@ function updateDaikinSupportUi() {
   const githubIssueGroup = document.getElementById('daikin_github_issue_group')
   const githubIssueLink = document.getElementById('daikin_github_issue_link')
 
-  if (!alertBox || !debugPanel) return
+  if (!debugPanel || !alertBox || !alertInner || !alertTitle || !alertMessage) return
 
   debugPanel.style.display = needsReporting ? 'block' : 'none'
 
@@ -153,6 +153,7 @@ function updateDaikinSupportUi() {
   } else {
     alertBox.style.display = 'block'
     alertInner.className = 'alert'
+    alertInner.style.marginBottom = '0'
 
     if (supportStatus === 'unsupported') {
       alertInner.classList.add('alert-danger')
