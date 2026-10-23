@@ -11,6 +11,7 @@ Toutes les modifications notables de ce plugin seront documentées sur cette pag
 
 ### Ajouté — Plugin
 - Contrôle local LAN (Online Controller) : config plugin + override IP par équipement ; le daemon privilégie le LAN si joignable
+- Mode d’auth **Local uniquement (LAN)** : démarrage sans Onecta
 - Pastille équipement **Cloud** / **Local** / **Les deux** (`_device.accessMode`)
 
 ## [1.0.0] - 2026-10-24

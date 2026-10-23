@@ -5,7 +5,7 @@ title: Authentification - Daikin ONECTA
 
 # Authentification
 
-Pour que Jeedom puisse piloter vos appareils Daikin, le plugin doit se connecter à votre compte cloud Daikin ONECTA. Deux modes de connexion sont disponibles.
+Pour piloter vos appareils Daikin depuis Jeedom, choisissez un mode de connexion : cloud Onecta, ou **local uniquement** (LAN, sans compte Daikin).
 
 ## Quel mode choisir ?
 
@@ -13,14 +13,22 @@ Pour que Jeedom puisse piloter vos appareils Daikin, le plugin doit se connecter
 
 **Mobile App** n’est **pas pris en charge officiellement** par Daikin. Il s’appuie sur une API non publique dédiée à l’application mobile officielle : ce mode peut **cesser de fonctionner à tout moment** sans préavis.
 
-| | Developer Portal (recommandé) | Mobile App |
-|---|-------------------------------|------------|
-| **Statut** | Officiel Daikin | Non officiel — peut casser à tout moment |
-| **Identifiants** | Client ID + Client Secret | Email + mot de passe Onecta |
-| **Même compte que l'app mobile ?** | Non (compte développeur séparé) | Oui |
-| **Quota journalier** | 200 interrogations | 3000 interrogations |
-| **Mises à jour en temps réel** | Non | Oui |
-| **Configuration** | Procédure OAuth | Simple (2 champs) |
+| | Developer Portal (recommandé) | Mobile App | Local uniquement |
+|---|-------------------------------|------------|------------------|
+| **Statut** | Officiel Daikin | Non officiel — peut casser à tout moment | LAN HTTP (Online Controller) |
+| **Identifiants** | Client ID + Client Secret | Email + mot de passe Onecta | Aucun (IPs LAN) |
+| **Même compte que l'app mobile ?** | Non (compte développeur séparé) | Oui | Non |
+| **Quota journalier** | 200 interrogations | 3000 interrogations | Aucun |
+| **Mises à jour en temps réel** | Non | Oui | Polling LAN |
+| **Configuration** | Procédure OAuth | Simple (2 champs) | Liste d’IP |
+
+### Mode Local uniquement (LAN)
+
+1. Sélectionnez **Local uniquement (LAN)**.
+2. Renseignez les **IPv4** des modules Online Controller (`BRP069A42` / `A43` / `B41`).
+3. Sauvegardez et redémarrez le daemon.
+
+Aucun compte Onecta n’est requis : le client cloud n’est pas démarré.
 
 ---
 

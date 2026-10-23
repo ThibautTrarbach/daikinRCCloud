@@ -56,13 +56,15 @@
 					$accessMode = $eqLogic->getConfiguration('accessMode', 'cloud');
 					$controlPath = $eqLogic->getConfiguration('controlPath', '');
 					echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-					echo '<img src="' . $plugin->getPathImgIcon() . '">';
 					if ($eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
-						echo '<span class="pull-right" style="margin:2px;">' . daikinRCCloud::accessModeBadgeHtml($accessMode, $controlPath) . '</span>';
+						echo '<div class="daikin-eq-badges" style="min-height:22px;margin-bottom:4px;text-align:center;">';
+						echo daikinRCCloud::accessModeBadgeHtml($accessMode, $controlPath);
+						if ($needsSupportBadge) {
+							echo ' <span class="label label-warning" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
+						}
+						echo '</div>';
 					}
-					if ($needsSupportBadge && $eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
-						echo '<span class="label label-warning pull-right" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
-					}
+					echo '<img src="' . $plugin->getPathImgIcon() . '">';
 					echo '<br>';
 					echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
 					echo '<span class="hiddenAsCard displayTableRight hidden">';
@@ -212,9 +214,9 @@
                                             <span class="eqLogicAttr" data-l1key="configuration" data-l2key="macAddress"></span>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" id="daikin_localIpOverride_group" style="display:none;">
                                         <label class="col-sm-6 control-label">{{IP locale (override)}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Force l'IP LAN pour le contrôle local (modèles Online Controller). Laisser vide pour l'IP cloud auto.}}"></i></sup>
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Force l'IP LAN pour le contrôle local (BRP069A42 / A43 / B41 uniquement). Laisser vide pour l'IP cloud auto.}}"></i></sup>
                                         </label>
                                         <div class="col-sm-6">
                                             <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="localIpOverride" placeholder="192.168.x.x" />

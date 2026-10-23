@@ -20,7 +20,7 @@ $pollingEstimate = array(
 $pollingEstimateDetail = '';
 try {
     $authMode = config::byKey('daikin_authMode', 'daikinRCCloud', 'developer_portal');
-    $dailyQuotaLimit = ($authMode === 'mobile_app') ? 3000 : 200;
+    $dailyQuotaLimit = ($authMode === 'mobile_app') ? 3000 : (($authMode === 'local') ? 0 : 200);
     config::save('daikin_dailyQuotaLimit', $dailyQuotaLimit, 'daikinRCCloud');
 
     $pollingEstimate = daikinRCCloud::computePollingEstimate(array(
@@ -79,6 +79,7 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                 <select class="configKey form-control" data-l1key="daikin_authMode" id="daikin_authMode">
                     <option value="developer_portal">{{Developer Portal (OAuth)}}</option>
                     <option value="mobile_app">{{Mobile App}}</option>
+                    <option value="local">{{Local uniquement (LAN)}}</option>
                 </select>
             </div>
         </div>
@@ -90,6 +91,20 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                 </div>
                 <div id="daikin-auth-quota-hint-mobile" class="alert alert-info" style="margin-bottom: 0; display:none;">
                     <small><i class="fas fa-info-circle"></i> {{Le mode Mobile App utilise vos identifiants Onecta (même compte que l'application mobile). Quota API : 3000 requêtes/jour. Aucune configuration OAuth manuelle requise.}}</small>
+                </div>
+                <div id="daikin-auth-quota-hint-local" class="alert alert-info" style="margin-bottom: 0; display:none;">
+                    <small><i class="fas fa-info-circle"></i> {{Mode local : aucun compte Onecta. Le daemon pilote uniquement les modules Online Controller via HTTP LAN (BRP069A42/A43/B41). Pas de quota cloud.}}</small>
+                </div>
+            </div>
+        </div>
+
+        <div id="daikin-auth-local" style="display:none;">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Modules locaux (IP)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Adresses IPv4 des modules Online Controller, séparées par espace, virgule ou retour ligne. Obligatoire en mode local.}}"></i></sup>
+                </label>
+                <div class="col-sm-6">
+                    <textarea class="configKey form-control" data-l1key="daikin_local_devices" rows="3" placeholder="192.168.1.50"></textarea>
                 </div>
             </div>
         </div>

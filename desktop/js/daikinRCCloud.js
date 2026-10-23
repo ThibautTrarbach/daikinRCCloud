@@ -192,9 +192,31 @@ function updateAccessModeBadge() {
   badge.innerHTML = html
 }
 
+function isLanCompatibleGatewayModel(raw) {
+  const model = String(raw || '').trim().toUpperCase().replace(/\s+/g, '')
+  return model === 'BRP069A42' || model === 'BRP069A43' || model === 'BRP069B41'
+}
+
+function updateLocalIpOverrideVisibility() {
+  const group = document.getElementById('daikin_localIpOverride_group')
+  if (!group) return
+  const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
+  if (isBridge) {
+    group.style.display = 'none'
+    return
+  }
+  const accessMode = (readEqConfig('accessMode') || '').toLowerCase()
+  const show = accessMode === 'local'
+    || isLanCompatibleGatewayModel(readEqConfig('modelInfo'))
+    || isLanCompatibleGatewayModel(readEqConfig('gatewayModelResolved'))
+    || isLanCompatibleGatewayModel(readEqConfig('gatewayModelRaw'))
+  group.style.display = show ? '' : 'none'
+}
+
 function updateDaikinSupportUi() {
   updateDaikinDeviceInfoPanel()
   updateAccessModeBadge()
+  updateLocalIpOverrideVisibility()
 
   const supportStatus = readEqConfig('supportStatus') || 'full'
   const configCoverage = readEqConfig('configCoverage') || 'complete'

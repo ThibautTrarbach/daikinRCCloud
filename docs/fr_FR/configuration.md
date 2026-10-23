@@ -23,6 +23,7 @@ Deux modes sont disponibles :
 |------|-------------|------------------|
 | **Developer Portal** | Application sur le [portail développeur Daikin](https://developer.cloud.daikineurope.com/) | 200 interrogations/jour |
 | **Mobile App** | Identifiants du compte Onecta (application mobile) | 3000 interrogations/jour |
+| **Local uniquement (LAN)** | Aucun compte Onecta : modules Online Controller via HTTP local | Aucun (pas de cloud) |
 
 Consultez la page [Authentification]({{ site.baseurl }}/fr_FR/authentification.html) pour le détail de chaque mode.
 
@@ -55,7 +56,7 @@ Dans **Configuration avancée**, section **Contrôle local (LAN)** :
 | **Modules locaux (IP)** | IPv4 des modules **non liés à Onecta**, séparées par espace / virgule / ligne |
 | **Timeout LAN** | Timeout HTTP local (défaut 5000 ms) |
 
-Sur chaque équipement cloud compatible, le champ **IP locale (override)** force l’adresse LAN. Redémarrez le daemon après modification.
+Sur les équipements **compatibles LAN** uniquement (`BRP069A42` / `A43` / `B41`, ou pastille Local), le champ **IP locale (override)** force l’adresse LAN. Il est masqué pour les autres modèles. Redémarrez le daemon après modification.
 
 Pastille équipement : **Cloud** / **Local** / **Les deux** (selon `_device.accessMode`).
 

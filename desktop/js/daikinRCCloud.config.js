@@ -34,6 +34,9 @@
     }
 
     function getDailyQuotaLimit(authMode) {
+        if (authMode === 'local') {
+            return 0;
+        }
         return authMode === 'mobile_app' ? 3000 : 200;
     }
 
@@ -169,11 +172,14 @@
         }
         var isDeveloper = authSelect.value === 'developer_portal';
         var isMobile = authSelect.value === 'mobile_app';
+        var isLocal = authSelect.value === 'local';
 
         var developerBlock = root.querySelector('#daikin-auth-developer');
         var mobileBlock = root.querySelector('#daikin-auth-mobile');
+        var localBlock = root.querySelector('#daikin-auth-local');
         var hintDeveloper = root.querySelector('#daikin-auth-quota-hint-developer');
         var hintMobile = root.querySelector('#daikin-auth-quota-hint-mobile');
+        var hintLocal = root.querySelector('#daikin-auth-quota-hint-local');
 
         if (developerBlock) {
             developerBlock.style.display = isDeveloper ? '' : 'none';
@@ -181,11 +187,17 @@
         if (mobileBlock) {
             mobileBlock.style.display = isMobile ? '' : 'none';
         }
+        if (localBlock) {
+            localBlock.style.display = isLocal ? '' : 'none';
+        }
         if (hintDeveloper) {
             hintDeveloper.style.display = isDeveloper ? '' : 'none';
         }
         if (hintMobile) {
             hintMobile.style.display = isMobile ? '' : 'none';
+        }
+        if (hintLocal) {
+            hintLocal.style.display = isLocal ? '' : 'none';
         }
 
         root.querySelectorAll('.daikin-auth-port').forEach(function(el) {
