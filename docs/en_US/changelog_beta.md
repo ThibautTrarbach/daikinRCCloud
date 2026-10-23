@@ -1,0 +1,195 @@
+---
+layout: default
+title: Daikin ONECTA Changelog (Beta)
+---
+
+# Daikin ONECTA Changelog
+
+All notable changes to this plugin will be documented on this page.
+
+## [1.0.0] - 2026-10-24
+
+> **Release candidate** for the stable channel — plugin **1.0.0** is ready.
+
+### Info
+- Plugin version **1.0.0** is complete and marked as the release candidate toward the stable release
+
+### Added — Plugin
+- Optional HVAC widget (dashboard / mobile / panel), inspired by **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
+- Equipment option **Use HVAC widget** (disabled by default)
+- Multi-zone / DHW tank adaptation (zone selector, tabs hidden when unavailable)
+
+### Changed — Documentation
+- Online documentation reviewed and improved (installation, configuration, authentication, usage, quotas, troubleshooting)
+
+## [0.10.4] - 2026-09-04
+
+> Daemon shipped by the `release-beta` branch: **2.1.7** (minimum required: 2.0.0)
+
+### Changed — Plugin
+- Hide the “API / diagnostic” panel when support is complete; clear stored diagnostic configuration
+- Align with daemon: support MQTT metadata only when coverage/support is incomplete
+
+### Changed — Daemon
+- Gateway IP/MAC/SSID and indoor unit software version: publish in `_device` (no dedicated MQTT commands)
+- Support diagnostic MQTT published only when coverage/support is incomplete
+
+### Added — Daemon
+- API inventory / settable mismatches in the debug report
+- BRP069C4x: `intelligentEyeMode`, `frontPanelSetting`, `installationPosition`
+
+### Fixed — Daemon
+- BRP069A78: `operationMode` and DHW setpoint marked settable to match the API
+- `climateControl/name`: intentional read-only (equipment identity)
+
+---
+
+## [0.10.3] - 2026-09-01
+
+> Daemon shipped by the `release-beta` branch: **2.1.5** (minimum required: 2.0.0)
+
+### Fixed — Daemon
+- BRP069B4x / BRP069A4x: complete static coverage (`gatewayDiagnosticsPack`, `auxiliaryUnitPack`) — [#42](https://github.com/ThibautTrarbach/daikinRCCloud/issues/42)
+- BRP069A78: gateway diagnostics, leaving water offset, DHW tank, hydro/outdoor/UI units — [#41](https://github.com/ThibautTrarbach/daikinRCCloud/issues/41)
+- Debug report: redact serial number (`serialNumber`)
+
+---
+
+## [0.10.2] - 2026-09-01
+
+> Daemon shipped by the `release-beta` branch: **2.1.3** (minimum required: 2.0.0)
+
+### Added — Plugin
+- Enhanced support diagnostic panel: support message, management points, detected units, unmapped datapoints, debug report with copy button
+- GitHub link to report unsupported devices (`githubIssueUrl`)
+- Support metadata synchronization from daemon to equipment configuration
+- Automatic cleanup of obsolete support commands (logical IDs `_supportStatus`, `_configCoverage`, etc.)
+
+### Added — Daemon
+- `gatewayDiagnosticsPack` and `auxiliaryUnitPack`: gateway network/diagnostic sensors and indoor/outdoor unit sensors (BRP069C4x)
+- Read-only `isPowerfulModeActive` mapping (firmware 2.6.x API)
+- Support metadata module: debug report, GitHub issue URL, synchronized support commands
+
+### Fixed — Daemon
+- API coverage audit: normalize datapoint paths, count `_device` metadata
+- Home Assistant preset mode: fallback to `_isPowerfulModeActive` when `_powerfulMode` is absent
+
+### Changed — Daemon
+- `_device` enrichment: `ipAddress`, `macAddress`, `ssid` alias
+- Debug report: support message inclusion, truncation indicator for unmapped datapoints
+
+---
+
+## [0.10.1] - 2026-09-01
+
+> Daemon shipped by the `release-beta` branch: **2.1.2** (minimum required: 2.0.0)
+
+### Added — Plugin
+- Support status alerts: notification when a Daikin device has partial support or incomplete configuration (UI banner + diagnostic information)
+- Phantom equipment cleanup: automatic removal of logical IDs created from internal MQTT topics (system bridge)
+- Authentication notifications: OAuth validation request with user message and timeout expiration handling
+
+### Added — Daemon
+- Configurable OAuth authorization timeout (`authorizationTimeoutSeconds`, 60–3600 s)
+- Cleanup of stale retained MQTT topics on startup
+- WebSocket: support for nested characteristics and references in push updates
+
+### Changed
+- Documentation clarification: distinction between the Daikin2MQTT bridge and actual Daikin devices
+- Enhanced daemon graceful shutdown (skip operations during shutdown)
+- Improved rate-limit handling: merge partial updates, retain previous values when absent
+
+---
+
+## [0.10.0] - 2026-08-30
+
+> Daemon shipped by the `release-beta` branch: **2.1.0** (minimum required: 2.0.0)
+
+### Breaking change
+- Daemon V1 (< 2.0.0) is no longer supported — mandatory migration to daemon V2
+- **Reinstalling dependencies is required** after updating the plugin
+- Default dependency branch: `release-beta`
+- Automatic migration of V1 branches (`release-stable`, `dev`, `release-dev`, etc.) to `release-beta`
+- Prerequisites: Jeedom 4.4+, **mqtt2** plugin installed and running
+
+### Added — Plugin
+- Complete redesign of the configuration page (collapsible sections, remembered “Advanced configuration” mode)
+- Display of plugin and daemon versions (useful for community support)
+- **Mobile App** mode: login with Onecta email/password, quota ~3000 req/day
+- **Developer Portal** mode: OAuth Client ID/Secret, quota ~200 req/day
+- Automatic estimation of API quota and requests/day based on authentication mode
+- New advanced settings: post-action refresh strategy, merge with polling, command coalescing, energy stats refresh, WebSocket, DynamicGateway, read-only sensors, publish on delta, HTTP curl transport, MQTT prefix
+- Onecta password stored encrypted
+- mqtt2 checks with explicit error messages if missing or not running
+- First version of online documentation: installation, configuration, authentication, usage, API quotas, troubleshooting. Content quickly generated by AI before publication — **not yet reviewed or validated**
+
+### Added — Daemon (via the plugin)
+- Simplified login with the same account as the Onecta app (Mobile App mode)
+- Real-time updates via WebSocket (responsiveness without consuming API quota)
+- Automatic support for unlisted Daikin models (DynamicGateway)
+- kWh energy counters refreshed daily at a configurable time
+- Immediate response in Jeedom after a command (optimistic MQTT publication)
+- Quota savings: merge refresh/polling, adaptive polling based on API budget, skip if WebSocket confirms the change
+- Workaround for Daikin network/WAF blocks (HTTP curl transport)
+- API budget status visible on the MQTT system bridge
+
+### Changed
+- Authentication interface: dynamic Mobile App / Developer Portal toggle with displayed quotas
+- Polling defaults: 15 min (day) / 30 min (night); post-action refresh delay: 60 s (instead of 120 s)
+- More reliable daemon installation: execution via compiled `main.js`, checks at install time
+- Explicit error messages (mqtt2 missing, daemon too old, `main.js` not found)
+- ~90 new UI translations (FR, EN, ES, DE, IT)
+- Version branching kept with commented V3 stubs for future evolution
+
+### Removed
+- Support for daemon V1 (< 2.0.0) and OAuth authentication via MQTT
+- V1 plugin code (configuration, legacy MQTT messages)
+- Obsolete dependency branches: `release-stable`, `dev`, `release-dev`
+
+---
+
+## [0.9.3] - 2025-12-10
+
+### Improved
+- Improved plugin update process
+- Improved plugin logs with translation
+- Fixed empty value handling in configuration page
+- Better error handling in configuration page and in tasks executed during plugin installation or update
+
+---
+## [0.9.2] - 2025-12-09
+
+### Fixed
+- Fixed a configuration update bug
+
+### Breaking change
+- The plugin now requires Jeedom 4.4 minimum
+
+---
+
+## [0.9.1] - 2025-12-05
+
+### Info
+- Daemon 2.0.x is not yet properly available. In the coming days, we will offer you to test it in alpha mode to avoid impacting your production during the heating period
+
+### Added
+- Dependency configuration: ability to choose branch or commit to install
+- Support for polling parameters (day/night) for daemon 2.0.0+
+- Support for action refresh modes for daemon 2.0.0+
+- Compatibility with daemon V1 and V2 versions
+- Full internationalization (FR, EN, ES, DE, IT)
+- Link to future documentation and changelog
+
+### Changed
+- Improved MQTT message handling
+- Optimized equipment creation
+
+### Fixed
+- Various bug fixes
+
+---
+
+## [0.9.0] - In the year 2022 (No memory of the date)
+
+### Added
+- Initial plugin version

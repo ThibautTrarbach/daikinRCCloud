@@ -1,0 +1,53 @@
+<script>
+$.include(['plugins/daikinRCCloud/mobile/js/panel.js'], function() {});
+</script>
+<div id="div_AppliDRC">
+	<div class="DRC_lastUpdate"><span class="DRC_LUtxt"></span> <span class="DRC_LUv"></span></div>
+	<div class="DRC_PanelList">
+		<div class="eqLogic_list DRC_AllUnit">
+			<div class="DRC_zImg">&nbsp;</div>
+			<div class="DRC_zPow disabled">
+				<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-off"><i class="far fa-circle"></i></span>&nbsp;
+				<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-on"><i class="fa fa-power-off"></i></span>
+			</div>
+			<div class="DRC_zInfos"><span class="DRC_ALtxt"></span> (<span class="DRC_ALnb">-</span>)</div>
+		</div>
+		<div class="DRC_eqLogics">
+			<div class="DRC_eqLogics_loading">Loading…</div>
+		</div>
+	</div>
+</div>
+
+<style>
+.DRC_lastUpdate { color:#333; text-align:center; font-size:12px; width:100%; padding:1px 0px; }
+.DRC_zPow .DRC_btn-pow { border-radius:50px!important; margin:0px 2px 0px 5px; }
+.DRC_zPow .DRC_btn-pow-on { background-color:#5cb85c; border:2px solid #5cb85c; color:#FFF; }
+.DRC_zPow.disabled .DRC_btn-pow-on { background-color:#888!important; border:2px solid #888!important; }
+.DRC_zPow .DRC_btn-pow-off { background-color:#FFF; color:#333; border:2px solid #333; }
+.DRC_btn-bleu { color:#3F2790!important; }
+.DRC_btn-rouge { color:#F09797!important; }
+.DRC_btn-vert { color:#83F483!important; }
+.DRC_btn-jaune { color:#F9F953!important; }
+.DRC_eqLogics_loading { text-align:center; height:50%; vertical-align:middle; }
+.eqLogic_list { width:100%; background-color:#FFF; border-bottom:1px solid #A0A0A0; height:70px; padding:5px 1px; }
+.eqLogic_list.DRC_AllUnit { background-color:#EEE!important; margin-top:5px; }
+.eqLogic_list .DRC_zImg { width:70px; height:49px; margin:1px 10px; float:left; }
+.eqLogic_list .DRC_zInfos { margin:5px; vertical-align:middle; font-size:16px; }
+.eqLogic_list .DRC_zInfos.disabled { color:#888; }
+.eqLogic_list .DRC_zPow { margin:5px; float:right; }
+.eqLogic_ctrl { z-index:1000; display:none; }
+.eqLogic_ctrl .DRC_zBack { margin-top:5px; padding:10px 0px; background-color:#EEE!important; font-size:110%; text-align:center; }
+.eqLogic_ctrl .DRC_zBack .DRC_back { float:left; top:-5px; }
+.eqLogic_ctrl .DRC_zInfos { min-width:200px; font-size:18px; text-align:center; margin:7px 0px; }
+.eqLogic_ctrl .DRC_zPow { margin:0px; padding:7px 15px; height:42px; border-bottom:1px solid #AAA; }
+.eqLogic_ctrl .DRC_btn-pow-off { float:left; }
+.eqLogic_ctrl .DRC_btn-pow-on { float:right; }
+.eqLogic_ctrl .DRC_zMode { text-align:center; padding:5px 0px 10px 0px; }
+.eqLogic_ctrl .DRC_zMode .cmd { color:#AAA; font-size:110%; }
+.eqLogic_ctrl .DRC_zMode .separ { margin:0px 2px; border-left:1px solid #AAA; }
+.eqLogic_ctrl .DRC_zModeName { text-align:center; font-size:14px; margin-bottom:8px; }
+.eqLogic_ctrl .DRC_zOneMenu,
+.eqLogic_ctrl .DRC_zMenus { border-top:1px solid #AAA; border-bottom:1px solid #AAA; text-align:center; padding:6px 0px; height:46px; bottom:0px; position:fixed; width:100%; background-color:#FFF; }
+.eqLogic_ctrl .DRC_zOneMenu { display:none; }
+.eqLogic_ctrl .DRC_zOneMenu .DRC_back { float:left; }
+</style>

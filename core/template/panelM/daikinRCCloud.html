@@ -1,0 +1,61 @@
+<!-- PANEL_M — inspired by DaikinOnlineCtrl (AGPL, Masterfion & A.Barrau) -->
+<div class="eqLogic noResize" data-version="panelM" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" style="display:none;">
+	<div class="eqLogic_list">
+		<div class="DRC_zImg DRC_clickOpenCtrl"><i class="fas fa-snowflake" style="font-size:40px;margin:8px 15px;"></i></div>
+		<div class="DRC_zPow">
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-off"><i class="far fa-circle"></i></span>&nbsp;
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-on"><i class="fa fa-power-off"></i></span>
+		</div>
+		<div class="DRC_zInfos DRC_clickOpenCtrl">#name_display# <br/>
+			<i class="fa fa-home"></i> <span class="DRC_HomeTemp">-</span>&nbsp;&nbsp;<i class="jeedom jeedom-thermometre"></i> <span class="DRC_ConsigneTemp">-</span>
+		</div>
+	</div>
+
+	<div class="eqLogic_ctrl">
+		<div class="DRC_zBack">
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_back"><i class="fa fa-chevron-left"></i></span>
+			<span>#name_display#</span>
+		</div>
+		<div class="DRC_zPow">
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-off"><i class="far fa-circle"></i></span>
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-pow DRC_btn-pow-on"><i class="fa fa-power-off"></i></span>
+			<div class="DRC_zInfos">
+				<i class="fa fa-home"></i> <span class="DRC_HomeTemp">-</span>&nbsp;&nbsp;<i class="jeedom2 jeedom2-plante_temp1"></i> <span class="DRC_ExtTemp">-</span>
+			</div>
+		</div>
+		<div class="DRC_zMode"></div>
+		<div class="DRC_zTempCtrl" style="text-align:center;margin:15px 0;">
+			<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
+			<span class="DRC_ConsigneBig" style="font-size:48px;margin:0 20px;">#stemp-v#°</span>
+			<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
+		</div>
+		<div class="DRC_zModeName">#active-zone-label#</div>
+		<div class="DRC_zMenus">
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-FRate"><i class="fas fa-fan"></i></span>
+			<span class="separ">&nbsp;</span>
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-FDir"><i class="fas fa-arrows-alt"></i></span>
+			<span class="separ">&nbsp;</span>
+			<span class="cmd action ui-btn ui-mini ui-btn-inline DRC_btn-Extra"><i class="fas fa-bolt"></i></span>
+		</div>
+		<div class="DRC_zOneMenu DRC_zMFRate"></div>
+		<div class="DRC_zOneMenu DRC_zMFDir"></div>
+		<div class="DRC_zOneMenu DRC_zMExtra"></div>
+	</div>
+
+	<script type="text/javascript">
+		var _aModeCmd#id# = #mode-cmd-list#;
+		var _aSensorInfo#id# = #sensor-info-list#;
+		var _aFRateCmd#id# = #frate-cmd-list#;
+		var _aFDirCmd#id# = #fdir-cmd-list#;
+		var _aExtraCmd#id# = #extra-cmd-list#;
+		if (typeof displayEqlogicWidthUpdate === 'function') { displayEqlogicWidthUpdate(true); }
+		DRCpSetPow('#id#', '#pow-v#', '#pow-off-id#', '#pow-on-id#');
+		DRCpSetTemperature('#id#', '#pow-v#', '#stemp-slider-id#', '#stemp-v#', _aSensorInfo#id#, '#temp-step#');
+		DRCpSetMode('#id#', '#pow-v#', '#mode-v#', _aModeCmd#id#);
+		DRCpSetMenu('#id#', '#pow-v#', '#fan-mode-v#', '.DRC_btn-FRate', '.DRC_zMFRate', _aFRateCmd#id#);
+		DRCpSetMenu('#id#', '#pow-v#', '', '.DRC_btn-FDir', '.DRC_zMFDir', _aFDirCmd#id#);
+		DRCpSetMenu('#id#', '#pow-v#', '', '.DRC_btn-Extra', '.DRC_zMExtra', _aExtraCmd#id#);
+		DRCpSetOther('#id#', '#DRClastUpdate#');
+		if (typeof _showUnit !== 'undefined' && _showUnit != 0) { displayDRCUnit(_showUnit, true); }
+	</script>
+</div>

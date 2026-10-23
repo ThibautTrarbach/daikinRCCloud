@@ -16,24 +16,39 @@
  */
 
 try {
-    require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    include_file('core', 'authentification', 'php');
+	require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+	include_file('core', 'authentification', 'php');
 
-    if (!isConnect('admin')) {
-        throw new Exception(__('401 - Accès non autorisé', __FILE__));
-    }
+	if (!isConnect()) {
+		throw new Exception(__('401 - Accès non autorisé', __FILE__));
+	}
 
-  /* Fonction permettant l'envoi de l'entête 'Content-Type: application/json'
-    En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
-    En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
-  */
-    ajax::init();
+	ajax::init();
 
+	if (init('action') == 'getInfoForMobilePanel') {
+		$return = array('eqLogics' => array());
+		foreach (eqLogic::byType('daikinRCCloud') as $eq) {
+			if ($eq->getLogicalId() === daikinRCCloud::INSTANCE_ID) {
+				continue;
+			}
+			if (!$eq->getIsEnable() || !$eq->getIsVisible()) {
+				continue;
+			}
+			if ($eq->getConfiguration('usePluginWidget', '0') != '1') {
+				continue;
+			}
+			$return['eqLogics'][] = array('html' => $eq->toHtml('panelM'));
+		}
+		$return['lastUpdateTxt'] = __('Dernière mise à jour', __FILE__);
+		$return['allUnitTxt'] = __('Toutes les unités', __FILE__);
+		ajax::success($return);
+	}
 
+	if (!isConnect('admin')) {
+		throw new Exception(__('401 - Accès non autorisé', __FILE__));
+	}
 
-    throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
-    /*     * *********Catch exeption*************** */
-}
-catch (Exception $e) {
-    ajax::error(displayException($e), $e->getCode());
+	throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
+} catch (Exception $e) {
+	ajax::error(displayException($e), $e->getCode());
 }

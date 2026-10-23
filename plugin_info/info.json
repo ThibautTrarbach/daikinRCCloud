@@ -1,13 +1,17 @@
 {
 	"id" : "daikinRCCloud",
 	"name" : "Daikin ONECTA",
-	"pluginVersion": "0.9.0",
+	"pluginVersion": "0.10.4",
 	"description" : {
-		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA"
+		"fr_FR": "Plugin pour gérer les appareils Daikin via le cloud ONECTA",
+		"en_US": "Plugin to manage Daikin devices via ONECTA cloud",
+		"es_ES": "Plugin para gestionar dispositivos Daikin a través de la nube ONECTA",
+		"de_DE": "Plugin zur Verwaltung von Daikin-Geräten über die ONECTA-Cloud",
+		"it_IT": "Plugin per gestire i dispositivi Daikin tramite il cloud ONECTA"
 	},
 	"licence" : "AGPL",
-	"author" : "Thibaut Trarbach",
-	"require" : "4.3",
+	"author" : "Thibaut Trarbach & Sagitaz",
+	"require" : "4.4",
 	"category" : "wellness",
 	"hasDependency" : true,
 	"hasOwnDeamon" : true,
@@ -15,15 +19,19 @@
 	"os": {
 		"min":11
 	},
-	"changelog" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog",
-	"documentation" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
-	"changelog_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/changelog-beta",
-	"documentation_beta" : "https://docs.trarbach.dev/fr/daikinRCCloud/Documentation",
+	"changelog" : "https://docs.daikinrccloud.trarbach.dev/#language#/changelog",
+	"documentation" : "https://docs.daikinrccloud.trarbach.dev/#language#/",
+	"changelog_beta" : "https://docs.daikinrccloud.trarbach.dev/#language#/changelog_beta",
+	"documentation_beta" : "https://docs.daikinrccloud.trarbach.dev/#language#/index_beta",
 	"link" : {
 		"forum":"https://community.jeedom.com/t/pilotage-nouvelle-gamme-pac-daikin-perfera-ftxm-r/45187/55?u=titi_titi"
 	},
 	"language": [
-		"fr_FR"
+		"fr_FR",
+		"en_US",
+		"es_ES",
+		"de_DE",
+		"it_IT"
 	],
 	"compatibility": [
 		"smart",
@@ -32,5 +40,6 @@
 		"diy",
 		"v4",
 		"atlas"
-	]
+	],
+	"mobile": "panel"
 }
