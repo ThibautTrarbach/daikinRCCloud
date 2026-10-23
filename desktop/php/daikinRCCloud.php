@@ -53,8 +53,13 @@
 					$supportStatus = $eqLogic->getConfiguration('supportStatus', 'full');
 					$configCoverage = $eqLogic->getConfiguration('configCoverage', 'complete');
 					$needsSupportBadge = ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
+					$accessMode = $eqLogic->getConfiguration('accessMode', 'cloud');
+					$controlPath = $eqLogic->getConfiguration('controlPath', '');
 					echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
 					echo '<img src="' . $plugin->getPathImgIcon() . '">';
+					if ($eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
+						echo '<span class="pull-right" style="margin:2px;">' . daikinRCCloud::accessModeBadgeHtml($accessMode, $controlPath) . '</span>';
+					}
 					if ($needsSupportBadge && $eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
 						echo '<span class="label label-warning pull-right" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
 					}
@@ -196,12 +201,23 @@
                                         <label class="col-sm-6 control-label">{{Gateway IP Address : }}</label>
                                         <div class="col-sm-6">
                                             <span class="eqLogicAttr" data-l1key="configuration" data-l2key="ipAddress"></span>
+                                            <span style="margin-left:8px;" id="daikin_accessModeBadge"></span>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="accessMode" style="display:none;"></span>
+                                            <span class="eqLogicAttr" data-l1key="configuration" data-l2key="controlPath" style="display:none;"></span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">{{Gateway MAC Address : }}</label>
                                         <div class="col-sm-6">
                                             <span class="eqLogicAttr" data-l1key="configuration" data-l2key="macAddress"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">{{IP locale (override)}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Force l'IP LAN pour le contrôle local (modèles Online Controller). Laisser vide pour l'IP cloud auto.}}"></i></sup>
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="localIpOverride" placeholder="192.168.x.x" />
                                         </div>
                                     </div>
                                     <div class="form-group">

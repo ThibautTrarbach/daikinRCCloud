@@ -5,7 +5,7 @@ title: Documentation Daikin ONECTA
 
 # Documentation Daikin ONECTA
 
-Le plugin **Daikin ONECTA** permet de piloter et de surveiller vos équipements Daikin compatibles ONECTA directement depuis Jeedom : climatiseurs, pompes à chaleur Altherma, et autres appareils connectés via le cloud Daikin.
+Le plugin **Daikin ONECTA** permet de piloter et de surveiller vos équipements Daikin compatibles ONECTA directement depuis Jeedom : climatiseurs, pompes à chaleur Altherma, et autres appareils connectés via le cloud Daikin. Les modules **Online Controller** locaux (BRP069A42/A43/B41) peuvent aussi être pilotés en LAN (prioritaire) via le daemon.
 
 ## À quoi sert ce plugin ?
 

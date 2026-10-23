@@ -177,8 +177,24 @@ function formatJsonConfig(raw) {
   }
 }
 
+function updateAccessModeBadge() {
+  const badge = document.getElementById('daikin_accessModeBadge')
+  if (!badge) return
+  const mode = (readEqConfig('accessMode') || 'cloud').toLowerCase()
+  const path = readEqConfig('controlPath') || ''
+  const titleExtra = path ? (' — chemin actif : ' + path) : ''
+  let html = '<span class="label label-info" title="Contrôle cloud Onecta' + titleExtra + '">Cloud</span>'
+  if (mode === 'local') {
+    html = '<span class="label label-success" title="Contrôle local (LAN)' + titleExtra + '">Local</span>'
+  } else if (mode === 'hybrid') {
+    html = '<span class="label label-warning" title="Cloud et local (LAN prioritaire)' + titleExtra + '">Les deux</span>'
+  }
+  badge.innerHTML = html
+}
+
 function updateDaikinSupportUi() {
   updateDaikinDeviceInfoPanel()
+  updateAccessModeBadge()
 
   const supportStatus = readEqConfig('supportStatus') || 'full'
   const configCoverage = readEqConfig('configCoverage') || 'complete'

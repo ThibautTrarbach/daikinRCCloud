@@ -45,6 +45,22 @@ Les versions du plugin et du service interne sont affichées en lecture seule. I
 
 ---
 
+## Contrôle local (LAN)
+
+Dans **Configuration avancée**, section **Contrôle local (LAN)** :
+
+| Réglage | Description |
+|---------|-------------|
+| **Activer le contrôle local** | Priorise le HTTP local pour les modules Online Controller (`BRP069A42` / `A43` / `B41`) s’ils sont joignables ; sinon cloud Onecta |
+| **Modules locaux (IP)** | IPv4 des modules **non liés à Onecta**, séparées par espace / virgule / ligne |
+| **Timeout LAN** | Timeout HTTP local (défaut 5000 ms) |
+
+Sur chaque équipement cloud compatible, le champ **IP locale (override)** force l’adresse LAN. Redémarrez le daemon après modification.
+
+Pastille équipement : **Cloud** / **Local** / **Les deux** (selon `_device.accessMode`).
+
+---
+
 ## Configuration avancée
 
 Cochez **Configuration avancée** pour afficher les réglages supplémentaires. **La plupart des utilisateurs peuvent laisser les valeurs par défaut.**

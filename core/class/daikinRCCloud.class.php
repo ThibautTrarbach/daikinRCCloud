@@ -53,7 +53,32 @@ class daikinRCCloud extends eqLogic
         'ipAddress',
         'macAddress',
         'indoorUnitSoftwareVersion',
+        'accessMode',
+        'controlPath',
     );
+
+    /**
+     * Pastille Cloud / Local / Les deux selon _device.accessMode
+     * @param string $accessMode
+     * @param string $controlPath
+     * @return string HTML
+     */
+    public static function accessModeBadgeHtml($accessMode, $controlPath = '')
+    {
+        $mode = strtolower(trim((string) $accessMode));
+        if ($mode === '') {
+            $mode = 'cloud';
+        }
+        $path = trim((string) $controlPath);
+        $titleExtra = ($path !== '') ? (' — {{chemin actif}} : ' . $path) : '';
+        if ($mode === 'local') {
+            return '<span class="label label-success" title="{{Contrôle local (LAN)}}' . $titleExtra . '">{{Local}}</span>';
+        }
+        if ($mode === 'hybrid') {
+            return '<span class="label label-warning" title="{{Cloud et local (LAN prioritaire)}}' . $titleExtra . '">{{Les deux}}</span>';
+        }
+        return '<span class="label label-info" title="{{Contrôle cloud Onecta}}' . $titleExtra . '">{{Cloud}}</span>';
+    }
     const DEVICE_INFO_CMD_LOGICAL_IDS = array(
         '_gatewayIpAddress',
         '_gatewayMacAddress',
@@ -279,6 +304,39 @@ class daikinRCCloud extends eqLogic
         }
         $settings['daikin']['enableWebSocket'] = (bool) config::byKey('daikin_enableWebSocket', 'daikinRCCloud', 1);
         $settings['daikin']['httpTransport'] = config::byKey('daikin_httpTransport', 'daikinRCCloud', 'node');
+
+        $localEnabled = (bool) config::byKey('daikin_local_enabled', 'daikinRCCloud', 0);
+        $localDevices = array();
+        $localDevicesRaw = config::byKey('daikin_local_devices', 'daikinRCCloud', '');
+        if (is_string($localDevicesRaw) && trim($localDevicesRaw) !== '') {
+            foreach (preg_split('/[\s,;]+/', trim($localDevicesRaw)) as $ip) {
+                $ip = trim($ip);
+                if ($ip !== '' && filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                    $localDevices[] = array('ip' => $ip);
+                }
+            }
+        }
+        $localOverrides = array();
+        foreach (eqLogic::byType('daikinRCCloud') as $eq) {
+            if ($eq->getLogicalId() === self::INSTANCE_ID) {
+                continue;
+            }
+            $overrideIp = trim((string) $eq->getConfiguration('localIpOverride', ''));
+            if ($overrideIp !== '' && filter_var($overrideIp, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                $localOverrides[$eq->getLogicalId()] = $overrideIp;
+                $localEnabled = true;
+            }
+        }
+        if (count($localDevices) > 0) {
+            $localEnabled = true;
+        }
+        $settings['daikin']['local'] = array(
+            'enabled' => $localEnabled,
+            'timeoutMs' => intval(config::byKey('daikin_local_timeoutMs', 'daikinRCCloud', 5000) ?? 5000),
+            'probeIntervalMinutes' => intval(config::byKey('daikin_local_probeIntervalMinutes', 'daikinRCCloud', 5) ?? 5),
+            'devices' => $localDevices,
+            'overrides' => (object) $localOverrides,
+        );
 
         $settings['mqtt']['host'] = $mqttInfos['ip'];
         $settings['mqtt']['port'] = intval($mqttInfos['port']);

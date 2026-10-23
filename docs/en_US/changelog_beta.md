@@ -7,6 +7,12 @@ title: Daikin ONECTA Changelog (Beta)
 
 All notable changes to this plugin will be documented on this page.
 
+## [Unreleased]
+
+### Added — Plugin
+- Local LAN control (Online Controller): plugin config + per-equipment IP override; daemon prefers LAN when reachable
+- Equipment badge **Cloud** / **Local** / **Both** from `_device.accessMode`
+
 ## [1.0.0] - 2026-10-24
 
 > **Release candidate** for the stable channel — plugin **1.0.0** is ready.

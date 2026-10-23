@@ -341,6 +341,32 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                 </div>
             </div>
 
+            <legend><i class="fas fa-network-wired"></i> {{Contrôle local (LAN)}}</legend>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Activer le contrôle local}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Priorise le HTTP local pour les modules Online Controller (BRP069A42/A43/B41) quand ils sont joignables, sinon cloud Onecta. Nécessite un redémarrage du daemon.}}"></i></sup>
+                </label>
+                <div class="col-sm-4">
+                    <input type="checkbox" class="configKey" data-l1key="daikin_local_enabled" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Modules locaux (IP)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Adresses IPv4 des modules Online Controller non liés à Onecta, séparées par espace, virgule ou retour ligne. Ex. : 192.168.1.50 192.168.1.51}}"></i></sup>
+                </label>
+                <div class="col-sm-6">
+                    <textarea class="configKey form-control" data-l1key="daikin_local_devices" rows="3" placeholder="192.168.1.50"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Timeout LAN (ms)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Timeout des requêtes HTTP locales. Défaut : 5000.}}"></i></sup>
+                </label>
+                <div class="col-sm-4">
+                    <input type="number" class="configKey form-control" data-l1key="daikin_local_timeoutMs" placeholder="5000" />
+                </div>
+            </div>
+
             <legend><i class="fas fa-sliders-h"></i> {{Options plugin}}</legend>
             <div class="form-group daikin-auth-port">
                 <label class="col-sm-3 control-label">{{Port pour l'authentication}}

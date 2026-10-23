@@ -7,6 +7,14 @@ title: Dépannage - Daikin ONECTA
 
 Cette page répond aux problèmes les plus fréquents rencontrés avec le plugin Daikin ONECTA.
 
+## Contrôle local (LAN)
+
+| Symptôme | Piste |
+|----------|--------|
+| Pastille **Les deux** mais commandes via le cloud | LAN injoignable (`controlPath` = `degraded_cloud`) : vérifier IP / VLAN / firewall, ou renseigner **IP locale (override)** |
+| Module local n’apparaît pas | Vérifier les IP dans **Contrôle local (LAN)**, redémarrer le daemon, logs `localTransport` |
+| Pastille reste **Cloud** sur un A42/A43/B41 | Activer le contrôle local ; confirmer le modèle ; sinon override IP |
+
 ## Mes équipements n'apparaissent pas
 
 **Vérifications à faire dans l'ordre :**

@@ -12,7 +12,15 @@ Cette page explique comment utiliser vos appareils Daikin au quotidien dans Jeed
 1. Ouvrez **Plugins → Daikin ONECTA**.
 2. Vos appareils apparaissent sous **Mes équipements**, sous forme de cartes.
 
-Ils sont ajoutés **automatiquement** lors de la première synchronisation. Il n'y a pas de bouton « Ajouter un équipement ».
+Ils sont ajoutés **automatiquement** lors de la première synchronisation (cloud Onecta). Les modules **locaux uniquement** (Online Controller) s’ajoutent via les IP renseignées dans la configuration plugin.
+
+Chaque carte affiche une pastille :
+
+| Pastille | Signification |
+|----------|----------------|
+| **Cloud** | Pilotage via Onecta uniquement |
+| **Local** | Pilotage LAN uniquement (module non lié au cloud) |
+| **Les deux** | Cloud + LAN ; le daemon privilégie le local si joignable |
 
 ### Pont système Daikin2MQTT Bridge
 
