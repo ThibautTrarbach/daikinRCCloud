@@ -25,7 +25,7 @@ No es una limitación del plugin, sino una regla impuesta por el servicio en la 
 | Acción | Consumo |
 |--------|-------------|
 | Sincronización planificada (cada 15 min por defecto) | 1 consulta (para todos sus dispositivos a la vez) |
-| Comando (cambiar la temperatura, encender…) | 1 consulta por modificación |
+| Comando (cambiar la temperatura, encender…) | 1 consulta por comando |
 | Verificación tras un comando | 1 consulta (según ajustes) |
 | Actualización de contadores kWh (cada noche) | 1 consulta |
 | Actualización en tiempo real (WebSocket, modo Mobile App) | **0** consultas |

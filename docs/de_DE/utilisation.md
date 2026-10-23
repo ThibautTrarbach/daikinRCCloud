@@ -14,6 +14,18 @@ Diese Seite erklärt, wie Sie Ihre Daikin-Geräte im Alltag in Jeedom nutzen: Ge
 
 Sie werden **automatisch** bei der ersten Synchronisation hinzugefügt. Es gibt keine Schaltfläche „Gerät hinzufügen".
 
+### Systembrücke Daikin2MQTT Bridge
+
+Sie sehen immer ein Gerät namens **Daikin - Daikin2MQTT Bridge**. Das ist normal: Es handelt sich um die **Systembrücke** des Plugins, nicht um ein physisches Daikin-Gerät.
+
+| Rolle | Beispielbefehle |
+|------|------------------|
+| Cloud-Authentifizierung | Authorization URL, Authorization Request |
+| Überwachung | Rate Limit, Modules List, WebSocket Connected |
+| Globale Aktionen | Refresh All Devices |
+
+Ihre **echten Daikin-Geräte** (Klimaanlage, Wärmepumpe usw.) erscheinen separat als **Daikin - {Name}**, wie in der Onecta-App definiert.
+
 ### Gerät anpassen
 
 Klicken Sie auf die Gerätekarte, um auf die Konfiguration zuzugreifen:
@@ -25,6 +37,8 @@ Klicken Sie auf die Gerätekarte, um auf die Konfiguration zuzugreifen:
 | **Kategorie** | Heizung, Komfort usw. |
 | **Aktivieren** | Gerät aktivieren oder deaktivieren |
 | **Sichtbar** | Gerät auf dem Dashboard anzeigen oder ausblenden |
+| **Plugin-Widget** | Dediziertes HVAC-Widget aktivieren (siehe unten) |
+| **Mobiler Panel-Link** | Panel-Schaltfläche auf dem mobilen Widget anzeigen |
 
 ### Geräteinformationen
 
@@ -110,7 +124,29 @@ Jede Zone hat eigene Ein/Aus-, Modus- und Sollwertbefehle.
 
 ## Anzeige auf dem Dashboard
 
-Um Ihre Geräte vom Jeedom-Startbildschirm aus zu steuern:
+### Optionales HVAC-Plugin-Widget
+
+Das Plugin bietet ein **dediziertes Widget** (inspiriert von DaikinOnlineCtrl), das Ein/Aus, Modus, Sollwert, Lüftung und Sensoren auf einer Kachel bündelt (Dashboard, Mobile und Panel).
+
+Diese Optionen finden Sie im Tab **Gerät** jedes Daikin-Geräts (nicht auf der Systembrücke):
+
+| Option | Standard | Beschreibung |
+|--------|----------|--------------|
+| **Plugin-Widget** — *HVAC-Widget verwenden (DaikinOnlineCtrl-Stil)* | Deaktiviert | Ersetzt die Standard-Jeedom-Kachel durch das HVAC-Widget des Plugins |
+| **Mobiler Panel-Link** — *Panel-Schaltfläche auf dem mobilen Widget anzeigen* | Aktiviert | In der mobilen Ansicht eine Schaltfläche zum Öffnen des **Panels** (app-ähnliche Ansicht) anzeigen |
+
+1. Öffnen Sie das Gerät (nicht die Systembrücke).
+2. Aktivieren Sie **HVAC-Widget verwenden (DaikinOnlineCtrl-Stil)**.
+3. (Optional) Aktivieren oder deaktivieren Sie **Panel-Schaltfläche auf dem mobilen Widget anzeigen**.
+4. Speichern und das Gerät auf dem Dashboard / Design platzieren.
+
+Bei Mehrzonengeräten (z. B. Altherma) erscheint oben auf der Kachel ein **Zonenauswahl**. Fehlende Funktionen blenden ihre Tabs automatisch aus.
+
+> Das HVAC-Widget ist **standardmäßig deaktiviert**, damit bestehende Installationen ihre Standardkacheln behalten.
+
+### Standard-Jeedom-Kacheln
+
+Ohne Plugin-Widget:
 
 1. Öffnen Sie das Gerät und gehen Sie zum Tab **Befehle**.
 2. Machen Sie die Befehle, die Sie anzeigen möchten, **sichtbar** (Kontrollkästchen in der Spalte Optionen).

@@ -11,10 +11,10 @@ This page answers the most common issues with the Daikin ONECTA plugin.
 
 **Checks to perform in order:**
 
-1. Is the **plugin service** running? (Tools → Health)
+1. Is the **plugin daemon** running? (Tools → Health)
 2. Is the **mqtt2** plugin installed, active, and running?
 3. Are **dependencies** installed? ("Reinstall dependencies" button)
-4. Are your **Daikin credentials** correct? (test on the Onecta mobile app)
+4. Are your **Daikin credentials** correct?
 5. Are your devices visible in the **Daikin Onecta** app on your phone?
 
 **Actions:**
@@ -34,37 +34,6 @@ This page answers the most common issues with the Daikin ONECTA plugin.
 | mqtt2 not running | Start the mqtt2 plugin |
 
 After fixing, restart the plugin service.
-
-## Dependency installation failure
-
-**Common symptoms in the `daikinRCCloud_packages` log:**
-
-- `could not read Username for 'https://github.com'`
-- `main.js is missing`
-- `daikintomqtt: No such file or directory`
-
-**Important points:**
-
-- A manual SSH clone may succeed while "Reinstall dependencies" fails: the automated script deletes `daikintomqtt` on every run and re-downloads the daemon.
-- The issue may affect **all branches** (`release-beta`, `release-alpha`, etc.) — it is usually not a wrong branch choice.
-- Recommended branch: **`release-beta`** (unless support instructs otherwise).
-
-**Checks:**
-
-1. Open **Analysis → Logs → daikinRCCloud_packages** to see whether git clone or tarball fallback succeeded.
-2. Verify the file exists: `/var/www/html/plugins/daikinRCCloud/resources/daikintomqtt/main.js`
-3. Update the plugin to the latest version (fixed install scripts), then click "Reinstall dependencies" again.
-
-**Network test from the Jeedom box (SSH):**
-
-```bash
-cd /var/www/html/plugins/daikinRCCloud/resources
-sudo env GIT_TERMINAL_PROMPT=0 git -c credential.helper= -c http.version=HTTP/1.1 clone --depth 1 -b release-beta https://github.com/ThibautTrarbach/daikintomqtt.git daikintomqtt-test
-ls daikintomqtt-test/main.js
-sudo rm -rf daikintomqtt-test
-```
-
-If this test passes but the UI still fails, update the plugin: recent `pre_install.sh` / `post_install.sh` scripts apply these safeguards automatically.
 
 ## Daikin connection error
 

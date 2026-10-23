@@ -14,6 +14,18 @@ Esta página explica cómo utilizar sus dispositivos Daikin a diario en Jeedom: 
 
 Se añaden **automáticamente** durante la primera sincronización. No hay botón «Añadir un equipo».
 
+### Puente del sistema Daikin2MQTT Bridge
+
+Siempre verá un equipo llamado **Daikin - Daikin2MQTT Bridge**. Es normal: se trata del **puente del sistema** del plugin, no de un dispositivo Daikin físico.
+
+| Rol | Ejemplos de comandos |
+|------|----------------------|
+| Autenticación cloud | Authorization URL, Authorization Request |
+| Supervisión | Rate Limit, Modules List, WebSocket Connected |
+| Acciones globales | Refresh All Devices |
+
+Sus **verdaderos dispositivos Daikin** (climatizador, bomba de calor, etc.) aparecen por separado como **Daikin - {nombre}**, tal como se define en la aplicación Onecta.
+
 ### Personalizar un equipo
 
 Haga clic en la tarjeta del equipo para acceder a su configuración:
@@ -25,6 +37,8 @@ Haga clic en la tarjeta del equipo para acceder a su configuración:
 | **Categoría** | Calefacción, confort, etc. |
 | **Activar** | Activa o desactiva el equipo |
 | **Visible** | Muestra u oculta el equipo en el dashboard |
+| **Widget del plugin** | Activa el widget HVAC dedicado (ver más abajo) |
+| **Enlace panel móvil** | Muestra el botón hacia el panel en el widget móvil |
 
 ### Información del dispositivo
 
@@ -110,7 +124,29 @@ Cada zona tiene sus propios comandos de marcha, modo y consigna.
 
 ## Mostrar en el dashboard
 
-Para controlar sus dispositivos desde la pantalla de inicio de Jeedom:
+### Widget HVAC del plugin (opcional)
+
+El plugin ofrece un **widget dedicado** (inspirado en DaikinOnlineCtrl) que agrupa marcha/parada, modo, consigna, ventilación y sondas en una sola baldosa (dashboard, móvil y panel).
+
+Estas opciones están en la pestaña **Equipo** de cada dispositivo Daikin (no aparecen en el puente del sistema):
+
+| Opción | Predeterminado | Descripción |
+|--------|----------------|-------------|
+| **Widget del plugin** — *Usar el widget HVAC (estilo DaikinOnlineCtrl)* | Desactivado | Sustituye la baldosa estándar de Jeedom por el widget HVAC del plugin |
+| **Enlace panel móvil** — *Mostrar el botón hacia el panel en el widget móvil* | Activado | En la vista móvil, muestra un botón para abrir el **panel** (vista tipo aplicación) |
+
+1. Abra el equipo (no el puente del sistema).
+2. Active **Usar el widget HVAC (estilo DaikinOnlineCtrl)**.
+3. (Opcional) Active o desactive **Mostrar el botón hacia el panel en el widget móvil**.
+4. Guarde y coloque el equipo en el dashboard / diseño.
+
+En dispositivos multi-zona (p. ej. Altherma), aparece un **selector de zona** en la parte superior de la baldosa. Las pestañas ausentes se ocultan automáticamente.
+
+> El widget HVAC está **desactivado por defecto** para no cambiar el comportamiento de las instalaciones existentes.
+
+### Baldosas Jeedom estándar
+
+Sin el widget del plugin:
 
 1. Abra el equipo y vaya a la pestaña **Comandos**.
 2. Haga **visibles** los comandos que desee mostrar (casilla en la columna Opciones).

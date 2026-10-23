@@ -7,12 +7,20 @@ title: Daikin ONECTA Changelog (Beta)
 
 All notable changes to this plugin will be documented on this page.
 
-## [Unreleased]
+## [1.0.0] - 2026-10-24
+
+> **Release candidate** for the stable channel — plugin **1.0.0** is ready.
+
+### Info
+- Plugin version **1.0.0** is complete and marked as the release candidate toward the stable release
 
 ### Added — Plugin
 - Optional HVAC widget (dashboard / mobile / panel), inspired by **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
 - Equipment option **Use HVAC widget** (disabled by default)
 - Multi-zone / DHW tank adaptation (zone selector, tabs hidden when unavailable)
+
+### Changed — Documentation
+- Online documentation reviewed and improved (installation, configuration, authentication, usage, quotas, troubleshooting)
 
 ## [0.10.4] - 2026-09-04
 

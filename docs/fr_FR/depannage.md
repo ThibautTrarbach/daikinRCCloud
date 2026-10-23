@@ -11,10 +11,10 @@ Cette page répond aux problèmes les plus fréquents rencontrés avec le plugin
 
 **Vérifications à faire dans l'ordre :**
 
-1. Le **service du plugin** est-il démarré ? (Outils → Santé)
+1. Le **deamon du plugin** est-il démarré ? (Outils → Santé)
 2. Le plugin **mqtt2** est-il installé, activé et démarré ?
 3. Les **dépendances** sont-elles installées ? (bouton « Réinstaller les dépendances »)
-4. Vos **identifiants Daikin** sont-ils corrects ? (testez sur l'application Onecta mobile)
+4. Vos **identifiants Daikin** sont-ils corrects ?
 5. Vos appareils sont-ils bien visibles dans l'application **Daikin Onecta** sur votre téléphone ?
 
 **Actions :**
@@ -34,36 +34,6 @@ Cette page répond aux problèmes les plus fréquents rencontrés avec le plugin
 | mqtt2 non démarré | Démarrez le plugin mqtt2 |
 
 Après correction, redémarrez le service du plugin.
-
-## Échec de l'installation des dépendances
-
-**Symptômes courants dans le log `daikinRCCloud_packages` :**
-
-- `could not read Username for 'https://github.com'`
-- `main.js is missing`
-- `daikintomqtt: No such file or directory`
-
-**Points importants :**
-
-- Le problème peut concerner **toutes les branches** (`release-beta`, `release-alpha`, etc.) — ce n'est en général pas un mauvais choix de branche.
-- Branche recommandée : **`release-beta`** (sauf instruction contraire du support).
-
-**Vérifications :**
-
-1. Consultez **Analyse → Logs → daikinRCCloud_packages** pour voir si le clone git ou le fallback tarball a réussi.
-2. Vérifiez que le fichier existe : `/var/www/html/plugins/daikinRCCloud/resources/daikintomqtt/main.js`
-3. Mettez à jour le plugin vers la dernière version (scripts d'installation corrigés), puis relancez « Réinstaller les dépendances ».
-
-**Test réseau depuis la box Jeedom (SSH) :**
-
-```bash
-cd /var/www/html/plugins/daikinRCCloud/resources
-sudo env GIT_TERMINAL_PROMPT=0 git -c credential.helper= -c http.version=HTTP/1.1 clone --depth 1 -b release-beta https://github.com/ThibautTrarbach/daikintomqtt.git daikintomqtt-test
-ls daikintomqtt-test/main.js
-sudo rm -rf daikintomqtt-test
-```
-
-Si ce test passe mais l'UI échoue encore, mettez à jour le plugin : les scripts `pre_install.sh` / `post_install.sh` récents intègrent ces garde-fous automatiquement.
 
 ## Erreur de connexion à Daikin
 

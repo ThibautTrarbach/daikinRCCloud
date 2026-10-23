@@ -11,10 +11,10 @@ Questa pagina risponde ai problemi più comuni del plugin Daikin ONECTA.
 
 **Verifiche da eseguire nell'ordine:**
 
-1. Il **servizio del plugin** è in esecuzione? (Strumenti → Salute)
+1. Il **daemon del plugin** è in esecuzione? (Strumenti → Salute)
 2. Il plugin **mqtt2** è installato, attivo e in esecuzione?
 3. Le **dipendenze** sono installate? (pulsante « Reinstalla dipendenze »)
-4. Le **credenziali Daikin** sono corrette? (verifica sull'app mobile Onecta)
+4. Le **credenziali Daikin** sono corrette?
 5. I dispositivi sono visibili nell'app **Daikin Onecta** sul telefono?
 
 **Azioni:**

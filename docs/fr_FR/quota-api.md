@@ -25,7 +25,7 @@ Ce n'est pas une limitation du plugin, mais une règle imposée par le service c
 | Action | Consommation |
 |--------|-------------|
 | Synchronisation planifiée (toutes les 15 min par défaut) | 1 interrogation (pour tous vos appareils à la fois) |
-| Commande (changer la température, allumer…) | 1 interrogation par modification |
+| Commande (changer la température, allumer…) | 1 interrogation par commande |
 | Vérification après une commande | 1 interrogation (selon réglages) |
 | Mise à jour des compteurs kWh (chaque soir) | 1 interrogation |
 | Mise à jour en temps réel (WebSocket, mode Mobile App) | **0** interrogation |

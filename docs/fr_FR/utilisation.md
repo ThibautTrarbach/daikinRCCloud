@@ -37,6 +37,8 @@ Cliquez sur la carte de l'équipement pour accéder à sa configuration :
 | **Catégorie** | Chauffage, confort, etc. |
 | **Activer** | Active ou désactive l'équipement |
 | **Visible** | Affiche ou masque l'équipement dans le dashboard |
+| **Widget du plugin** | Active le widget HVAC dédié (voir ci-dessous) |
+| **Lien panel mobile** | Affiche le bouton vers le panel sur le widget mobile |
 
 ### Informations sur l'appareil
 
@@ -124,17 +126,23 @@ Chaque zone possède ses propres commandes de marche, mode et consigne.
 
 ### Widget HVAC du plugin (optionnel)
 
-Le plugin propose un **widget dédié** (inspiré de DaikinOnlineCtrl) qui regroupe marche/arrêt, mode, consigne, ventilation et sondes sur une seule tuile.
+Le plugin propose un **widget dédié** (inspiré de DaikinOnlineCtrl) qui regroupe marche/arrêt, mode, consigne, ventilation et sondes sur une seule tuile (dashboard, mobile et panel).
+
+Ces options se trouvent dans l'onglet **Équipement** de chaque appareil Daikin (elles n'apparaissent pas sur le pont système) :
+
+| Option | Défaut | Description |
+|--------|--------|-------------|
+| **Widget du plugin** — *Utiliser le widget HVAC (type DaikinOnlineCtrl)* | Désactivé | Remplace la tuile Jeedom standard par le widget HVAC du plugin |
+| **Lien panel mobile** — *Afficher le bouton vers le panel sur le widget mobile* | Activé | Sur la vue mobile, affiche un bouton pour ouvrir le **panel** (vue type application) |
 
 1. Ouvrez l'équipement (pas le pont système).
 2. Cochez **Utiliser le widget HVAC (type DaikinOnlineCtrl)**.
-3. Sauvegardez, puis placez l'équipement sur le dashboard / design.
+3. (Optionnel) Cochez ou décochez **Afficher le bouton vers le panel sur le widget mobile**.
+4. Sauvegardez, puis placez l'équipement sur le dashboard / design.
 
 Sur les appareils multi-zones (ex. Altherma), un **sélecteur de zone** apparaît en haut de la tuile. Les onglets absents (pas de ventilateur, etc.) sont masqués automatiquement.
 
-Sur mobile, un lien vers le **panel** (vue type application) peut être affiché via l'option **Lien panel mobile**.
-
-> Le widget est **désactivé par défaut** pour ne pas changer le comportement des installations existantes.
+> Le widget HVAC est **désactivé par défaut** pour ne pas changer le comportement des installations existantes.
 
 ### Tuiles Jeedom standard
 

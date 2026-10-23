@@ -11,10 +11,10 @@ Esta página responde a los problemas más frecuentes encontrados con el plugin 
 
 **Comprobaciones a realizar en orden:**
 
-1. ¿Está **iniciado el servicio del plugin**? (Herramientas → Salud)
+1. ¿Está **iniciado el daemon del plugin**? (Herramientas → Salud)
 2. ¿Está el plugin **mqtt2** instalado, activado e iniciado?
 3. ¿Están **instaladas las dependencias**? (botón «Reinstalar dependencias»)
-4. ¿Son correctas sus **credenciales Daikin**? (pruébelas en la aplicación Onecta móvil)
+4. ¿Son correctas sus **credenciales Daikin**?
 5. ¿Son visibles sus dispositivos en la aplicación **Daikin Onecta** en su teléfono?
 
 **Acciones:**

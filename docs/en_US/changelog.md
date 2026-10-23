@@ -7,4 +7,8 @@ title: Daikin ONECTA Changelog
 
 All notable changes to this plugin will be documented in this file.
 
-## Not yet available in stable, see [beta changelog]({{ site.baseurl }}/en_US/changelog_beta)
+## [1.0.0] — Release candidate
+
+Plugin **1.0.0** is ready and is the **release candidate** for the stable channel.
+
+See the full notes in the [beta changelog]({{ site.baseurl }}/en_US/changelog_beta).

@@ -55,8 +55,8 @@ Ces réglages déterminent à quelle fréquence Jeedom interroge le cloud Daikin
 
 | Réglage | Défaut | Description |
 |---------|--------|-------------|
-| **Intervalle en journée** | 15 min | Fréquence de vérification entre le matin et le soir |
-| **Intervalle la nuit** | 30 min | Fréquence de vérification pendant la nuit (économise le quota) |
+| **Intervalle en journée** | 15 min | Fréquence de vérification  pendant le jour |
+| **Intervalle la nuit** | 30 min | Fréquence de vérification pendant la nuit  |
 | **Début de la nuit** | 22h | Heure à laquelle commence la période nuit |
 | **Fin de la nuit** | 7h | Heure à laquelle se termine la période nuit |
 

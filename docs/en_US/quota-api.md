@@ -25,7 +25,7 @@ This is not a plugin limitation, but a rule imposed by the Daikin ONECTA cloud s
 | Action | Consumption |
 |--------|-------------|
 | Scheduled sync (every 15 min by default) | 1 request (for all your devices at once) |
-| Command (change temperature, turn on, etc.) | 1 request per change |
+| Command (change temperature, turn on, etc.) | 1 request per command |
 | Verification after a command | 1 request (depending on settings) |
 | kWh counter update (each evening) | 1 request |
 | Real-time update (WebSocket, Mobile App mode) | **0** requests |

@@ -57,8 +57,9 @@ Queste impostazioni determinano la frequenza con cui Jeedom interroga il cloud D
 
 | Impostazione | Predefinito | Descrizione |
 |--------------|-------------|-------------|
-| **Intervallo diurno** | 15 min | Frequenza di controllo tra mattina e sera |
-| **Intervallo notturno** | 30 min | Frequenza di controllo durante la notte (risparmia quota) |
+| **Intervallo diurno** | 15 min | Frequenza di controllo durante il giorno |
+| **Intervallo notturno** | 30 min | Frequenza di controllo durante la notte |
+
 | **Inizio notte** | 22:00 | Ora di inizio del periodo notturno |
 | **Fine notte** | 07:00 | Ora di fine del periodo notturno |
 

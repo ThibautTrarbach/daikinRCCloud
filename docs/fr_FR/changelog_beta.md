@@ -7,12 +7,20 @@ title: Changelog Daikin ONECTA (Beta)
 
 Toutes les modifications notables de ce plugin seront documentées sur cette page.
 
-## [Unreleased]
+## [1.0.0] - 2026-10-24
+
+> **Release candidate** vers la branche stable — le plugin **1.0.0** est prêt.
+
+### Info
+- La version **1.0.0** du plugin est finalisée et constitue la release candidate vers la version stable
 
 ### Ajouté — Plugin
 - Widget HVAC optionnel (dashboard / mobile / panel), inspiré de **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
 - Option équipement **Utiliser le widget HVAC** (désactivée par défaut)
 - Adaptation multi-zones / ballon ECS (sélecteur de zone, onglets masqués si non disponibles)
+
+### Modifié — Documentation
+- Documentation en ligne revue et améliorée (installation, configuration, authentification, utilisation, quotas, dépannage)
 
 ## [0.10.4] - 2026-09-04
 
