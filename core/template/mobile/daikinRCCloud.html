@@ -1,7 +1,32 @@
 <!--
   Mobile tile widget for daikinRCCloud — inspired by DaikinOnlineCtrl (AGPL, Masterfion & A.Barrau).
 -->
-<script type="text/javascript">
+<div class="eqLogic-widget eqLogic DRC_widget #eqLogic_class#" data-eqTyle="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;border:#border#;border-radius:#border-radius#;color:#color#;#style#">
+	<span class="cmd refresh pull-right cursor DRC_Refresh" style="margin-top:-2px!important;"><i class="fas fa-sync" title="#refresh-txt#"></i></span>
+	<center class="widget-name"><span style="#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></span></center>
+	<center>
+		<div class="DRC_TT tooltips">
+			<div class="DRC_Zone1">
+				<span class="cmd DRC_zPow"><a class="action ui-btn ui-mini ui-btn-inline"><i class="fa fa-power-off"></i></a></span>
+				<span class="DRC_zTemperature">
+					<span><i class="jeedom jeedom-thermometre-celcius" style="font-size:30px;"></i></span>
+					<span style="text-align:right;"><div class="DRC_zsensorLabel">#txt_indoor_min# :</div><div class="DRC_zsensorLabel">#txt_outdoor_min# :</div></span>
+					<span style="width:50px;"><div class="DRC_zhtempTxt DRC_zsensortemp">?</div><div class="DRC_zotempTxt DRC_zsensortemp">?</div></span>
+				</span>
+			</div>
+			<div class="DRC_Zone2">
+				<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
+				<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
+				<span class="DRC_ConsigneTable"><span class="DRC_ConsigneIcon"><i class="jeedom-thermo-moyen"></i></span><span class="DRC_ConsigneTemp">?</span></span>
+			</div>
+			<div class="DRC_Zone3"></div>
+			<div class="DRC_Zone4">
+				<a href="#" class="link ui-btn ui-mini ui-btn-inline DRC_btn-temp" data-page="panel" data-plugin="daikinRCCloud" data-title="Daikin ONECTA" data-option="#id#">#txt_showLinkToPanelMobil#</a>
+			</div>
+		</div>
+	</center>
+	<span class="statusCmd" style="position:absolute;left:2px;bottom:-3px;width:30px;z-index:1030;"></span>
+	<script type="text/javascript">
 var _styleBtnDisabledDRCm = "color:#ADADAD!important;";
 function DRCmExec(_id, _opts) {
 	if (!_id) { return; }
@@ -88,6 +113,7 @@ function DRCmSetOther(_eq, _refreshId, _showPanel) {
 	}
 }
 </script>
+
 <style>
 .DRC_Refresh { padding-top:3px; margin-right:10px; }
 .DRC_Zone1 { position:relative; top:5px; }
@@ -108,32 +134,7 @@ function DRCmSetOther(_eq, _refreshId, _showPanel) {
 .DRC_Zone4 { margin-top:5px; }
 </style>
 
-<div class="eqLogic-widget eqLogic DRC_widget #eqLogic_class#" data-eqTyle="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;border:#border#;border-radius:#border-radius#;color:#color#;#style#">
-	<span class="cmd refresh pull-right cursor DRC_Refresh" style="margin-top:-2px!important;"><i class="fas fa-sync" title="#refresh-txt#"></i></span>
-	<center class="widget-name"><span style="#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></span></center>
-	<center>
-		<div class="DRC_TT tooltips">
-			<div class="DRC_Zone1">
-				<span class="cmd DRC_zPow"><a class="action ui-btn ui-mini ui-btn-inline"><i class="fa fa-power-off"></i></a></span>
-				<span class="DRC_zTemperature">
-					<span><i class="jeedom jeedom-thermometre-celcius" style="font-size:30px;"></i></span>
-					<span style="text-align:right;"><div class="DRC_zsensorLabel">#txt_indoor_min# :</div><div class="DRC_zsensorLabel">#txt_outdoor_min# :</div></span>
-					<span style="width:50px;"><div class="DRC_zhtempTxt DRC_zsensortemp">?</div><div class="DRC_zotempTxt DRC_zsensortemp">?</div></span>
-				</span>
-			</div>
-			<div class="DRC_Zone2">
-				<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
-				<span class="cmd"><a class="action ui-btn ui-mini ui-btn-inline DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
-				<span class="DRC_ConsigneTable"><span class="DRC_ConsigneIcon"><i class="jeedom-thermo-moyen"></i></span><span class="DRC_ConsigneTemp">?</span></span>
-			</div>
-			<div class="DRC_Zone3"></div>
-			<div class="DRC_Zone4">
-				<a href="#" class="link ui-btn ui-mini ui-btn-inline DRC_btn-temp" data-page="panel" data-plugin="daikinRCCloud" data-title="Daikin ONECTA" data-option="#id#">#txt_showLinkToPanelMobil#</a>
-			</div>
-		</div>
-	</center>
-	<span class="statusCmd" style="position:absolute;left:2px;bottom:-3px;width:30px;z-index:1030;"></span>
-	<script type="text/javascript">
+<script type="text/javascript">
 		var _aModeCmd#id# = #mode-cmd-list#;
 		var _aOnMobilCmd#id# = #onmobil-cmd-list#;
 		var _aSensorInfo#id# = #sensor-info-list#;

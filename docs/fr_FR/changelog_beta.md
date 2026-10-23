@@ -10,7 +10,7 @@ Toutes les modifications notables de ce plugin seront documentées sur cette pag
 ## [Unreleased]
 
 ### Ajouté — Plugin
-- Widget HVAC optionnel (dashboard / mobile / panel), inspiré de **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau)
+- Widget HVAC optionnel (dashboard / mobile / panel), inspiré de **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
 - Option équipement **Utiliser le widget HVAC** (désactivée par défaut)
 - Adaptation multi-zones / ballon ECS (sélecteur de zone, onglets masqués si non disponibles)
 

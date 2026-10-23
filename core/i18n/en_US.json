@@ -210,7 +210,6 @@
     "Visible": "Visible",
     "Widget du plugin": "Plugin widget",
     "Utiliser le widget HVAC (type DaikinOnlineCtrl)": "Use HVAC widget (DaikinOnlineCtrl style)",
-    "Désactivé par défaut : tuiles Jeedom standard. Activé : tuile dashboard / mobile / panel dédiée.": "Disabled by default: standard Jeedom tiles. Enabled: dedicated dashboard / mobile / panel tile.",
     "Lien panel mobile": "Mobile panel link",
     "Afficher le bouton vers le panel sur le widget mobile": "Show the panel button on the mobile widget",
     "Information sur l'équipement associé": "Information about associated equipment",

@@ -2,7 +2,58 @@
   Dashboard widget for daikinRCCloud — inspired by DaikinOnlineCtrl (AGPL, Masterfion & A.Barrau).
   Adapted for ONECTA MQTT commands (_onOffMode, _operationMode, …).
 -->
-<script type="text/javascript">
+<div class="eqLogic-widget eqLogic DRC_widget allowResize #eqLogic_class#" data-eqTyle="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;border:#border#;border-radius:#border-radius#;height:#height#;color:#color#;#style#">
+	<span class="cmd refresh pull-right cursor DRC_Refresh" style="margin-top:-2px!important;"><i class="fas fa-sync" title="#refresh-txt#"></i></span>
+	<center class="widget-name">
+		<span class="reportModeVisible" style="font-size:1.2em;display:none;">#name_display# <span class="object_name">#object_name#</span></span>
+		<a href="#eqLink#" class="reportModeHidden" style="font-size:1.2em;#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></a>
+	</center>
+	<div class="DRC_TT tooltips vertical-align">
+	<center>
+		<div class="DRC_ZoneSelect"></div>
+		<div class="DRC_Zone1">
+			<span class="cmd DRC_zPow"><a class="btn btn-default DRC_btn-pow"><i class="fa fa-power-off"></i></a></span>
+			<span class="DRC_zTemperature">
+				<span class="DRC_zsensorLabel"><div class="DRC_zsensorTxt DRC_zhtempLabel DRC_bottomborder">#txt_indoor# :</div><div class="DRC_zsensorTxt DRC_zotempLabel">#txt_outdoor# :</div></span>
+				<span class="DRC_zsensortempIcon"><i class="jeedom jeedom-thermometre-celcius" style="font-size:35px;"></i></span>
+				<span class="DRC_zsensortempTxt"><div class="DRC_zhtempTxt DRC_zsensortemp DRC_bottomborder">?</div><div class="DRC_zotempTxt DRC_zsensortemp">?</div></span>
+				<span class="DRC_zhhum DRC_zhhumIcon"><i class="fa fa-tint" style="font-size:30px;"></i></span>
+				<span class="DRC_zhhum"><div class="DRC_zhhumTxt DRC_bottomborder">?</div><div class="DRC_zotempLabel">&nbsp;</div></span>
+			</span>
+		</div>
+		<div class="DRC_Zone1B">
+			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatIcon"><i class="nature-fire14" style="font-size:15px;"></i></div><div class="DRC_zcurr_day_coolIcon"><i class="nature-snowflake" style="font-size:15px;"></i></div></span>
+			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatTxt DRC_zcurr_dayTxt DRC_bottomborder">?</div><div class="DRC_zcurr_day_coolTxt DRC_zcurr_dayTxt">?</div></span>
+		</div>
+		<div class="DRC_Zone2">
+			<div style="display:table;height:35px;width:315px;">
+				<span class="DRC_onglet-menu" drc-menuId="1" title="Mode"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="2" title="Ventilation"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="3" title="Direction"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu" drc-menuId="4" title="Extras"><i class="fa fa-spinner"></i></span>
+				<span style="display:table-cell;">
+					<div style="display:table;height:30px;">
+						<span class="DRC_SpacerTable">&nbsp;</span>
+						<span class="DRC_TempTable">
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="P"><i class="loisir loisir-runner5"></i></a></span>
+						</span>
+						<span class="DRC_ConsigneTable"><span class="DRC_ConsigneIcon"><i class="jeedom-thermo-moyen"></i></span><span class="DRC_ConsigneTemp">?</span></span>
+					</div>
+				</span>
+			</div>
+		</div>
+		<div class="DRC_Zone3">
+			<div class="DRC_zMenuAct" drc-menuId="1"></div>
+			<div class="DRC_zMenuAct" drc-menuId="2"></div>
+			<div class="DRC_zMenuAct" drc-menuId="3"></div>
+			<div class="DRC_zMenuAct" drc-menuId="4"></div>
+		</div>
+	</center>
+	</div>
+	<span class="statusCmd" style="position:absolute;left:5px;bottom:0px;width:30px;z-index:1030;height:30px;"></span>
+	<script type="text/javascript">
 var _styleBtnDisabledDRC = "color:#ADADAD!important;";
 
 function DRCexecCmd(_id, _opts) {
@@ -299,58 +350,7 @@ function DRCboot(_eq, _zones, _activeKey, _zonesData, _bg, _color) {
 .DRC_kind-tank .DRC_fanOnly { display:none; }
 </style>
 
-<div class="eqLogic-widget eqLogic DRC_widget allowResize #eqLogic_class#" data-eqTyle="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;border:#border#;border-radius:#border-radius#;height:#height#;color:#color#;#style#">
-	<span class="cmd refresh pull-right cursor DRC_Refresh" style="margin-top:-2px!important;"><i class="fas fa-sync" title="#refresh-txt#"></i></span>
-	<center class="widget-name">
-		<span class="reportModeVisible" style="font-size:1.2em;display:none;">#name_display# <span class="object_name">#object_name#</span></span>
-		<a href="#eqLink#" class="reportModeHidden" style="font-size:1.2em;#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></a>
-	</center>
-	<div class="DRC_TT tooltips vertical-align">
-	<center>
-		<div class="DRC_ZoneSelect"></div>
-		<div class="DRC_Zone1">
-			<span class="cmd DRC_zPow"><a class="btn btn-default DRC_btn-pow"><i class="fa fa-power-off"></i></a></span>
-			<span class="DRC_zTemperature">
-				<span class="DRC_zsensorLabel"><div class="DRC_zsensorTxt DRC_zhtempLabel DRC_bottomborder">#txt_indoor# :</div><div class="DRC_zsensorTxt DRC_zotempLabel">#txt_outdoor# :</div></span>
-				<span class="DRC_zsensortempIcon"><i class="jeedom jeedom-thermometre-celcius" style="font-size:35px;"></i></span>
-				<span class="DRC_zsensortempTxt"><div class="DRC_zhtempTxt DRC_zsensortemp DRC_bottomborder">?</div><div class="DRC_zotempTxt DRC_zsensortemp">?</div></span>
-				<span class="DRC_zhhum DRC_zhhumIcon"><i class="fa fa-tint" style="font-size:30px;"></i></span>
-				<span class="DRC_zhhum"><div class="DRC_zhhumTxt DRC_bottomborder">?</div><div class="DRC_zotempLabel">&nbsp;</div></span>
-			</span>
-		</div>
-		<div class="DRC_Zone1B">
-			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatIcon"><i class="nature-fire14" style="font-size:15px;"></i></div><div class="DRC_zcurr_day_coolIcon"><i class="nature-snowflake" style="font-size:15px;"></i></div></span>
-			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatTxt DRC_zcurr_dayTxt DRC_bottomborder">?</div><div class="DRC_zcurr_day_coolTxt DRC_zcurr_dayTxt">?</div></span>
-		</div>
-		<div class="DRC_Zone2">
-			<div style="display:table;height:35px;width:315px;">
-				<span class="DRC_onglet-menu" drc-menuId="1" title="Mode"><i class="fa fa-spinner"></i></span>
-				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="2" title="Ventilation"><i class="fa fa-spinner"></i></span>
-				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="3" title="Direction"><i class="fa fa-spinner"></i></span>
-				<span class="DRC_onglet-menu" drc-menuId="4" title="Extras"><i class="fa fa-spinner"></i></span>
-				<span style="display:table-cell;">
-					<div style="display:table;height:30px;">
-						<span class="DRC_SpacerTable">&nbsp;</span>
-						<span class="DRC_TempTable">
-							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
-							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
-							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="P"><i class="loisir loisir-runner5"></i></a></span>
-						</span>
-						<span class="DRC_ConsigneTable"><span class="DRC_ConsigneIcon"><i class="jeedom-thermo-moyen"></i></span><span class="DRC_ConsigneTemp">?</span></span>
-					</div>
-				</span>
-			</div>
-		</div>
-		<div class="DRC_Zone3">
-			<div class="DRC_zMenuAct" drc-menuId="1"></div>
-			<div class="DRC_zMenuAct" drc-menuId="2"></div>
-			<div class="DRC_zMenuAct" drc-menuId="3"></div>
-			<div class="DRC_zMenuAct" drc-menuId="4"></div>
-		</div>
-	</center>
-	</div>
-	<span class="statusCmd" style="position:absolute;left:5px;bottom:0px;width:30px;z-index:1030;height:30px;"></span>
-	<script type="text/javascript">
+<script type="text/javascript">
 		(function() {
 			var _zones#id# = #zones-json#;
 			var _zonesData#id# = #zones-data-json#;

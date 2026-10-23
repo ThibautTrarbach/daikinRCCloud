@@ -10,7 +10,7 @@ All notable changes to this plugin will be documented on this page.
 ## [Unreleased]
 
 ### Added — Plugin
-- Optional HVAC widget (dashboard / mobile / panel), inspired by **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau)
+- Optional HVAC widget (dashboard / mobile / panel), inspired by **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
 - Equipment option **Use HVAC widget** (disabled by default)
 - Multi-zone / DHW tank adaptation (zone selector, tabs hidden when unavailable)
 
