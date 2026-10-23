@@ -40,5 +40,6 @@
 		"diy",
 		"v4",
 		"atlas"
-	]
+	],
+	"mobile": "panel"
 }

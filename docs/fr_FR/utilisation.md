@@ -122,13 +122,29 @@ Chaque zone possède ses propres commandes de marche, mode et consigne.
 
 ## Afficher sur le dashboard
 
-Pour piloter vos appareils depuis l'écran d'accueil de Jeedom :
+### Widget HVAC du plugin (optionnel)
+
+Le plugin propose un **widget dédié** (inspiré de DaikinOnlineCtrl) qui regroupe marche/arrêt, mode, consigne, ventilation et sondes sur une seule tuile.
+
+1. Ouvrez l'équipement (pas le pont système).
+2. Cochez **Utiliser le widget HVAC (type DaikinOnlineCtrl)**.
+3. Sauvegardez, puis placez l'équipement sur le dashboard / design.
+
+Sur les appareils multi-zones (ex. Altherma), un **sélecteur de zone** apparaît en haut de la tuile. Les onglets absents (pas de ventilateur, etc.) sont masqués automatiquement.
+
+Sur mobile, un lien vers le **panel** (vue type application) peut être affiché via l'option **Lien panel mobile**.
+
+> Le widget est **désactivé par défaut** pour ne pas changer le comportement des installations existantes.
+
+### Tuiles Jeedom standard
+
+Sans le widget du plugin :
 
 1. Ouvrez l'équipement et allez dans l'onglet **Commandes**.
-2. Rendez **visibles** les commandes que vous souhaitez afficher (case à cocher dans la colonne Options).
+2. Rendez **visibles** les commandes que vous souhaitez afficher.
 3. Ajoutez-les à votre dashboard via le configurateur de design Jeedom.
 
-Les commandes binaires (marche/arrêt) s'affichent sous forme de boutons. Les consignes de température s'affichent sous forme de curseur (slider).
+Les commandes binaires s'affichent sous forme de boutons. Les consignes de température s'affichent sous forme de curseur (slider).
 
 **Conseil :** pour un usage quotidien, rendez visibles au minimum **State**, **Operation Mode** et **Temperature Control**.
 

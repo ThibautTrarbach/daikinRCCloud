@@ -7,6 +7,11 @@ title: Changelog Daikin ONECTA (Beta)
 
 Todas las modificaciones notables de este plugin se documentarán en esta página.
 
+## [Unreleased]
+
+### Añadido — Plugin
+- Widget HVAC opcional (dashboard / móvil / panel), inspirado en **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau)
+
 ## [0.10.4] - 2026-09-04
 
 > Daemon incluido en la rama `release-beta`: **2.1.7** (mínimo requerido: 2.0.0)

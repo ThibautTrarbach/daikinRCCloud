@@ -110,7 +110,23 @@ Each zone has its own power, mode, and setpoint commands.
 
 ## Display on the dashboard
 
-To control your devices from the Jeedom home screen:
+### Optional HVAC plugin widget
+
+The plugin provides a dedicated **HVAC widget** (inspired by DaikinOnlineCtrl) that groups power, mode, setpoint, fan and sensors on a single tile.
+
+1. Open the equipment (not the system bridge).
+2. Enable **Use HVAC widget (DaikinOnlineCtrl style)**.
+3. Save, then place the equipment on the dashboard / design.
+
+On multi-zone devices (e.g. Altherma), a **zone selector** appears at the top of the tile. Missing capabilities hide their tabs automatically.
+
+On mobile, a link to the **panel** view can be shown via **Mobile panel link**.
+
+> The widget is **disabled by default** so existing installs keep standard Jeedom tiles.
+
+### Standard Jeedom tiles
+
+Without the plugin widget:
 
 1. Open the device and go to the **Commands** tab.
 2. Make **visible** the commands you want to display (checkbox in the Options column).

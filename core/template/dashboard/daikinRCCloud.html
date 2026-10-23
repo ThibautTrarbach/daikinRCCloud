@@ -1,0 +1,386 @@
+<!--
+  Dashboard widget for daikinRCCloud — inspired by DaikinOnlineCtrl (AGPL, Masterfion & A.Barrau).
+  Adapted for ONECTA MQTT commands (_onOffMode, _operationMode, …).
+-->
+<script type="text/javascript">
+var _styleBtnDisabledDRC = "color:#ADADAD!important;";
+
+function DRCexecCmd(_id, _opts) {
+	if (!_id) { return; }
+	var opts = _opts || {};
+	opts.fromWidget = '1';
+	jeedom.cmd.execute({id: _id, value: opts, notify: true});
+}
+
+function DRCexecListItem(_item) {
+	if (!_item || !_item.id) { return; }
+	if (_item.exec === 'select') {
+		DRCexecCmd(_item.id, {select: _item.v});
+	} else if (_item.exec === 'slider') {
+		DRCexecCmd(_item.id, {slider: _item.v});
+	} else {
+		DRCexecCmd(_item.id, {});
+	}
+}
+
+function DRCmodeColor(_mode, _tRoom, _tSet) {
+	var m = String(_mode || '').toLowerCase();
+	var room = parseFloat(_tRoom);
+	var set = parseFloat(_tSet);
+	if (m === 'cooling' || ((!isNaN(room) && !isNaN(set) && room > set) && (m === 'auto'))) {
+		return {cls: 'DRC_btn-bleu', style: 'border-color:#3F2790!important;color:#3F2790!important;'};
+	}
+	if (m === 'heating' || ((!isNaN(room) && !isNaN(set) && set >= room) && (m === 'auto'))) {
+		return {cls: 'DRC_btn-rouge', style: 'border-color:#F09797!important;color:#F09797!important;'};
+	}
+	if (m === 'dry') {
+		return {cls: 'DRC_btn-vert', style: 'border-color:#83F483!important;color:#83F483!important;'};
+	}
+	if (m === 'fanonly' || m === 'fan_only') {
+		return {cls: 'DRC_btn-jaune', style: 'border-color:#F9F953!important;color:#F9F953!important;'};
+	}
+	return {cls: 'DRC_btn-active', style: 'border-color:#3F2790!important;color:#3F2790!important;'};
+}
+
+function DRCsetPow(_eq, _pow, _offId, _onId) {
+	var $pow = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zPow');
+	$pow.off('click');
+	if (_pow === '-1') { return; }
+	if (_pow === '1') {
+		$pow.attr('data-cmd_id', _offId).on('click', function() { DRCexecCmd($(this).attr('data-cmd_id'), {}); })
+			.children().removeClass('btn-danger').addClass('btn-success')
+			.attr('style', 'color:#FFFFFF!important;background-color:#5CB85C!important;border-color:#4CAE4C!important;');
+	} else {
+		$pow.attr('data-cmd_id', _onId).on('click', function() { DRCexecCmd($(this).attr('data-cmd_id'), {}); })
+			.children().removeClass('btn-success').addClass('btn-danger')
+			.attr('style', 'color:#FFFFFF!important;background-color:#D9534F!important;border-color:#D43F3A!important;');
+	}
+}
+
+function DRCsetSubMenu(_eq, _menuId, _typeClass, _active, _list, _pow) {
+	var $menu = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zMenuAct[drc-menuId="' + _menuId + '"]');
+	var $tab = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_onglet-menu[drc-menuId="' + _menuId + '"]');
+	$menu.empty();
+	if (!_list || !_list.length) {
+		$tab.hide();
+		$menu.hide();
+		return;
+	}
+	$tab.show();
+	var n = Math.min(_list.length, 8);
+	for (var i = 0; i < n; i++) {
+		var item = _list[i];
+		var $btn = $('<span class="cmd DRC_btn-menu-tabs ' + _typeClass + '" data-cmd_id="' + item.id + '" drc-val="' + item.v + '" title="' + item.txt + '"></span>');
+		$btn.data('drcItem', item);
+		var style = (_pow == 1) ? '' : _styleBtnDisabledDRC;
+		$btn.append('<a class="btn btn-circle DRC_btn-menu" style="' + style + '">' + item.icone + '</a>');
+		$menu.append($btn);
+		if (String(item.v) === String(_active)) {
+			$tab.html(item.icone);
+			if (_pow == 1) {
+				$btn.find('a').addClass('disabled DRC_btn-active').attr('style', 'border-color:#3F2790!important;color:#3F2790!important;');
+			}
+		}
+	}
+	$menu.find('.cmd').off('click').on('click', function() {
+		DRCexecListItem($(this).data('drcItem'));
+	});
+}
+
+function DRCsetMenu(_eq, _pow, _idMenu) {
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zMenuAct').css({display: 'none'});
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_onglet-menu').removeClass('DRC_Menu-active-on DRC_Menu-active-off').addClass('cursor')
+		.off('click').on('click', function() { DRCsetMenu(_eq, _pow, $(this).attr('drc-menuId')); });
+	var act = (_pow == 1) ? 'on' : 'off';
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_onglet-menu[drc-menuId="' + _idMenu + '"]').addClass('DRC_Menu-active-' + act).removeClass('cursor').off('click');
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zMenuAct[drc-menuId="' + _idMenu + '"]').css({display: 'table'});
+}
+
+function DRCsetTemperature(_eq, _pow, _sliderId, _val, _step) {
+	var html = _val;
+	if (parseFloat(_val) > 0 && parseInt(_val, 10) != _val) {
+		var parts = String(parseFloat(_val)).split('.');
+		html = parts[0] + "<span style='font-size:60%;'>." + (parts[1] || '0') + "</span>°";
+	} else if (_val !== '' && _val !== null) {
+		html = _val + '°';
+	} else {
+		html = '?';
+	}
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ConsigneTemp').attr('data-tempval', _val).html(html);
+	var step = parseFloat(_step) || 0.5;
+	var $btns = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp');
+	$btns.off('click');
+	if (_pow != 1) {
+		$btns.attr('style', _styleBtnDisabledDRC);
+	} else {
+		$btns.attr('style', '');
+	}
+	if (!_sliderId || !(parseFloat(_val) > 0 || _val === '0' || _val === 0)) {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="+"], .eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="-"]').hide();
+		return;
+	}
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="+"]').show().parent().attr('data-cmd_id', _sliderId);
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="-"]').show().parent().attr('data-cmd_id', _sliderId);
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="+"]').on('click', function() {
+		var v = parseFloat($('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ConsigneTemp').attr('data-tempval')) + step;
+		DRCexecCmd(_sliderId, {slider: v});
+	});
+	$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="-"]').on('click', function() {
+		var v = parseFloat($('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ConsigneTemp').attr('data-tempval')) - step;
+		DRCexecCmd(_sliderId, {slider: v});
+	});
+}
+
+function DRCsetPowerful(_eq, _pow, _kind, _powerful, _offId, _onId, _stemp) {
+	var $p = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="P"]');
+	$p.off('click').hide();
+	if (_pow != 1 || !_offId || !_onId) { return; }
+	$p.show().parent().attr('data-cmd_id', (_powerful === '1') ? _offId : _onId);
+	if (_powerful === '1') {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ConsigneTemp').html('P');
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="+"], .eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp[drc-val="-"]').hide();
+	}
+	$p.on('click', function() {
+		DRCexecCmd($(this).parent().attr('data-cmd_id'), {});
+	});
+}
+
+function DRCsetInfo(_eq, _sensors, _valOff) {
+	$.each(_sensors, function(k, s) {
+		if (s.kcmd === '1') {
+			var value = (s.v === false) ? _valOff : s.v;
+			$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Txt').attr('title', s.txt).html(value).show();
+			$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Label').show();
+			if (s.h === '1') {
+				$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Txt').addClass('history cursor').attr('data-cmd_id', s.id);
+			}
+		} else {
+			$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Txt').hide();
+			$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Label').hide();
+			$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_z' + s.n + 'Icon').hide();
+		}
+	});
+	if ($('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zotempTxt').is(':hidden') && $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zhtempTxt').is(':hidden')) {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zsensortempIcon').hide();
+	}
+	if ($('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zcurr_day_heatTxt').is(':hidden') && $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zcurr_day_coolTxt').is(':hidden')) {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_zcurr_day').hide();
+	}
+}
+
+function DRCsetOther(_eq, _refreshId) {
+	if (_refreshId) {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_Refresh').show().off('click').on('click', function() {
+			$(this).animate({color: '#00DE00'}, 800);
+			DRCexecCmd(_refreshId, {});
+		});
+	} else {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_Refresh').hide();
+	}
+}
+
+function DRCsetDesign(_eq, _bg, _color) {
+	$('.eqLogic[data-eqLogic_id=' + _eq + ']').css('background-color', _bg);
+	if (_bg === 'transparent') {
+		$('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_btn-temp, .eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ConsigneTable').addClass('DRC_border-in-transparence');
+	}
+}
+
+function DRCsetZones(_eq, _zones, _activeKey, _zonesData) {
+	var $bar = $('.eqLogic[data-eqLogic_id=' + _eq + '] .DRC_ZoneSelect');
+	$bar.empty();
+	if (!_zones || _zones.length <= 1) {
+		$bar.hide();
+		return;
+	}
+	$bar.show();
+	for (var i = 0; i < _zones.length; i++) {
+		var z = _zones[i];
+		var $b = $('<a class="btn btn-xs DRC_zoneBtn" style="margin:0 2px;"></a>').text(z.label).attr('drc-zone', z.key);
+		if (z.key === _activeKey) { $b.addClass('btn-primary'); } else { $b.addClass('btn-default'); }
+		$bar.append($b);
+	}
+	$bar.find('.DRC_zoneBtn').off('click').on('click', function() {
+		var key = $(this).attr('drc-zone');
+		if (!_zonesData[key]) { return; }
+		DRCapplyZone(_eq, key, _zones, _zonesData);
+	});
+}
+
+function DRCapplyZone(_eq, _key, _zones, _zonesData) {
+	var p = _zonesData[_key];
+	if (!p) { return; }
+	var zoneMeta = null;
+	for (var i = 0; i < _zones.length; i++) {
+		if (_zones[i].key === _key) { zoneMeta = _zones[i]; break; }
+	}
+	var kind = p.kind || (zoneMeta ? zoneMeta.kind : 'climate');
+	var $root = $('.eqLogic[data-eqLogic_id=' + _eq + ']');
+	$root.attr('data-drc-zone', _key).attr('data-drc-kind', kind);
+	$root.find('.DRC_zoneBtn').removeClass('btn-primary').addClass('btn-default');
+	$root.find('.DRC_zoneBtn[drc-zone="' + _key + '"]').removeClass('btn-default').addClass('btn-primary');
+
+	DRCsetPow(_eq, p.pow, p.powOffId, p.powOnId);
+	var roomRaw = (p.sensors && p.sensors.htemp && p.sensors.htemp.v !== false) ? parseFloat(p.sensors.htemp.v) : NaN;
+	var color = (p.pow == 1) ? DRCmodeColor(p.mode, roomRaw, p.stemp) : {cls: '', style: ''};
+	if (kind === 'tank') {
+		$root.find('.DRC_onglet-menu[drc-menuId="2"], .DRC_onglet-menu[drc-menuId="3"]').hide();
+		$root.find('.DRC_zMenuAct[drc-menuId="2"], .DRC_zMenuAct[drc-menuId="3"]').hide();
+		DRCsetSubMenu(_eq, 1, 'DRC_Mode', p.mode, p.modeList, p.pow);
+		DRCsetSubMenu(_eq, 4, 'DRC_Extra', '', p.extraList, p.pow);
+		if (!p.modeList.length) {
+			$root.find('.DRC_onglet-menu[drc-menuId="1"]').hide();
+		}
+	} else {
+		DRCsetSubMenu(_eq, 1, 'DRC_Mode', p.mode, p.modeList, p.pow);
+		DRCsetSubMenu(_eq, 2, 'DRC_FanRate', p.fanMode, p.fanRateList, p.pow);
+		DRCsetSubMenu(_eq, 3, 'DRC_FanDir', p.fanH || p.fanV, p.fanDirList, p.pow);
+		DRCsetSubMenu(_eq, 4, 'DRC_Extra', '', p.extraList, p.pow);
+		if (p.pow == 1 && p.mode) {
+			$root.find('.DRC_Mode[drc-val="' + p.mode + '"] a').addClass(color.cls).attr('style', color.style);
+		}
+	}
+	DRCsetTemperature(_eq, p.pow, p.stempSliderId, p.stemp, p.stempStep || 0.5);
+	DRCsetPowerful(_eq, p.pow, kind, p.powerful, p.powerfulOffId, p.powerfulOnId, p.stemp);
+	DRCsetMenu(_eq, p.pow, 1);
+	DRCsetInfo(_eq, p.sensors, 'off');
+	DRCsetOther(_eq, p.refreshId);
+	if (kind === 'tank') {
+		$root.addClass('DRC_kind-tank').removeClass('DRC_kind-climate');
+	} else {
+		$root.addClass('DRC_kind-climate').removeClass('DRC_kind-tank');
+	}
+}
+
+function DRCboot(_eq, _zones, _activeKey, _zonesData, _bg, _color) {
+	DRCsetZones(_eq, _zones, _activeKey, _zonesData);
+	DRCapplyZone(_eq, _activeKey, _zones, _zonesData);
+	DRCsetDesign(_eq, _bg, _color);
+}
+</script>
+
+<style>
+.DRC_widget { font-size:13px; }
+.DRC_widget .btn i { font-size:17px; }
+.DRC_Refresh { padding-top:8px; margin-right:10px; }
+.DRC_widget .widget-name a { font-size:1.5em; }
+.DRC_bottomborder { border-bottom:1px solid #ADADAD; }
+.DRC_ZoneSelect { margin:2px 0 4px 0; min-height:22px; }
+.DRC_zTemperature span { display:inline-block; vertical-align:middle; }
+.DRC_btn-pow { -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%!important; width:33px!important; height:33px!important; padding:7px 0 !important; margin:3px 4px 0px 0px; }
+.DRC_zsensortemp { padding:0px 5px; text-align:left; }
+.DRC_zsensorLabel { text-align:right; }
+.DRC_zsensorTxt { padding:0px 1px 0px 8px; }
+.DRC_zhhumTxt { padding:0px 10px 0px 3px; text-align:left; }
+.DRC_zhhumIcon { padding:0px 6px; }
+.DRC_Zone1B span { display:inline-block; vertical-align:middle; }
+.DRC_zcurr_day { padding:0px 2px 0px 6px; text-align:right; margin:5px 0px; }
+.DRC_Zone2 { margin:4px 5px 0px 5px; }
+.DRC_onglet-menu { display:table-cell; vertical-align:middle; text-align:center; width:35px; color:#ACACAC; background-color:#E0E0E0; border-left:1px solid #ACACAC; border-top:1px solid #ACACAC; border-radius:7px 7px 0px 0px; position:relative; top:1px; }
+.DRC_onglet-menu:last-child { border-right:1px solid #ACACAC; }
+.DRC_onglet-menu i { font-size:22px; }
+.DRC_Menu-active-on { color:#000000; background-color:#FFFFFF; }
+.DRC_Menu-active-off { color:#ADADAD; background-color:#FFFFFF; }
+.DRC_TempTable { display:table-cell; width:108px; vertical-align:middle; }
+.DRC_btn-temp { background-color:#FFFFFF!important; color:#888888!important; }
+.DRC_ConsigneTable { display:table-cell; vertical-align:middle; width:70px; border-radius:5px; background-color:#FFFFFF; color:#373737; }
+.DRC_ConsigneIcon { font-size:19px; padding:0px 7px; position:relative; top:2px; }
+.DRC_ConsigneTemp { font-size:21px; position:relative; top:1px; }
+.DRC_SpacerTable { display:table-cell; }
+.DRC_Zone3 { margin:0px 5px 5px 5px; }
+.DRC_btn-menu { -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%!important; width:35px!important; height:34px!important; padding:7px 0 !important; color:#888888!important; border:1px solid #ADADAD; max-height:34px!important; }
+.DRC_zMenuAct { background-color:#FFFFFF; border:1px solid #ADADAD; text-align:center; border-radius:0px 7px 7px 7px; width:315px; height:44px; }
+.DRC_btn-menu-tabs { display:table-cell; vertical-align:middle; }
+.DRC_btn-bleu, .DRC_btn-active { border-color:#3F2790!important; color:#3F2790!important; }
+.DRC_btn-rouge { border-color:#F09797!important; color:#F09797!important; }
+.DRC_btn-vert { border-color:#83F483!important; color:#83F483!important; }
+.DRC_btn-jaune { border-color:#F9F953!important; color:#F9F953!important; }
+.DRC_border-in-transparence { border:1px solid #ADADAD; }
+.DRC_kind-tank .DRC_fanOnly { display:none; }
+</style>
+
+<div class="eqLogic-widget eqLogic DRC_widget allowResize #eqLogic_class#" data-eqTyle="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width:#width#;border:#border#;border-radius:#border-radius#;height:#height#;color:#color#;#style#">
+	<span class="cmd refresh pull-right cursor DRC_Refresh" style="margin-top:-2px!important;"><i class="fas fa-sync" title="#refresh-txt#"></i></span>
+	<center class="widget-name">
+		<span class="reportModeVisible" style="font-size:1.2em;display:none;">#name_display# <span class="object_name">#object_name#</span></span>
+		<a href="#eqLink#" class="reportModeHidden" style="font-size:1.2em;#hideEqLogicName#">#name_display# <span class="object_name">#object_name#</span></a>
+	</center>
+	<div class="DRC_TT tooltips vertical-align">
+	<center>
+		<div class="DRC_ZoneSelect"></div>
+		<div class="DRC_Zone1">
+			<span class="cmd DRC_zPow"><a class="btn btn-default DRC_btn-pow"><i class="fa fa-power-off"></i></a></span>
+			<span class="DRC_zTemperature">
+				<span class="DRC_zsensorLabel"><div class="DRC_zsensorTxt DRC_zhtempLabel DRC_bottomborder">#txt_indoor# :</div><div class="DRC_zsensorTxt DRC_zotempLabel">#txt_outdoor# :</div></span>
+				<span class="DRC_zsensortempIcon"><i class="jeedom jeedom-thermometre-celcius" style="font-size:35px;"></i></span>
+				<span class="DRC_zsensortempTxt"><div class="DRC_zhtempTxt DRC_zsensortemp DRC_bottomborder">?</div><div class="DRC_zotempTxt DRC_zsensortemp">?</div></span>
+				<span class="DRC_zhhum DRC_zhhumIcon"><i class="fa fa-tint" style="font-size:30px;"></i></span>
+				<span class="DRC_zhhum"><div class="DRC_zhhumTxt DRC_bottomborder">?</div><div class="DRC_zotempLabel">&nbsp;</div></span>
+			</span>
+		</div>
+		<div class="DRC_Zone1B">
+			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatIcon"><i class="nature-fire14" style="font-size:15px;"></i></div><div class="DRC_zcurr_day_coolIcon"><i class="nature-snowflake" style="font-size:15px;"></i></div></span>
+			<span class="DRC_zcurr_day"><div class="DRC_zcurr_day_heatTxt DRC_zcurr_dayTxt DRC_bottomborder">?</div><div class="DRC_zcurr_day_coolTxt DRC_zcurr_dayTxt">?</div></span>
+		</div>
+		<div class="DRC_Zone2">
+			<div style="display:table;height:35px;width:315px;">
+				<span class="DRC_onglet-menu" drc-menuId="1" title="Mode"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="2" title="Ventilation"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu DRC_fanOnly" drc-menuId="3" title="Direction"><i class="fa fa-spinner"></i></span>
+				<span class="DRC_onglet-menu" drc-menuId="4" title="Extras"><i class="fa fa-spinner"></i></span>
+				<span style="display:table-cell;">
+					<div style="display:table;height:30px;">
+						<span class="DRC_SpacerTable">&nbsp;</span>
+						<span class="DRC_TempTable">
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="+"><i class="fa fa-plus"></i></a></span>
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="-"><i class="fa fa-minus"></i></a></span>
+							<span class="cmd"><a class="btn btn-circle DRC_btn-temp" drc-val="P"><i class="loisir loisir-runner5"></i></a></span>
+						</span>
+						<span class="DRC_ConsigneTable"><span class="DRC_ConsigneIcon"><i class="jeedom-thermo-moyen"></i></span><span class="DRC_ConsigneTemp">?</span></span>
+					</div>
+				</span>
+			</div>
+		</div>
+		<div class="DRC_Zone3">
+			<div class="DRC_zMenuAct" drc-menuId="1"></div>
+			<div class="DRC_zMenuAct" drc-menuId="2"></div>
+			<div class="DRC_zMenuAct" drc-menuId="3"></div>
+			<div class="DRC_zMenuAct" drc-menuId="4"></div>
+		</div>
+	</center>
+	</div>
+	<span class="statusCmd" style="position:absolute;left:5px;bottom:0px;width:30px;z-index:1030;height:30px;"></span>
+	<script type="text/javascript">
+		(function() {
+			var _zones#id# = #zones-json#;
+			var _zonesData#id# = #zones-data-json#;
+			var _active#id# = '#active-zone-key#';
+			if (!_zonesData#id#[_active#id#] && _zones#id#.length) {
+				_active#id# = _zones#id#[0].key;
+			}
+			if (!_zonesData#id#[_active#id#]) {
+				_zonesData#id#[_active#id#] = {
+					kind: '#active-zone-kind#',
+					pow: '#pow-v#',
+					powOffId: '#pow-off-id#',
+					powOnId: '#pow-on-id#',
+					mode: '#mode-v#',
+					modeList: #mode-cmd-list#,
+					fanMode: '#fan-mode-v#',
+					fanRateList: #frate-cmd-list#,
+					fanDirList: #fdir-cmd-list#,
+					extraList: #extra-cmd-list#,
+					stemp: '#stemp-v#',
+					stempSliderId: '#stemp-slider-id#',
+					stempStep: '#temp-step#',
+					powerful: '#powerful-v#',
+					powerfulOffId: '#powerful-off-id#',
+					powerfulOnId: '#powerful-on-id#',
+					sensors: #sensor-info-list#,
+					refreshId: '#refresh-id#'
+				};
+			}
+			DRCboot('#id#', _zones#id#, _active#id#, _zonesData#id#, '#background-color#', '#color#');
+		})();
+	</script>
+</div>
