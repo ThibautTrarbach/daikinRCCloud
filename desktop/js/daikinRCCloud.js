@@ -183,11 +183,11 @@ function updateAccessModeBadge() {
   const mode = (readEqConfig('accessMode') || 'cloud').toLowerCase()
   const path = readEqConfig('controlPath') || ''
   const titleExtra = path ? (' — chemin actif : ' + path) : ''
-  let html = '<span class="label label-info" title="Contrôle cloud Onecta' + titleExtra + '">Cloud</span>'
+  let html = '<span class="label label-info" title="Daikin Onecta' + titleExtra + '">Cloud</span>'
   if (mode === 'local') {
-    html = '<span class="label label-success" title="Contrôle local (LAN)' + titleExtra + '">Local</span>'
+    html = '<span class="label label-success" title="Daikin Online Control' + titleExtra + '">Local</span>'
   } else if (mode === 'hybrid') {
-    html = '<span class="label label-warning" title="Cloud et local (LAN prioritaire)' + titleExtra + '">Les deux</span>'
+    html = '<span class="label label-warning" title="Daikin Onecta + Daikin Online Control (local prioritaire)' + titleExtra + '">Les deux</span>'
   }
   badge.innerHTML = html
 }

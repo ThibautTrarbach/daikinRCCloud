@@ -33,12 +33,46 @@
 				}
 			?>
         </div>
-        <legend><i class="fas fa-table"></i> {{Mes Equipments}}</legend>
 		<?php
+			$bridgeEqLogics = array();
+			$deviceEqLogics = array();
+			foreach ($eqLogics as $eqLogic) {
+				if ($eqLogic->getLogicalId() === daikinRCCloud::INSTANCE_ID) {
+					$bridgeEqLogics[] = $eqLogic;
+				} else {
+					$deviceEqLogics[] = $eqLogic;
+				}
+			}
+
+			$renderEqCard = function ($eqLogic) use ($plugin) {
+				$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
+				$isBridge = ($eqLogic->getLogicalId() === daikinRCCloud::INSTANCE_ID);
+				$supportStatus = $eqLogic->getConfiguration('supportStatus', 'full');
+				$configCoverage = $eqLogic->getConfiguration('configCoverage', 'complete');
+				$needsSupportBadge = !$isBridge && (($supportStatus !== 'full') || ($configCoverage === 'incomplete'));
+				$accessMode = $eqLogic->getConfiguration('accessMode', 'cloud');
+				$controlPath = $eqLogic->getConfiguration('controlPath', '');
+				echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
+				if (!$isBridge) {
+					echo '<div class="daikin-eq-badges" style="min-height:22px;margin-bottom:4px;text-align:center;">';
+					echo daikinRCCloud::accessModeBadgeHtml($accessMode, $controlPath);
+					if ($needsSupportBadge) {
+						echo ' <span class="label label-warning" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
+					}
+					echo '</div>';
+				}
+				echo '<img src="' . $plugin->getPathImgIcon() . '">';
+				echo '<br>';
+				echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
+				echo '<span class="hiddenAsCard displayTableRight hidden">';
+				echo ($eqLogic->getIsVisible() == 1) ? '<i class="fas fa-eye" title="{{Equipement visible}}"></i>' : '<i class="fas fa-eye-slash" title="{{Equipement non visible}}"></i>';
+				echo '</span>';
+				echo '</div>';
+			};
+
 			if (count($eqLogics) == 0) {
 				echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement trouvé, relancer le daemon ou contacter le developer }}</div>';
 			} else {
-				// Champ de recherche
 				echo '<div class="input-group" style="margin:5px;">';
 				echo '<input class="form-control roundedLeft" placeholder="{{Rechercher}}" id="in_searchEqlogic">';
 				echo '<div class="input-group-btn">';
@@ -46,33 +80,26 @@
 				echo '<a class="btn roundedRight hidden" id="bt_pluginDisplayAsTable" data-coreSupport="1" data-state="0"><i class="fas fa-grip-lines"></i></a>';
 				echo '</div>';
 				echo '</div>';
-				// Liste des équipements du plugin
-				echo '<div class="eqLogicThumbnailContainer">';
-				foreach ($eqLogics as $eqLogic) {
-					$opacity = ($eqLogic->getIsEnable()) ? '' : 'disableCard';
-					$supportStatus = $eqLogic->getConfiguration('supportStatus', 'full');
-					$configCoverage = $eqLogic->getConfiguration('configCoverage', 'complete');
-					$needsSupportBadge = ($supportStatus !== 'full') || ($configCoverage === 'incomplete');
-					$accessMode = $eqLogic->getConfiguration('accessMode', 'cloud');
-					$controlPath = $eqLogic->getConfiguration('controlPath', '');
-					echo '<div class="eqLogicDisplayCard cursor '.$opacity.'" data-eqLogic_id="' . $eqLogic->getId() . '">';
-					if ($eqLogic->getLogicalId() !== daikinRCCloud::INSTANCE_ID) {
-						echo '<div class="daikin-eq-badges" style="min-height:22px;margin-bottom:4px;text-align:center;">';
-						echo daikinRCCloud::accessModeBadgeHtml($accessMode, $controlPath);
-						if ($needsSupportBadge) {
-							echo ' <span class="label label-warning" title="{{Support partiel ou configuration incomplète}}"><i class="fas fa-exclamation-triangle"></i></span>';
-						}
-						echo '</div>';
+
+				echo '<legend><i class="fas fa-table"></i> {{Mes équipements}}</legend>';
+				if (count($deviceEqLogics) == 0) {
+					echo '<br><div class="text-center" style="font-size:1.1em;">{{Aucun appareil Daikin pour le moment}}</div>';
+				} else {
+					echo '<div class="eqLogicThumbnailContainer">';
+					foreach ($deviceEqLogics as $eqLogic) {
+						$renderEqCard($eqLogic);
 					}
-					echo '<img src="' . $plugin->getPathImgIcon() . '">';
-					echo '<br>';
-					echo '<span class="name">' . $eqLogic->getHumanName(true, true) . '</span>';
-					echo '<span class="hiddenAsCard displayTableRight hidden">';
-					echo ($eqLogic->getIsVisible() == 1) ? '<i class="fas fa-eye" title="{{Equipement visible}}"></i>' : '<i class="fas fa-eye-slash" title="{{Equipement non visible}}"></i>';
-					echo '</span>';
 					echo '</div>';
 				}
-				echo '</div>';
+
+				if (count($bridgeEqLogics) > 0) {
+					echo '<legend><i class="fas fa-project-diagram"></i> {{Pont système}}</legend>';
+					echo '<div class="eqLogicThumbnailContainer">';
+					foreach ($bridgeEqLogics as $eqLogic) {
+						$renderEqCard($eqLogic);
+					}
+					echo '</div>';
+				}
 			}
 		?>
     </div> <!-- /.eqLogicThumbnailDisplay -->

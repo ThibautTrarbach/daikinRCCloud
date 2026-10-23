@@ -83,12 +83,12 @@ class daikinRCCloud extends eqLogic
         $path = trim((string) $controlPath);
         $titleExtra = ($path !== '') ? (' — {{chemin actif}} : ' . $path) : '';
         if ($mode === 'local') {
-            return '<span class="label label-success" title="{{Contrôle local (LAN)}}' . $titleExtra . '">{{Local}}</span>';
+            return '<span class="label label-success" title="{{Daikin Online Control}}' . $titleExtra . '">{{Local}}</span>';
         }
         if ($mode === 'hybrid') {
-            return '<span class="label label-warning" title="{{Cloud et local (LAN prioritaire)}}' . $titleExtra . '">{{Les deux}}</span>';
+            return '<span class="label label-warning" title="{{Daikin Onecta + Daikin Online Control (local prioritaire)}}' . $titleExtra . '">{{Les deux}}</span>';
         }
-        return '<span class="label label-info" title="{{Contrôle cloud Onecta}}' . $titleExtra . '">{{Cloud}}</span>';
+        return '<span class="label label-info" title="{{Daikin Onecta}}' . $titleExtra . '">{{Cloud}}</span>';
     }
     const DEVICE_INFO_CMD_LOGICAL_IDS = array(
         '_gatewayIpAddress',
