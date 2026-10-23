@@ -351,12 +351,14 @@ class daikinRCCloud extends eqLogic
         if (count($localDevices) > 0) {
             $localEnabled = true;
         }
+        // Ne pas caster en (object) : yaml_emit émettrait !php/object illisible par js-yaml.
+        // Tableau associatif vide → [] ; non vide → mapping YAML { uuid: ip }.
         $settings['daikin']['local'] = array(
             'enabled' => $localEnabled,
             'timeoutMs' => intval(config::byKey('daikin_local_timeoutMs', 'daikinRCCloud', 5000) ?? 5000),
             'probeIntervalMinutes' => intval(config::byKey('daikin_local_probeIntervalMinutes', 'daikinRCCloud', 5) ?? 5),
             'devices' => $localDevices,
-            'overrides' => (object) $localOverrides,
+            'overrides' => $localOverrides,
         );
 
         $settings['mqtt']['host'] = $mqttInfos['ip'];
