@@ -11,10 +11,10 @@ Diese Seite beantwortet die häufigsten Probleme mit dem Daikin-ONECTA-Plugin.
 
 **Prüfungen in dieser Reihenfolge:**
 
-1. Läuft der **Plugin-Dienst**? (Werkzeuge → Gesundheit)
+1. Läuft der **Plugin-Daemon**? (Werkzeuge → Gesundheit)
 2. Ist das **mqtt2**-Plugin installiert, aktiv und läuft es?
 3. Sind **Abhängigkeiten** installiert? (Schaltfläche „Abhängigkeiten neu installieren")
-4. Sind Ihre **Daikin-Zugangsdaten** korrekt? (Test in der Onecta Mobile App)
+4. Sind Ihre **Daikin-Zugangsdaten** korrekt?
 5. Sind Ihre Geräte in der **Daikin Onecta**-App auf Ihrem Smartphone sichtbar?
 
 **Maßnahmen:**

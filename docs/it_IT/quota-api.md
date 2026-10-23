@@ -25,7 +25,7 @@ Non è una limitazione del plugin, ma una regola imposta dal servizio cloud Daik
 | Azione | Consumo |
 |--------|---------|
 | Sincronizzazione pianificata (ogni 15 min per impostazione predefinita) | 1 richiesta (per tutti i dispositivi contemporaneamente) |
-| Comando (cambio temperatura, accensione, ecc.) | 1 richiesta per modifica |
+| Comando (cambio temperatura, accensione, ecc.) | 1 richiesta per comando |
 | Verifica dopo un comando | 1 richiesta (a seconda delle impostazioni) |
 | Aggiornamento contatori kWh (ogni sera) | 1 richiesta |
 | Aggiornamento in tempo reale (WebSocket, modalità Mobile App) | **0** richieste |

@@ -140,6 +140,24 @@
                                     <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked>{{Visible}}</label>
                                 </div>
                             </div>
+                            <div class="form-group" id="daikin_usePluginWidget_group">
+                                <label class="col-sm-4 control-label">{{Widget du plugin}}</label>
+                                <div class="col-sm-6">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="usePluginWidget"/>
+                                        {{Utiliser le widget HVAC (type DaikinOnlineCtrl)}}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" id="daikin_showLinkToPanelMobil_group">
+                                <label class="col-sm-4 control-label">{{Lien panel mobile}}</label>
+                                <div class="col-sm-6">
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="showLinkToPanelMobil" checked/>
+                                        {{Afficher le bouton vers le panel sur le widget mobile}}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Partie droite de l'onglet "Équipement" -->

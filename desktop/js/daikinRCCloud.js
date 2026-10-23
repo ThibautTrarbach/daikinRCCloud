@@ -162,6 +162,10 @@ function updateDaikinDeviceInfoPanel() {
   if (!panel) return
   const isBridge = readEqAttr('logicalId') === DAIKIN_BRIDGE_LOGICAL_ID
   panel.style.display = isBridge ? 'none' : ''
+  const widgetGroup = document.getElementById('daikin_usePluginWidget_group')
+  const panelLinkGroup = document.getElementById('daikin_showLinkToPanelMobil_group')
+  if (widgetGroup) widgetGroup.style.display = isBridge ? 'none' : ''
+  if (panelLinkGroup) panelLinkGroup.style.display = isBridge ? 'none' : ''
 }
 
 function formatJsonConfig(raw) {

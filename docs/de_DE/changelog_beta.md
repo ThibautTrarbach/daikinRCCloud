@@ -7,6 +7,21 @@ title: Changelog Daikin ONECTA (Beta)
 
 Alle bemerkenswerten Änderungen an diesem Plugin werden auf dieser Seite dokumentiert.
 
+## [1.0.0] - 2026-10-24
+
+> **Release Candidate** für den Stable-Kanal — Plugin **1.0.0** ist bereit.
+
+### Info
+- Plugin-Version **1.0.0** ist fertig und gilt als Release Candidate für die stabile Veröffentlichung
+
+### Hinzugefügt — Plugin
+- Optionales HVAC-Widget (Dashboard / Mobile / Panel), inspiriert von **DaikinOnlineCtrl** (AGPL, Masterfion & A.Barrau & Bison)
+- Geräteoption **HVAC-Widget verwenden** (standardmäßig deaktiviert)
+- Anpassung Mehrzonen / Warmwasserspeicher (Zonenauswahl, ausgeblendete Tabs wenn nicht verfügbar)
+
+### Geändert — Dokumentation
+- Online-Dokumentation überarbeitet und verbessert (Installation, Konfiguration, Authentifizierung, Nutzung, Kontingente, Fehlerbehebung)
+
 ## [0.10.4] - 2026-09-04
 
 > Mit der Branche `release-beta` gelieferter Daemon: **2.1.7** (Mindestanforderung: 2.0.0)

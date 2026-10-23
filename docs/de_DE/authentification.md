@@ -9,8 +9,13 @@ Damit Jeedom Ihre Daikin-Geräte steuern kann, muss das Plugin eine Verbindung z
 
 ## Welchen Modus wählen?
 
-| | Developer Portal | Mobile App |
-|---|-------------------|-----------|
+**Developer Portal** ist der von Daikin angebotene **offizielle** Betriebsmodus (öffentliche API des Developer-Portals).
+
+**Mobile App** wird von Daikin **nicht offiziell unterstützt**. Der Modus basiert auf einer nicht öffentlichen API der offiziellen Mobil-App und kann **jederzeit ohne Vorankündigung** ausfallen.
+
+| | Developer Portal (empfohlen) | Mobile App |
+|---|-------------------------------|------------|
+| **Status** | Offiziell Daikin | Inoffiziell — kann jederzeit ausfallen |
 | **Zugangsdaten** | Client ID + Client Secret | Onecta-E-Mail + Passwort |
 | **Gleiches Konto wie Mobile App?** | Nein (separates Developer-Konto) | Ja |
 | **Tageskontingent** | 200 Anfragen | 3000 Anfragen |
@@ -19,7 +24,77 @@ Damit Jeedom Ihre Daikin-Geräte steuern kann, muss das Plugin eine Verbindung z
 
 ---
 
+## Developer-Portal-Modus
+
+Dieser Modus verwendet eine auf dem [Daikin Developer Portal](https://developer.cloud.daikineurope.com/) erstellte Anwendung. Das ist die **offizielle** Arbeitsweise von Daikin. Kontingent: 200 Anfragen/Tag. Für die erste Verbindung ist ein OAuth-Verfahren erforderlich.
+
+### Erstkonfiguration
+
+1. Öffnen Sie **Plugins → Daikin ONECTA → Konfiguration**.
+2. Wählen Sie **Developer Portal (OAuth)**.
+3. Geben Sie die **Client ID** und das **Client Secret** Ihrer Anwendung ein.
+4. Klicken Sie auf **Speichern**.
+
+### Anleitung für die erste Verbindung
+
+#### Schritt 1: Developer-Konto erstellen
+
+Gehen Sie zu [developer.cloud.daikineurope.com](https://developer.cloud.daikineurope.com/) und melden Sie sich an.
+
+#### Schritt 2: Auf Ihre Anwendungen zugreifen
+
+Klicken Sie oben rechts auf Ihre E-Mail-Adresse und wählen Sie **My Apps**.
+
+#### Schritt 3: Anwendung erstellen
+
+Klicken Sie auf **New App**, geben Sie einen Namen ein (z. B. „Jeedom"), wählen Sie **Onecta OIDC** als *Auth Strategy* und bestätigen Sie.
+
+![Anwendung im Daikin Developer Portal erstellen](../assets/images/authentification/01-daikin-new-app.png)
+
+#### Schritt 4: Zugangsdaten kopieren
+
+Kopieren Sie die **Client ID** und das **Client Secret** in die Plugin-Konfiguration und speichern Sie.
+
+#### Schritt 5: Plugin starten und URL abrufen
+
+1. Starten Sie den Plugin-Dienst.
+2. Öffnen Sie die Plugin-**Logs** (**Analyse → Logs**, Filter `daikinRCCloud`).
+3. Kopieren Sie die in den Logs angezeigte **Authentifizierungs-URL** (z. B. `https://JEEDOM_IP:8765`).
+
+![Authentifizierungs-URL in den Logs](../assets/images/authentification/02-auth-url-logs.png)
+
+#### Schritt 6: Redirect-URL konfigurieren
+
+1. Kehren Sie zum Daikin Developer Portal zurück.
+2. Bearbeiten Sie Ihre Anwendung.
+3. Fügen Sie die kopierte URL in das Feld **Redirect URI** ein.
+4. Klicken Sie auf **Update**.
+
+![Redirect-URI-Konfiguration im Daikin-Portal](../assets/images/authentification/03-redirect-uri.png)
+
+#### Schritt 7: Zugriff autorisieren
+
+1. Öffnen Sie die Authentifizierungs-URL in einem Browser.
+2. Akzeptieren Sie das Zertifikat, falls Ihr Browser es anzeigt.
+3. Folgen Sie dem Daikin-Autorisierungsverfahren.
+
+#### Schritt 8: Verifizieren
+
+Eine Erfolgsmeldung bestätigt, dass die Verbindung hergestellt ist. Ihre Geräte sollten in Jeedom erscheinen.
+
+![Erfolgreiche Autorisierung](../assets/images/authentification/04-auth-success.png)
+
+### Fehlerbehebung
+
+- Wenn Daikin Ihren API-Schlüssel ungültig macht, starten Sie das Verbindungsverfahren ab Schritt 5 erneut.
+- Prüfen Sie, ob der Authentifizierungsport (Standard: 8765) nicht von einer Firewall blockiert wird.
+- Siehe das [Jeedom-Community-Tutorial](https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t), wenn Ihr Schlüssel ungültig gemacht wurde.
+
+---
+
 ## Mobile-App-Modus
+
+> **Achtung:** dieser Modus wird von Daikin **nicht offiziell unterstützt**. Er basiert auf einer nicht öffentlichen API der Onecta-App und kann **jederzeit ausfallen**. Bevorzugen Sie den [Developer-Portal-Modus](#developer-portal-modus) für den langfristigen Einsatz.
 
 Dieser Modus verwendet dasselbe Konto wie die **Daikin Onecta**- oder **Daikin Residential Controller**-App auf Ihrem Smartphone.
 
@@ -43,66 +118,6 @@ Dieser Modus verwendet dasselbe Konto wie die **Daikin Onecta**- oder **Daikin R
 - Prüfen Sie, ob Sie sich mit denselben Zugangsdaten in der Daikin-Onecta-App auf Ihrem Smartphone anmelden können.
 - Wenn Sie Ihr Onecta-Passwort geändert haben, aktualisieren Sie es in der Plugin-Konfiguration.
 - Starten Sie den Plugin-Dienst nach jeder Änderung neu.
-
----
-
-## Developer-Portal-Modus
-
-Dieser Modus verwendet eine auf dem [Daikin Developer Portal](https://developer.cloud.daikineurope.com/) erstellte Anwendung. Kontingent: 200 Anfragen/Tag. Für die erste Verbindung ist ein OAuth-Verfahren erforderlich.
-
-### Erstkonfiguration
-
-1. Öffnen Sie **Plugins → Daikin ONECTA → Konfiguration**.
-2. Wählen Sie **Developer Portal (OAuth)**.
-3. Geben Sie die **Client ID** und das **Client Secret** Ihrer Anwendung ein.
-4. Klicken Sie auf **Speichern**.
-
-### Anleitung für die erste Verbindung
-
-#### Schritt 1: Developer-Konto erstellen
-
-Gehen Sie zu [developer.cloud.daikineurope.com](https://developer.cloud.daikineurope.com/) und melden Sie sich an.
-
-#### Schritt 2: Auf Ihre Anwendungen zugreifen
-
-Klicken Sie oben rechts auf Ihre E-Mail-Adresse und wählen Sie **My Apps**.
-
-#### Schritt 3: Anwendung erstellen
-
-Klicken Sie auf **New App**, geben Sie einen Namen ein (z. B. „Jeedom") und bestätigen Sie.
-
-#### Schritt 4: Zugangsdaten kopieren
-
-Kopieren Sie die **Client ID** und das **Client Secret** in die Plugin-Konfiguration und speichern Sie.
-
-#### Schritt 5: Plugin starten und URL abrufen
-
-1. Starten Sie den Plugin-Dienst.
-2. Öffnen Sie die Plugin-**Logs** (**Analyse → Logs**, Filter `daikinRCCloud`).
-3. Kopieren Sie die in den Logs angezeigte **Authentifizierungs-URL**.
-
-#### Schritt 6: Redirect-URL konfigurieren
-
-1. Kehren Sie zum Daikin Developer Portal zurück.
-2. Bearbeiten Sie Ihre Anwendung.
-3. Fügen Sie die kopierte URL in das Feld **Redirect URI** ein.
-4. Klicken Sie auf **Update**.
-
-#### Schritt 7: Zugriff autorisieren
-
-1. Öffnen Sie die Authentifizierungs-URL in einem Browser.
-2. Akzeptieren Sie das Zertifikat, falls Ihr Browser es anzeigt.
-3. Folgen Sie dem Daikin-Autorisierungsverfahren.
-
-#### Schritt 8: Verifizieren
-
-Eine Erfolgsmeldung bestätigt, dass die Verbindung hergestellt ist. Ihre Geräte sollten in Jeedom erscheinen.
-
-### Fehlerbehebung
-
-- Wenn Daikin Ihren API-Schlüssel ungültig macht, starten Sie das Verbindungsverfahren ab Schritt 5 erneut.
-- Prüfen Sie, ob der Authentifizierungsport (Standard: 8765) nicht von einer Firewall blockiert wird.
-- Siehe das [Jeedom-Community-Tutorial](https://community.jeedom.com/t/onecta-cloud-api-key-invalidation-action-required/127311/33?u=thibaut_t), wenn Ihr Schlüssel ungültig gemacht wurde.
 
 ---
 

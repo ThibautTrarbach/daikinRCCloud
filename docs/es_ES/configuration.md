@@ -57,8 +57,9 @@ Estos ajustes determinan con qué frecuencia Jeedom consulta la nube Daikin para
 
 | Ajuste | Predeterminado | Descripción |
 |---------|--------|-------------|
-| **Intervalo diurno** | 15 min | Frecuencia de comprobación entre la mañana y la noche |
-| **Intervalo nocturno** | 30 min | Frecuencia de comprobación durante la noche (ahorra cuota) |
+| **Intervalo diurno** | 15 min | Frecuencia de comprobación durante el día |
+| **Intervalo nocturno** | 30 min | Frecuencia de comprobación durante la noche |
+
 | **Inicio de la noche** | 22h | Hora a la que comienza el periodo nocturno |
 | **Fin de la noche** | 7h | Hora a la que termina el periodo nocturno |
 

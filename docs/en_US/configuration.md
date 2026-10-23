@@ -57,8 +57,9 @@ These settings determine how often Jeedom queries the Daikin cloud for your devi
 
 | Setting | Default | Description |
 |---------|--------|-------------|
-| **Daytime interval** | 15 min | Check frequency between morning and evening |
-| **Nighttime interval** | 30 min | Check frequency during the night (saves quota) |
+| **Daytime interval** | 15 min | Check frequency during the day |
+| **Nighttime interval** | 30 min | Check frequency during the night |
+
 | **Night start** | 10 PM | Time when the night period begins |
 | **Night end** | 7 AM | Time when the night period ends |
 

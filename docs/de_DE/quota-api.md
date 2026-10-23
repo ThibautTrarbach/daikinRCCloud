@@ -25,7 +25,7 @@ Dies ist keine Plugin-Beschränkung, sondern eine Regel, die vom Daikin-ONECTA-C
 | Aktion | Verbrauch |
 |--------|-------------|
 | Geplante Synchronisation (standardmäßig alle 15 Min.) | 1 Anfrage (für alle Ihre Geräte gleichzeitig) |
-| Befehl (Temperatur ändern, einschalten usw.) | 1 Anfrage pro Änderung |
+| Befehl (Temperatur ändern, einschalten usw.) | 1 Anfrage pro Befehl |
 | Verifizierung nach einem Befehl | 1 Anfrage (je nach Einstellungen) |
 | kWh-Zähleraktualisierung (jeden Abend) | 1 Anfrage |
 | Echtzeit-Update (WebSocket, Mobile-App-Modus) | **0** Anfragen |

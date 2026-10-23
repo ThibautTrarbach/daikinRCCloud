@@ -14,6 +14,18 @@ Questa pagina spiega come utilizzare i dispositivi Daikin quotidianamente in Jee
 
 Vengono aggiunti **automaticamente** durante la prima sincronizzazione. Non esiste un pulsante « Aggiungi dispositivo ».
 
+### Bridge di sistema Daikin2MQTT Bridge
+
+Vedrai sempre un dispositivo chiamato **Daikin - Daikin2MQTT Bridge**. È normale: si tratta del **bridge di sistema** del plugin, non di un dispositivo Daikin fisico.
+
+| Ruolo | Esempi di comandi |
+|------|-------------------|
+| Autenticazione cloud | Authorization URL, Authorization Request |
+| Supervisione | Rate Limit, Modules List, WebSocket Connected |
+| Azioni globali | Refresh All Devices |
+
+I tuoi **veri dispositivi Daikin** (climatizzatore, pompa di calore, ecc.) appaiono separatamente come **Daikin - {nome}**, come definito nell'app Onecta.
+
 ### Personalizzare un dispositivo
 
 Fai clic sulla scheda del dispositivo per accedere alla sua configurazione:
@@ -25,6 +37,8 @@ Fai clic sulla scheda del dispositivo per accedere alla sua configurazione:
 | **Categoria** | Riscaldamento, comfort, ecc. |
 | **Attiva** | Attivare o disattivare il dispositivo |
 | **Visibile** | Mostrare o nascondere il dispositivo sulla dashboard |
+| **Widget del plugin** | Attiva il widget HVAC dedicato (vedi sotto) |
+| **Link panel mobile** | Mostra il pulsante verso il panel sul widget mobile |
 
 ### Informazioni sul dispositivo
 
@@ -110,7 +124,29 @@ Ogni zona ha i propri comandi di accensione, modalità e setpoint.
 
 ## Visualizzazione sulla dashboard
 
-Per controllare i dispositivi dalla schermata principale di Jeedom:
+### Widget HVAC del plugin (opzionale)
+
+Il plugin offre un **widget dedicato** (ispirato a DaikinOnlineCtrl) che raggruppa accensione/spegnimento, modalità, setpoint, ventilazione e sonde su un'unica tile (dashboard, mobile e panel).
+
+Queste opzioni si trovano nella scheda **Dispositivo** di ciascun apparecchio Daikin (non compaiono sul bridge di sistema):
+
+| Opzione | Predefinito | Descrizione |
+|---------|-------------|-------------|
+| **Widget del plugin** — *Usa il widget HVAC (stile DaikinOnlineCtrl)* | Disattivato | Sostituisce la tile standard Jeedom con il widget HVAC del plugin |
+| **Link panel mobile** — *Mostra il pulsante verso il panel sul widget mobile* | Attivato | Nella vista mobile, mostra un pulsante per aprire il **panel** (vista tipo app) |
+
+1. Apri il dispositivo (non il bridge di sistema).
+2. Attiva **Usa il widget HVAC (stile DaikinOnlineCtrl)**.
+3. (Opzionale) Attiva o disattiva **Mostra il pulsante verso il panel sul widget mobile**.
+4. Salva e posiziona il dispositivo sulla dashboard / design.
+
+Sui dispositivi multizona (ad es. Altherma), compare un **selettore di zona** in alto sulla tile. Le schede assenti vengono nascoste automaticamente.
+
+> Il widget HVAC è **disattivato per impostazione predefinita** per non modificare il comportamento delle installazioni esistenti.
+
+### Tile Jeedom standard
+
+Senza il widget del plugin:
 
 1. Apri il dispositivo e vai alla scheda **Comandi**.
 2. Rendi **visibili** i comandi che desideri mostrare (casella nella colonna Opzioni).

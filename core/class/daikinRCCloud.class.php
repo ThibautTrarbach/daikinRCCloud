@@ -2,9 +2,12 @@
 
 /* * ***************************Includes********************************* */
 require_once __DIR__ . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/daikinRCCloud.widget.php';
 
 class daikinRCCloud extends eqLogic
 {
+	use daikinRCCloudWidget;
+
     const INSTANCE_ID = '960adb71-4632-4f53-bf47-8ffa5abd7581';
     const PHANTOM_LOGICAL_IDS = array('system');
     const SUPPORT_CMD_LOGICAL_IDS = array(
@@ -921,10 +924,6 @@ class daikinRCCloud extends eqLogic
 class daikinRCCloudCmd extends cmd
 {
     /*     * *************************Attributs****************************** */
-
-    /*
-    public static $_widgetPossibility = array();
-    */
 
     /*     * ***********************Methode static*************************** */
 

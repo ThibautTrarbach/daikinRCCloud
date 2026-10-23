@@ -57,8 +57,9 @@ Diese Einstellungen legen fest, wie oft Jeedom die Daikin-Cloud nach dem Status 
 
 | Einstellung | Standard | Beschreibung |
 |---------|--------|-------------|
-| **Tagesintervall** | 15 Min. | Abfragefrequenz zwischen Morgen und Abend |
-| **Nachtintervall** | 30 Min. | Abfragefrequenz während der Nacht (spart Kontingent) |
+| **Tagesintervall** | 15 Min. | Abfragefrequenz tagsüber |
+| **Nachtintervall** | 30 Min. | Abfragefrequenz während der Nacht |
+
 | **Nachtbeginn** | 22 Uhr | Uhrzeit, zu der die Nachtperiode beginnt |
 | **Nachtende** | 7 Uhr | Uhrzeit, zu der die Nachtperiode endet |
 

@@ -14,6 +14,18 @@ This page explains how to use your Daikin devices day to day in Jeedom: find you
 
 They are added **automatically** during the first sync. There is no "Add device" button.
 
+### Daikin2MQTT Bridge system bridge
+
+You will always see a device named **Daikin - Daikin2MQTT Bridge**. This is normal: it is the plugin **system bridge**, not a physical Daikin device.
+
+| Role | Example commands |
+|------|------------------|
+| Cloud authentication | Authorization URL, Authorization Request |
+| Monitoring | Rate Limit, Modules List, WebSocket Connected |
+| Global actions | Refresh All Devices |
+
+Your **real Daikin devices** (air conditioner, heat pump, etc.) appear separately as **Daikin - {name}**, as defined in the Onecta app.
+
 ### Customize a device
 
 Click the device card to access its configuration:
@@ -25,6 +37,8 @@ Click the device card to access its configuration:
 | **Category** | Heating, comfort, etc. |
 | **Enable** | Enable or disable the device |
 | **Visible** | Show or hide the device on the dashboard |
+| **Plugin widget** | Enable the dedicated HVAC widget (see below) |
+| **Mobile panel link** | Show the panel button on the mobile widget |
 
 ### Device information
 
@@ -110,7 +124,29 @@ Each zone has its own power, mode, and setpoint commands.
 
 ## Display on the dashboard
 
-To control your devices from the Jeedom home screen:
+### Optional HVAC plugin widget
+
+The plugin provides a dedicated **HVAC widget** (inspired by DaikinOnlineCtrl) that groups power, mode, setpoint, fan and sensors on a single tile (dashboard, mobile and panel).
+
+These options are in the **Device** tab of each Daikin equipment (they do not appear on the system bridge):
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| **Plugin widget** — *Use HVAC widget (DaikinOnlineCtrl style)* | Disabled | Replaces the standard Jeedom tile with the plugin HVAC widget |
+| **Mobile panel link** — *Show the panel button on the mobile widget* | Enabled | On the mobile view, shows a button to open the **panel** (app-like view) |
+
+1. Open the equipment (not the system bridge).
+2. Enable **Use HVAC widget (DaikinOnlineCtrl style)**.
+3. (Optional) Enable or disable **Show the panel button on the mobile widget**.
+4. Save, then place the equipment on the dashboard / design.
+
+On multi-zone devices (e.g. Altherma), a **zone selector** appears at the top of the tile. Missing capabilities hide their tabs automatically.
+
+> The HVAC widget is **disabled by default** so existing installs keep standard Jeedom tiles.
+
+### Standard Jeedom tiles
+
+Without the plugin widget:
 
 1. Open the device and go to the **Commands** tab.
 2. Make **visible** the commands you want to display (checkbox in the Options column).
