@@ -381,6 +381,14 @@ $displayDeamonVersion = config::byKey('deamonVersion', 'daikinRCCloud', '—');
                     <input type="number" class="configKey form-control" data-l1key="daikin_local_timeoutMs" placeholder="5000" />
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">{{Intervalle polling LAN (s)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement HTTP local (5–300 s). Indépendant du polling cloud et du quota Onecta. Défaut : 60.}}"></i></sup>
+                </label>
+                <div class="col-sm-4">
+                    <input type="number" class="configKey form-control" data-l1key="daikin_local_pollIntervalSeconds" placeholder="60" min="5" max="300" />
+                </div>
+            </div>
 
             <legend><i class="fas fa-sliders-h"></i> {{Options plugin}}</legend>
             <div class="form-group daikin-auth-port">

@@ -55,6 +55,7 @@ Dans **Configuration avancée**, section **Contrôle local (LAN)** :
 | **Activer le contrôle local** | Priorise le HTTP local pour les modules Online Controller (`BRP069A42` / `A43` / `B41`) s’ils sont joignables ; sinon cloud Onecta |
 | **Modules locaux (IP)** | IPv4 des modules **non liés à Onecta**, séparées par espace / virgule / ligne |
 | **Timeout LAN** | Timeout HTTP local (défaut 5000 ms) |
+| **Intervalle polling LAN** | Rafraîchissement HTTP local périodique (défaut 60 s, plage 5–300). Indépendant du polling cloud et du quota Onecta |
 
 Sur les équipements **compatibles LAN** uniquement (`BRP069A42` / `A43` / `B41`, ou pastille Local), le champ **IP locale (override)** force l’adresse LAN. Il est masqué pour les autres modèles. Redémarrez le daemon après modification.
 

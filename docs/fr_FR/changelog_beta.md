@@ -13,6 +13,7 @@ Toutes les modifications notables de ce plugin seront documentées sur cette pag
 - Contrôle local LAN (Online Controller) : config plugin + override IP par équipement ; le daemon privilégie le LAN si joignable
 - Mode d’auth **Local uniquement (LAN)** : démarrage sans Onecta
 - Pastille équipement **Cloud** / **Local** / **Les deux** (`_device.accessMode`)
+- Réglage **Intervalle polling LAN** (`daikin_local_pollIntervalSeconds`, défaut 60 s) — refresh local indépendant du quota cloud
 
 ## [1.0.0] - 2026-10-24
 

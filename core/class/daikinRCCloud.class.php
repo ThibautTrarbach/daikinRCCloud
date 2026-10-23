@@ -353,10 +353,17 @@ class daikinRCCloud extends eqLogic
         }
         // Ne pas caster en (object) : yaml_emit émettrait !php/object illisible par js-yaml.
         // Tableau associatif vide → [] ; non vide → mapping YAML { uuid: ip }.
+        $pollInterval = intval(config::byKey('daikin_local_pollIntervalSeconds', 'daikinRCCloud', 60) ?? 60);
+        if ($pollInterval < 5) {
+            $pollInterval = 5;
+        } elseif ($pollInterval > 300) {
+            $pollInterval = 300;
+        }
         $settings['daikin']['local'] = array(
             'enabled' => $localEnabled,
             'timeoutMs' => intval(config::byKey('daikin_local_timeoutMs', 'daikinRCCloud', 5000) ?? 5000),
             'probeIntervalMinutes' => intval(config::byKey('daikin_local_probeIntervalMinutes', 'daikinRCCloud', 5) ?? 5),
+            'pollIntervalSeconds' => $pollInterval,
             'devices' => $localDevices,
             'overrides' => $localOverrides,
         );
